@@ -1,0 +1,33 @@
+12/28
+
+adding
+
+heuristic rounding down and up
+
+decomposition
+
+focus on teams
+
+1/2
+
+hard instances
+
+improvement, solutions (not just relaxation)
+
+braches and bound (divide into several groups)
+
+partition y, s (integer variables partition)
+
+balance between overflow and security utility
+
+time to wait in a queue
+
+resource structure (should not change a lot, a restriction to the difference of two continuous numbers of resource)
+
+1/3
+
+all integer
+
+relax some of the integer variables
+
+see whether there is any theoretical bound on some relaxation

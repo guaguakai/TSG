@@ -1,0 +1,17 @@
+w, 5
+method, 0, 1, 2, 3
+running time, 0.53, 2.94, 2206 (killed), 2357 (killed)
+utility, -816.028, -816.493, -816.079, -816.592
+percentage approximated to optimality, 0, 0, 0.0103%, 0.0118%
+
+w, 10
+method, 0, 1, 2, 3
+running time, 0.81, 25.72, 379.22, 379.58
+utility, -1329.163, -1331.730, -1330.891, 1331.730
+percentage approximated to optimality, 0, 0.0089%, 0.0088%, 0.0096%
+
+w, 15
+method, 0, 1, 2, 3
+running time, 2.04, 1546 (killed), 2274 (killed), 1739 (killed)
+utility, -1200.115, -1203.441, -1201.959, -1203.802
+percentage approximated to optimality, 0, 0.1078%, 0.0272%, 0.1407%

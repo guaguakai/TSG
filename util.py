@@ -1,0 +1,46 @@
+import numpy as np
+from gurobipy import *
+import itertools
+import random
+
+
+def generateAllTeams(R, mR):
+    teams = []
+    for nR in range(mR):
+        iterator = itertools.combinations(range(R), nR+1)
+        for x in iterator:
+            teams.append(x)
+    teams.append([])
+    return teams
+
+def computeTeamsRate(R, M, T, teams, Er):
+    E = np.zeros((T, M))
+    for t in range(T):
+        for m in range(M):
+            tmp_rate = 1
+            for r in teams[t]:
+                tmp_rate *= (1 - Er[r][m])
+            E[t][m] = 1 - tmp_rate
+    return E
+
+def randomGenerateTeams(R, mR, nT):
+    allTeams = []
+    for nR in range(mR):
+        iterator = itertools.combinations(range(R), nR+1)
+        for x in iterator:
+            allTeams.append(x)
+
+    assert(len(allTeams) >= nT)
+    teams = random.sample(allTeams, nT)
+    teams.append([])
+    return teams
+
+def resourceTeamDict(R, T, teams):
+    resource2team = []
+    for r in range(R):
+        resource2team.append([])
+    for t in range(T):
+        for tmp_r in teams[t]:
+            resource2team[tmp_r].append(t)
+
+    return resource2team
