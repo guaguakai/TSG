@@ -94,7 +94,7 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
     tmp_sum = LinExpr([1]*W, [s[w] for w in range(W)])
     model.addConstr(tmp_sum - P <= 0, name="(8)")
 
-    model.write("slave.lp")
+    model.write("lp/slave.lp")
 
     model.optimize()
 
@@ -184,7 +184,7 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
     tmp_sum = LinExpr([1 for i in range(len(Q))], [q[i] for i in range(len(Q))])
     c_q_sum = model.addConstr(tmp_sum == 1, name="(4)")
 
-    model.write("CG.lp")
+    model.write("lp/CG.lp")
 
     model.optimize()
 

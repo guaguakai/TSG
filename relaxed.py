@@ -3,7 +3,7 @@ from gurobipy import *
 import numpy as np
 import random
 
-def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=True): # integer indicates different relaxation method
+def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
@@ -150,8 +150,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
             model.addConstr(y[w][r] == 0, name="(11-2)_w{0}_r{1}".format(w, r))
     """
 
-    model.write("tsg.mps")
-    model.write("tsg.lp")
+    model.write("lp/tsg.lp")
 
     model.optimize()
 
@@ -171,7 +170,30 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     #            print "utility of w={0}, k={1}, m={2} is: {3}".format(w,k,m, tmp_utility)
 
     #print "defender utility: {0}".format(defender_utility)
-    return model
+
+    n_value = np.zeros((W,T,K))
+    for w in range(W):
+        for t in range(T):
+            for k in range(K):
+                n_value[w][t][k] = n_wtk[w][t][k].x
+                if n_value[w][t][k] != int(n_value[w][t][k]):
+                    print n_value[w][t][k]
+
+    overflow_value = np.zeros((W,R))
+    for w in range(W):
+        for r in range(R):
+            overflow_value[w][r] = overflow[w][r].x
+
+    y_value = np.zeros((W,R))
+    for w in range(W):
+        for r in range(R):
+            y_value[w][r] = y[w][r].x
+
+    s_value = np.zeros(W)
+    for w in range(W):
+        s_value[w] = s[w].x
+
+    return n_value, overflow_value, y_value, s_value
     
 
 def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
@@ -219,9 +241,9 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
         for k in range(K):
             large_or_small = random.random()
             if large_or_small > 0.5:
-                tmp_N = random.randint(1000, 3000)
-            else:
                 tmp_N = random.randint(100, 300)
+            else:
+                tmp_N = random.randint(10, 30)
             N_wk[w].append(tmp_N)
 
     print "number of passengers: {0}".format([sum(N_wk[w]) for w in range(W)])
@@ -269,12 +291,12 @@ if __name__ == "__main__":
     resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
     print "============================ LP relaxation =============================="
-    model = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0)
-    #print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
-    #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1)
-    #print "============================ relaxed y (number of resources) MIP ==============================="
-    #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=2)
-    #print "============================ full MIP ==============================="
-    #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=3)
+    LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0)
+    print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
+    LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1)
+    print "============================ relaxed y (number of resources) MIP ==============================="
+    LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=2)
+    print "============================ full MIP ==============================="
+    LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=3)
 
 
