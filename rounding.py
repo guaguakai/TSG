@@ -2,9 +2,10 @@ from gurobipy import *
 import util
 import relaxed
 import numpy as np
+import random
 
 def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0):
-    n_value, overflow_value, y_value, s_value = relaxed.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 0)
+    n_value, overflow_value, y_value, s_value = relaxed.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1)
 
     print "========================================== randomized rounding ================================================"
 
@@ -14,12 +15,14 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
     model = Model("MIP")
     model.params.DualReductions = 0
 
+    theta = model.addVar(vtype=GRB.CONTINUOUS, name="theta")
+
     q = []
     for i in range(pure_strategy_limit):
         tmp_var = model.addVar(vtype=GRB.CONTINUOUS, name="q_i{0}".format(i))
         q.append(tmp_var)
 
-    n_value_floor = n_value
+    n_value_floor = np.array(n_value)
     n_value_integer_indicator = np.zeros((W,T,K))
     n_binary = [] # n[w][t][k][i]
     n_effective = [] # n[w][t][k][i]
@@ -48,11 +51,11 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
                     n_value_integer_indicator[w][t][k] = 1
                     for i in range(pure_strategy_limit):
                         model.addConstr(n_binary[w][t][k][i] == 0, name="(0.1)_w{0}_t{1}_k{2}_i{3} (n is already integer)".format(w,t,k,i))
-                else:
-                    print n_value[w][t][k]
+                #else:
+                #    print n_value[w][t][k]
                     
 
-    overflow_value_floor = overflow_value
+    overflow_value_floor = np.array(overflow_value)
     overflow_value_integer_indicator = np.zeros((W,R))
     overflow_binary = [] # o[w][r][i]
     overflow_effective = [] # o[w][r][i]
@@ -78,7 +81,7 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
                 for i in range(pure_strategy_limit):
                     model.addConstr(overflow_binary[w][r][i] == 0, name="(0.2)_w{0}_r{1}_i{2} (overflow is already integer)".format(w,r,i))
 
-    y_value_floor = y_value
+    y_value_floor = np.array(y_value)
     y_value_integer_indicator = np.zeros((W,R))
     y_binary = [] # y[w][r][i]
     y_effective = [] # y[w][r][i]
@@ -104,7 +107,7 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
                 for i in range(pure_strategy_limit):
                     model.addConstr(y_binary[w][r][i] == 0, name="(0.3)_w{0}_r{1}_i{2} (y is already integer)".format(w,r,i))
 
-    s_value_floor = s_value
+    s_value_floor = np.array(s_value)
     s_value_integer_indicator = np.zeros(W)
     s_binary = [] # s[r][i]
     s_effective = [] # s[r][i]
@@ -170,14 +173,12 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
         model.addConstr(s_mixed[w] == s_value_floor[w] + tmp_sum, name="(s 3)_w{0}".format(w))
 
     # ============================== pure strategy constraints ======================================
-    """
     for w in range(W):
         for k in range(K):
             for i in range(pure_strategy_limit):
                 tmp_sum = LinExpr([1]*T, [n_binary[w][t][k][i] for t in range(T)])
                 tmp_sum2 = sum([n_value_floor[w][t][k] for t in range(T)])
                 model.addConstr(tmp_sum + tmp_sum2 == N_wk[w][k], name="(N_wk)_w{0}_k{1}_i{2}".format(w,k,i))
-
     for w in range(W):
         for r in range(R):
             for i in range(pure_strategy_limit):
@@ -193,7 +194,6 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
             for i in range(pure_strategy_limit):
                 if w >= 1:
                     model.addConstr((y_value_floor[w][r] + y_binary[w][r][i]) * C[r] >= (overflow_value_floor[w-1][r] + overflow_binary[w-1][r][i]))
-
     for w in range(W):
         for r in range(R):
             for i in range(pure_strategy_limit):
@@ -221,7 +221,6 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
         tmp_sum = LinExpr([1]*W, [s_binary[w][i] for w in range(W)])
         tmp_sum2 = sum([s_value_floor[w] for w in range(W)])
         model.addConstr(tmp_sum + tmp_sum2 <= P)
-    """
 
 
     model.write("lp/k_tsg.lp")
@@ -249,7 +248,7 @@ if __name__ == "__main__":
     print teams
 
     # ================= random generate game setting ===========================
-    seed = 2345
+    seed = random.randint(1,10000)
     resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = relaxed.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
     #print "============================ LP relaxation =============================="
