@@ -292,11 +292,11 @@ if __name__ == "__main__":
 
     print "============================ LP relaxation =============================="
     LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0)
-    #print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
-    #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1)
+    print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
+    LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1)
     #print "============================ relaxed y (number of resources) MIP ==============================="
     #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=2)
-    #print "============================ full MIP ==============================="
-    #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=3)
+    print "============================ full MIP ==============================="
+    LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=3)
 
 

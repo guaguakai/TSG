@@ -9,13 +9,22 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
 
     print "========================================== randomized rounding ================================================"
 
-    pure_strategy_limit = 10
-    large_number = 100
+    pure_strategy_limit = 1
+    large_number = 1 # 1 is enough since all the variables are probability <= 1
 
     model = Model("MIP")
     model.params.DualReductions = 0
 
-    theta = model.addVar(vtype=GRB.CONTINUOUS, name="theta")
+    theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
+
+    z = []
+    for w in range(W):
+        z.append([])
+        for k in range(K):
+            z[w].append([])
+            for m in range(M):
+                tmp_var = model.addVar(vtype=GRB.CONTINUOUS, name="z_w{0}_k{1}_m{2}".format(w,k,m))
+                z[w][k].append(tmp_var)
 
     q = []
     for i in range(pure_strategy_limit):
@@ -137,9 +146,25 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
             p[w].append(tmp_var)
 
     # =================================== objective value ===========================================
-    model.setObjective(n_mixed[0][0][0], GRB.MAXIMIZE)
+    tmp_sum = LinExpr([phi[r] for i in range(pure_strategy_limit) for w in range(W) for r in range(R)], [overflow_effective[w][r][i] for i in range(pure_strategy_limit) for w in range(W) for r in range(R)])
+    model.setObjective(theta - tmp_sum, GRB.MAXIMIZE)
 
-    # =============================== gurobi constraints ============================================
+    # =============================== defender optimization problem =================================
+    for w in range(W):
+        for k in range(K):
+            for m in range(M):
+                model.addConstr(theta <= z[w][k][m] * (U_plus[k] - U_minus[k]) + U_minus[k], name="(def 1)_w{0}_k{1}_m{2}".format(w,k,m))
+
+    for w in range(W):
+        for k in range(K):
+            for m in range(M):
+                tmp_sum = LinExpr([E[t][m]/N_wk[w][k] for t in range(T)], [n_mixed[w][t][k] for t in range(T)])
+                model.addConstr(z[w][k][m] == tmp_sum, name="(def 2)_w{0}_k{1}_m{2}".format(w,k,m))
+
+    tmp_sum = LinExpr([1]*pure_strategy_limit, q)
+    model.addConstr(tmp_sum == 1, name="(def 3)_probability==1")
+
+    # =============================== binary constraints ============================================
     for w in range(W):
         for t in range(T):
             for k in range(K):
@@ -168,7 +193,7 @@ def randomizedRounding(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus,
     for w in range(W):
         for i in range(pure_strategy_limit):
             model.addConstr(s_effective[w][i] <= q[i], name="(s 1)_w{0}_i{1}".format(w,i))
-            model.addConstr(s_effective[w][i] <= s_binary[w][r] * large_number, name="(s 2)_w{0}_i{1}".format(w,i))
+            model.addConstr(s_effective[w][i] <= s_binary[w][i] * large_number, name="(s 2)_w{0}_i{1}".format(w,i))
         tmp_sum = LinExpr([1]*pure_strategy_limit, s_effective[w])
         model.addConstr(s_mixed[w] == s_value_floor[w] + tmp_sum, name="(s 3)_w{0}".format(w))
 
@@ -248,7 +273,8 @@ if __name__ == "__main__":
     print teams
 
     # ================= random generate game setting ===========================
-    seed = random.randint(1,10000)
+    #seed = random.randint(1,10000)
+    seed = 2345
     resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = relaxed.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
     #print "============================ LP relaxation =============================="
