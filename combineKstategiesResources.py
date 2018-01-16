@@ -30,6 +30,8 @@ if __name__ == "__main__":
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = bigSetting( W, K , mR,  P, teams, shift)
     
     
+    minr=np.zeros((W,R))
+    
     obj_relaxed_all, n_value0, overflow_value0, y_value0, s_value0, p_value0 = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=1, binary_y=0, OverConstr=False)
     
     for w in range(W):
@@ -44,7 +46,7 @@ if __name__ == "__main__":
     obj, rt, q, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, n_value, overflow_value, y_value, s_value,p_value,integer=0,OverConstr=False)
     walltime = time.time() - start_time
     
-    #print "relaxation all objective: ", obj_relaxed_all
-    #print "relaxation n objective : ", obj_relaxed_n
-    #print "MIP objective: ", obj
-    #print "Runtime/walltime ", rt, " ", walltime
+    print "relaxation all objective: ", obj_relaxed_all
+    print "relaxation n objective : ", obj_relaxed_n
+    print "MIP objective: ", obj
+    print "Runtime/walltime ", rt, " ", walltime
