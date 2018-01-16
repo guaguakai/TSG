@@ -3,6 +3,178 @@ from gurobipy import *
 import numpy as np
 import random
 
+
+def LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, y, s, p, mr, ar, phi, integer=0, OverConstr=False): # integer indicates different relaxation method
+    # ======================= Gurobi Setting ===================================
+    model = Model("MIP")
+    model.params.DualReductions = 0
+
+    theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
+    z = [] # z[w][k][m]
+    for w in range(W):
+        z.append([])
+        for k in range(K):
+            z[w].append([])
+            for m in range(M):
+                tmp_z_var = model.addVar(vtype=GRB.CONTINUOUS, name="z_w{0}_k{1}_m{2}".format(w, k, m))
+                z[w][k].append(tmp_z_var)
+
+    pi = [] # pi[w][t][k]
+    for w in range(W):
+        pi.append([])
+        for t in range(T):
+            pi[w].append([])
+            for k in range(K):
+                tmp_pi_var = model.addVar(vtype=GRB.CONTINUOUS, name="pi_w{0}_t{1}_k{2}".format(w, t, k))
+                pi[w][t].append(tmp_pi_var)
+
+    n_wtk = [] # n_wtk[w][t][k] # integer value of N_wk[w][k] * pi[w][t][k]
+    for w in range(W):
+        n_wtk.append([])
+        for t in range(T):
+            n_wtk[w].append([])
+            for k in range(K):
+                if (integer == 2) or (integer == 3):
+                    tmp_pi_var = model.addVar(vtype=GRB.INTEGER, name="n_w{0}_t{1}_k{2}".format(w, t, k))
+                else:
+                    tmp_pi_var = model.addVar(vtype=GRB.CONTINUOUS, name="n_w{0}_t{1}_k{2}".format(w, t, k))
+                n_wtk[w][t].append(tmp_pi_var)
+
+    overflow = [] # overflow[w][r]
+    for w in range(W):
+        overflow.append([])
+        for r in range(R):
+            tmp_overflow_var = model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="o_w{0}_r{1}".format(w, r)) # this is original integer but can be approximated by continuous value
+            overflow[w].append(tmp_overflow_var)
+
+        
+    model.update()
+    # ========================= Gurobi Objective ===============================
+    objective_variables = [theta] + [overflow[w][r] for w in range(W) for r in range(R)]
+    objective_coefficients = [1] + [-phi[r] for r in range(R)]*W
+    objective_value = LinExpr(objective_coefficients, objective_variables)
+
+    #objective_value = theta
+    #for w in range(W):
+    #    for r in range(R):
+    #        objective_value += phi[r]*overflow[w][r]
+    model.setObjective(objective_value, GRB.MAXIMIZE)
+    model.update()
+    # ======================= Gurobi Constraints ===============================
+    for w in range(W):
+        for k in range(K):
+            for m in range(M):
+                model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
+
+    for w in range(W):
+        for k in range(K):
+            for m in range(M):
+                tmp_sum = LinExpr([E[t][m] for t in range(T)], [pi[w][t][k] for t in range(T)])
+                model.addConstr(z[w][k][m] - tmp_sum == 0, name="(2)_w{0}_k{1}_m{2}".format(w, k, m))
+
+    for w in range(W):
+        for k in range(K):
+            tmp_sum = LinExpr([1]*T, [pi[w][t][k] for t in range(T)])
+            model.addConstr(tmp_sum == 1, name="(3)_w{0}_k{1}".format(w, k))
+
+    for w in range(W):
+        for t in range(T):
+            for k in range(K):
+                model.addConstr(pi[w][t][k] * N_wk[w][k] - n_wtk[w][t][k] == 0, name="(3.5)_w{0}_t{1}_k{2}".format(w,t,k))
+
+    #pre_overflow = np.random.randint(0, 100, R)
+    pre_overflow = [0] * R
+    for w in range(W):
+        for r in range(R):
+            #tmp_sum = LinExpr([N_wk[w][k] for k in range(K)]*len(resource2team[r]), [pi[w][t][k] for t in resource2team[r] for k in range(K)])
+            
+            tmp_sum = LinExpr([1 for k in range(K)]*len(resource2team[r]), [n_wtk[w][t][k] for t in resource2team[r] for k in range(K)])
+            #tmp_sum_pass = LinExpr([1/N_wk[w][k] for k in range(K)]*len(resource2team[r]), [n_wtk[w][t][k] for t in resource2team[r] for k in range(K)])
+
+            model.addConstr( tmp_sum <= y[w][r]*10000 , name="(5.6)_w{0}_r{1}".format(w, r))
+            if w == 0:
+                model.addConstr(tmp_sum + pre_overflow[r] - y[w][r] * C[r] - overflow[w][r] <= 0, name="(4)_w{0}_r{1}".format(w, r))
+            else:
+                model.addConstr(tmp_sum + overflow[w-1][r] - y[w][r] * C[r] - overflow[w][r] <= 0, name="(4)_w{0}_r{1}".format(w, r))
+     
+    if OverConstr:        
+        for r in range(R): # OPTIONAL
+            model.addConstr(overflow[W-1][r] == 0, name="(5)_r{0}".format(r))
+    
+        for w in range(W):
+            for r in range(R):
+                if w > 0:
+                    model.addConstr(y[w][r] * C[r] - overflow[w-1][r] >= 0, name="(5.5)_w{0}_r{1}".format(w, r))
+
+    """
+    for w in range(W):
+        for t in range(T-1):
+            for k in range(K):
+                model.addConstr(pi[w][t][k] == 0, name="(10-1)_w{0}_t{1}_k{2}".format(w, t, k))
+
+    for w in range(W):
+        for r in range(R):
+            model.addConstr(overflow[w][r] == 0, name="(10-2)_w{0}_r{1}".format(w, r))
+
+    for w in range(W):
+        model.addConstr(s[w] == 0, name="(11-1)_w{0}".format(w))
+
+    for w in range(W):
+        for r in range(R):
+            model.addConstr(y[w][r] == 0, name="(11-2)_w{0}_r{1}".format(w, r))
+    """
+    model.update()
+    model.write("tsg.lp")
+
+    model.optimize()
+    model.write("tsg_relax.sol")
+
+    #if True:
+    #    for v in model.getVars():
+    #        if v.x > 0:
+    #            print "{0} {1}".format(v.varName, v.x)
+
+    #defender_utility = np.inf
+    #for w in range(W):
+    #    for k in range(K):
+    #        for m in range(M):
+    #            tmp_z_wkm = model.getVarByName("z_w{0}_k{1}_m{2}".format(w, k, m)).x
+    #            tmp_utility = U_plus[k] * tmp_z_wkm + (1 - tmp_z_wkm) * U_minus[k]
+    #            if tmp_utility < defender_utility:
+    #               defender_utility = tmp_utility
+    #            print "utility of w={0}, k={1}, m={2} is: {3}".format(w,k,m, tmp_utility)
+
+    #print "defender utility: {0}".format(defender_utility)
+
+    n_value = np.zeros((W,T,K))
+    for w in range(W):
+        for t in range(T):
+            for k in range(K):
+                n_value[w][t][k] = n_wtk[w][t][k].x
+                #if n_value[w][t][k] != int(n_value[w][t][k]):
+                    #print n_value[w][t][k]
+
+    overflow_value = np.zeros((W,R))
+    for w in range(W):
+        for r in range(R):
+            overflow_value[w][r] = overflow[w][r].x
+
+  
+    obj = model.getAttr('ObjVal')
+    
+    attack_set = 0
+    fractional_vals=0
+    AV = theta.x
+    for w in range(W):
+        for m in range(M):
+            for k in range(K):
+                att_val = z[w][k][m].x*(U_plus[k] - U_minus[k]) - U_minus[k]
+                diff = np.abs(AV - att_val)
+                if(diff>0.0001): attack_set+=1
+                if(n_value[w][t][k]!=np.floor(n_value[w][t][k])): fractional_vals+=1
+    return obj, n_value, overflow_value, attack_set, fractional_vals
+
+
 def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")

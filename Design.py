@@ -3,12 +3,13 @@ from gurobipy import *
 import numpy as np
 import random
 import math
-from relaxed_feed import LPsolver
+from relaxed_feed import LPsolver, LPsolverR
+from KStrategiesFixedYRoundN import Ksolver
 def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, miny, ar, phi, integer=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
-    #model.params.MIPGap=0.05;
+    model.params.MIPGap=0.0005;
 
     q = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="q_s{0}".format(i)) for i in range(Q)]
 
@@ -37,7 +38,7 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_
         for t in range(T):
             n_wtk[w].append([])
             for k in range(K):
-                if (integer == 2) or (integer == 3) and (binary_n == 0):
+                if (integer == 2) or (integer == 3):
                     tmp_pi_var = model.addVar(vtype=GRB.INTEGER, name="n_w{0}_t{1}_k{2}".format(w, t, k))
                 else:
                     tmp_pi_var = model.addVar(vtype=GRB.CONTINUOUS, name="n_w{0}_t{1}_k{2}".format(w, t, k))
@@ -136,7 +137,7 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_
             
     for w in range(W):
         for r in range(R):
-            model.addConstr(y[w][r] + quicksum(X[i][w][r] for i in range(Q)) - miny[w][r] == 0, name="(11)_w{0}_r{1}".format(w, r))
+            model.addConstr(y[w][r] - quicksum(X[i][w][r] for i in range(Q)) - miny[w][r] == 0, name="(11)_w{0}_r{1}".format(w, r))
     
     tmp_sum = LinExpr([1]*Q, [q[i] for i in range(Q)])
     model.addConstr(tmp_sum == 1, name="sumQ")         
@@ -182,17 +183,29 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_
             overflow_value[w][r] = overflow[w][r].x
 
     y_value = np.zeros((W,R))
+    ys_value = np.zeros((Q,W,R))
+
     for w in range(W):
         for r in range(R):
             y_value[w][r] = y[w][r].x
+            for i in range(Q):
+                ys_value[i][w][r] = miny[w][r] + yb[i][w][r].x
+                
 
     s_value = np.zeros(W)
     for w in range(W):
         s_value[w] = s[w].x
-        
     
+    p_value = np.zeros(W)
+    for w in range(W):
+        p_value[w] = p[w].x    
+    q_val = np.zeros(Q)
+    for i in range(Q):
+        q_val[i]=q[i].x
+    obj = model.getAttr('ObjVal')
 
-    return n_value, overflow_value, y_value, s_value
+
+    return obj, n_value, overflow_value, y_value, ys_value, s_value, p_value, q_val
     
 
 def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
@@ -291,8 +304,8 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 5 # number of time windows
-    K = 2 # number of passenger types
+    W = 15 # number of time windows
+    K = 10 # number of passenger types
     R = 3 # number of resources
     mR = 10 # max number of reosurces
     M = 1 # number of attack methods
@@ -303,7 +316,6 @@ if __name__ == "__main__":
     teams = util.generateAllTeams(R, mR)
     #teams = util.randomGenerateTeams(R, mR, nT)
 
-    #print teams
 
     # ================= random generate game setting ===========================
     seed = 2345
@@ -317,10 +329,26 @@ if __name__ == "__main__":
             print y_value0[w][r]
             
     print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
-    n_value, overflow_value, y_value, s_value = KStrategiesY( Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0)
+    objy, n_value, overflow_value, y_value, ys,  s_value, p_value, q = KStrategiesY( Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0)
     
+    n =[]
+    objs =[]
+    for i in range(Q):
+        obj_relaxi, n_value0, overflow_value0, attset, f = LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, ys[i], s_value, p_value, mr, ar, phi, integer=0, OverConstr=False)
+        n.append(n_value0)
+        objs.append(obj_relaxi)
+    obj, rt, q, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q,5, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, n,overflow_value, ys, s_value, p_value, integer=0, OverConstr=False)
     print y_value0
 
     print y_value
+    
+    print obj_relax, objy, obj, 
+    print objs
+    print y_value
+    for i in range(Q):
+        if q[i]>0:
+            print q[i]
+            print ys[i]
+
 
 

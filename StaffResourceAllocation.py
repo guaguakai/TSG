@@ -4,7 +4,7 @@ import numpy as np
 import random
 import math
 
-def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0, binary_y=0, binary_n=0): # integer indicates different relaxation method
+def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0, binary_y=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
@@ -35,7 +35,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
         for t in range(T):
             n_wtk[w].append([])
             for k in range(K):
-                if (integer == 2) or (integer == 3) and (binary_n == 0):
+                if (integer == 2) or (integer == 3):
                     tmp_pi_var = model.addVar(vtype=GRB.INTEGER, name="n_w{0}_t{1}_k{2}".format(w, t, k))
                 else:
                     tmp_pi_var = model.addVar(vtype=GRB.CONTINUOUS, name="n_w{0}_t{1}_k{2}".format(w, t, k))
@@ -112,18 +112,20 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
         for r in range(R):
             #tmp_sum = LinExpr([N_wk[w][k] for k in range(K)]*len(resource2team[r]), [pi[w][t][k] for t in resource2team[r] for k in range(K)])
             tmp_sum = LinExpr([1 for k in range(K)]*len(resource2team[r]), [n_wtk[w][t][k] for t in resource2team[r] for k in range(K)])
+            model.addConstr(y[w][r]*10000 >= tmp_sum, name="(5.6)_w{0}_r{1}".format(w, r))
             if w == 0:
                 model.addConstr(tmp_sum + pre_overflow[r] - y[w][r] * C[r] - overflow[w][r] <= 0, name="(4)_w{0}_r{1}".format(w, r))
             else:
                 model.addConstr(tmp_sum + overflow[w-1][r] - y[w][r] * C[r] - overflow[w][r] <= 0, name="(4)_w{0}_r{1}".format(w, r))
 
-    for r in range(R): # OPTIONAL
-        model.addConstr(overflow[W-1][r] == 0, name="(5)_r{0}".format(r))
-
-    for w in range(W):
-        for r in range(R):
-            if w > 0:
-                model.addConstr(y[w][r] * C[r] - overflow[w-1][r] >= 0, name="(5.5)_w{0}_r{1}".format(w, r))
+    if OverConstr:
+        for r in range(R): # OPTIONAL
+            model.addConstr(overflow[W-1][r] == 0, name="(5)_r{0}".format(r))
+    
+        for w in range(W):
+            for r in range(R):
+                if w > 0:
+                    model.addConstr(y[w][r] * C[r] - overflow[w-1][r] >= 0, name="(5.5)_w{0}_r{1}".format(w, r))
 
     for w in range(W):
         tmp_sum = LinExpr(ar, [y[w][r] for r in range(R)])
@@ -215,9 +217,13 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     for w in range(W):
         s_value[w] = s[w].x
         
+        p_value = np.zeros(W)
+    for w in range(W):
+        p_value[w] = p[w].x
     
+    obj = model.getAttr('ObjVal')
 
-    return n_value, overflow_value, y_value, s_value
+    return obj, n_value, overflow_value, y_value, s_value, p_value
     
 
 def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
@@ -299,6 +305,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     mr = [10,10,10,15,10,5]
     
     minr = np.zeros((W,R))
+    minn = np.zeros((W,T,K))
 
     ar = np.random.randint(1, 5, R)
     #print "\nar"
@@ -316,8 +323,8 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 15 # number of time windows
-    K = 20 # number of passenger types
+    W = 10 # number of time windows
+    K = 10 # number of passenger types
     R = 6 # number of resources
     mR = 3 # max number of reosurces
     M = 3 # number of attack methods
@@ -334,15 +341,16 @@ if __name__ == "__main__":
     seed = 2345
     resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
+
     print "============================ LP relaxation =============================="
-    n_value0, overflow_value0, y_value0, s_value0 = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0)
+    obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0 = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0, binary_y=0, OverConstr = 1)
     
     for w in range(W):
         for r in range(R):
             minr[w][r] = math.floor(y_value0[w][r])
             
     print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
-    n_value, overflow_value, y_value, s_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn , ar, phi, integer=0, binary_y=1)
+    obj, n_value, overflow_value, y_value, s_value, p_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn , ar, phi, integer=0, binary_y=1, OverConstr = 1)
     #print "============================ relaxed y (number of resources) MIP ==============================="
     #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=2)
     #print "============================ full MIP ==============================="
