@@ -4,7 +4,7 @@ import numpy as np
 import random
 import math
 
-def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0, binary_y=0, OverConstr=False): # integer indicates different relaxation method
+def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
@@ -305,7 +305,6 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     mr = [10,10,10,15,10,5]
     
     minr = np.zeros((W,R))
-    minn = np.zeros((W,T,K))
 
     ar = np.random.randint(1, 5, R)
     #print "\nar"
@@ -317,7 +316,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     print phi
     #phi = np.random.rand(W, R) # phi[w][r] overflow penalty
 
-    return resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi
+    return resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi
 
 if __name__ == "__main__":
     # ============================= main =======================================
@@ -339,18 +338,18 @@ if __name__ == "__main__":
 
     # ================= random generate game setting ===========================
     seed = 2345
-    resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
+    resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
 
     print "============================ LP relaxation =============================="
-    obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0 = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0, binary_y=0, OverConstr = 1)
+    obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0 = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 1)
     
     for w in range(W):
         for r in range(R):
             minr[w][r] = math.floor(y_value0[w][r])
             
     print "============================ relaxed n_wtk (allocated arrivals) MIP ==============================="
-    obj, n_value, overflow_value, y_value, s_value, p_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn , ar, phi, integer=0, binary_y=1, OverConstr = 1)
+    obj, n_value, overflow_value, y_value, s_value, p_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr , ar, phi, integer=0, binary_y=1, OverConstr = 1)
     #print "============================ relaxed y (number of resources) MIP ==============================="
     #LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=2)
     #print "============================ full MIP ==============================="

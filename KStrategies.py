@@ -208,7 +208,18 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
             else:
                 model.addConstr(tmp_sum + nmarginal + overflow[w-1][r] - y[w][r] * C[r] - overflow[w][r] <= 0)
             #model.addConstr(overflow[w][r] == quicksum(Overflow(i,w,r) for i in range(Q))) 
-            
+    for i in range(Q):
+        for r in range(R): # OPTIONAL
+            overflow_w = overflow[W-1][r]
+            # model.addConstr(overflow_w == 0, name="(5)_r{0}_s{1}".format(r,i))
+        
+    for i in range(Q):
+        for w in range(W):
+            for r in range(R):
+                overflow_w = overflow[w][r]
+                if w > 0:
+                    model.addConstr(y[w][r] * C[r] - overflow_w >= 0, name="(5.5)_w{0}_r{1}_s{2}".format(w, r,i))
+        
     
     model.update()
     
