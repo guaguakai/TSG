@@ -30,21 +30,21 @@ if __name__ == "__main__":
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = bigSetting( W, K , mR,  P, teams, shift)
     
     
-    obj_relaxed_all, n_value, overflow_value, y_value, s_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0)
+    obj_relaxed_all, n_value, overflow_value, y_value, s_value, p_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn, ar, phi, integer=0, binary_y=0, OverConstr=False)
     
     for w in range(W):
         for r in range(R):
             minr[w][r] = math.floor(y_value0[w][r])
             
-    obj_relaxed_n, n_value, overflow_value, y_value, s_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn , ar, phi, integer=0, binary_y=1)
+    obj_relaxed_n, n_value, overflow_value, y_value, s_value, p_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, minn , ar, phi, integer=0, binary_y=1, OverConstr=False)
 
     start_time = time.time()
     print "============================ MIP SOLVER =============================="
 
-    obj, rt, q, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, n, o, y, s,p,integer=0,OverConstr=False)
+    #obj, rt, q, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, n, o, y, s,p,integer=0,OverConstr=False)
     walltime = time.time() - start_time
     
-    print "relaxation all objective: ", obj_relaxed_all
-    print "relaxation n objective : ", obj_relaxed_n
-    print "MIP objective: ", obj
-    print "Runtime/walltime ", rt, " ", walltime
+    #print "relaxation all objective: ", obj_relaxed_all
+    #print "relaxation n objective : ", obj_relaxed_n
+    #print "MIP objective: ", obj
+    #print "Runtime/walltime ", rt, " ", walltime
