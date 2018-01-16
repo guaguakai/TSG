@@ -4,6 +4,17 @@ import itertools
 import random
 
 
+def genResources(R, M, NP):
+    ER = []
+    capacity = []
+    for r in range(R):
+        E = np.random.rand(M)
+        cap = (1-np.max(E))*NP
+        
+        ER.append(E)
+        capacity.append(cap)
+    return ER, capacity
+        
 def generateAllTeams(R, mR):
     teams = []
     for nR in range(mR):

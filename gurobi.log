@@ -56577,3 +56577,2314 @@ H157041 14317                    -464.7949199 -464.36353  0.09%   4.3  868s
  170175 14889 -464.36353   58  424 -464.79492 -464.36353  0.09%   4.4  935s
  171087 14854     cutoff   67      -464.79492 -464.36353  0.09%   4.4  940s
  172335 14866 -464.36353   81  422 -464.79492 -464.36353  0.09%   4.4  945s
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 16:55:36 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 15001 rows, 26311 columns and 125541 nonzeros
+Coefficient statistics:
+  Matrix range    [2e-01, 1e+04]
+  Objective range [6e-03, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 13605 rows and 13515 columns
+Presolve time: 0.06s
+Presolved: 1396 rows, 12796 columns, 62421 nonzeros
+Variable types: 12781 continuous, 15 integer (0 binary)
+
+Root relaxation: objective -3.493609e+02, 2142 iterations, 0.06 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -349.36091    0   10          - -349.36091      -     -    0s
+H    0     0                    -1928.000000 -349.36091  81.9%     -    0s
+H    0     0                    -1576.000000 -349.36091  77.8%     -    0s
+     0     0 -351.07970    0    9 -1576.0000 -351.07970  77.7%     -    0s
+     0     0 -351.07989    0    9 -1576.0000 -351.07989  77.7%     -    0s
+H    0     0                    -352.4032576 -351.07989  0.38%     -    0s
+     0     0 -351.08187    0    9 -352.40326 -351.08187  0.37%     -    0s
+     0     2 -351.08187    0    9 -352.40326 -351.08187  0.37%     -    0s
+*   99    67              12    -352.1593961 -351.09003  0.30%   6.5    0s
+H  119    55                    -351.8289256 -351.09003  0.21%   6.5    0s
+H  129    59                    -351.8055634 -351.09003  0.20%   6.4    0s
+H  317    91                    -351.7963732 -351.10955  0.20%   6.9    0s
+  6122   168 -351.76833   34    5 -351.79637 -351.51119  0.08%   7.1    5s
+
+Explored 6828 nodes (47817 simplex iterations) in 5.28 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -3.517963732274e+02, best bound -3.517963732274e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 16:58:50 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 15001 rows, 26311 columns and 125541 nonzeros
+Coefficient statistics:
+  Matrix range    [2e-01, 1e+04]
+  Objective range [6e-03, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+
+Concurrent LP optimizer: dual simplex and barrier
+Showing barrier log only...
+
+Presolve removed 13605 rows and 13515 columns
+Presolve time: 0.04s
+Presolved: 1396 rows, 12796 columns, 62421 nonzeros
+
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 1
+ AA' NZ     : 6.876e+03
+ Factor NZ  : 1.153e+04 (roughly 6 MBytes of memory)
+ Factor Ops : 1.833e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   3.10193653e+03  2.37645313e+04  6.83e+02 1.19e+01  4.37e+02     0s
+   1  -1.37457237e+04  2.35173436e+04  1.93e+02 7.87e+00  1.27e+02     0s
+   2  -2.67498138e+03  6.58926141e+04  8.90e+01 3.06e+00  6.24e+01     0s
+   3  -4.90108995e+03  4.18592823e+04  5.99e+00 1.66e+00  7.46e+00     0s
+   4  -3.29672307e+03  7.02400403e+03  4.99e-01 3.16e-02  9.85e-01     0s
+   5  -1.17483549e+03  2.67560984e+03  1.25e-01 1.26e-02  3.03e-01     0s
+   6  -9.03019791e+02  1.69863866e+03  7.80e-02 8.13e-03  1.98e-01     0s
+   7  -7.27722306e+02  1.04111761e+03  4.79e-02 2.05e-03  1.32e-01     0s
+   8  -6.93632507e+02  5.47197639e+02  4.24e-02 9.30e-16  9.22e-02     0s
+   9  -5.80848574e+02  1.51889203e+02  2.56e-02 1.20e-15  5.39e-02     0s
+  10  -5.22087032e+02  1.58168849e+01  1.79e-02 9.78e-16  3.93e-02     0s
+  11  -4.76498387e+02 -1.39294287e+02  1.24e-02 1.90e-04  2.46e-02     0s
+  12  -4.29669048e+02 -1.82531997e+02  6.93e-03 1.74e-04  1.79e-02     0s
+  13  -4.24276881e+02 -2.19588443e+02  6.27e-03 1.55e-04  1.49e-02     0s
+  14  -4.17185962e+02 -2.24995559e+02  5.64e-03 1.44e-04  1.39e-02     0s
+  15  -4.10236462e+02 -2.40804041e+02  5.04e-03 1.30e-04  1.23e-02     0s
+  16  -4.07478687e+02 -2.55781200e+02  4.81e-03 1.13e-04  1.10e-02     0s
+  17  -4.06635539e+02 -2.59896669e+02  4.74e-03 1.08e-04  1.06e-02     0s
+  18  -4.00857442e+02 -2.68948122e+02  4.18e-03 9.62e-05  9.56e-03     0s
+  19  -3.88406492e+02 -2.78135915e+02  3.27e-03 7.35e-05  7.99e-03     0s
+  20  -3.82563461e+02 -2.85567750e+02  2.85e-03 5.88e-05  7.02e-03     0s
+  21  -3.74911701e+02 -2.95571569e+02  2.28e-03 4.08e-05  5.74e-03     0s
+  22  -3.69314067e+02 -3.12009452e+02  1.78e-03 1.27e-04  4.15e-03     0s
+  23  -3.60710075e+02 -3.22485853e+02  9.15e-04 1.06e-04  2.76e-03     0s
+  24  -3.58732802e+02 -3.26439120e+02  7.05e-04 8.98e-05  2.33e-03     0s
+  25  -3.59163051e+02 -3.29623109e+02  6.33e-04 7.80e-05  2.13e-03     0s
+  26  -3.56645956e+02 -3.30116858e+02  4.96e-04 7.57e-05  1.91e-03     0s
+  27  -3.56244683e+02 -3.30372699e+02  4.74e-04 7.45e-05  1.87e-03     0s
+  28  -3.55670207e+02 -3.31645553e+02  4.33e-04 6.12e-05  1.73e-03     0s
+  29  -3.54665944e+02 -3.32386794e+02  3.81e-04 5.01e-05  1.61e-03     0s
+
+Barrier performed 29 iterations in 0.14 seconds
+Barrier solve interrupted - model solved by another algorithm
+
+
+Solved with dual simplex
+Solved in 2225 iterations and 0.16 seconds
+Optimal objective -3.493609055e+02
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 16:59:53 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 15001 rows, 26311 columns and 125541 nonzeros
+Coefficient statistics:
+  Matrix range    [2e-01, 1e+04]
+  Objective range [6e-03, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+
+Concurrent LP optimizer: dual simplex and barrier
+Showing barrier log only...
+
+Presolve removed 13605 rows and 13515 columns
+Presolve time: 0.04s
+Presolved: 1396 rows, 12796 columns, 62421 nonzeros
+
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 1
+ AA' NZ     : 6.876e+03
+ Factor NZ  : 1.153e+04 (roughly 6 MBytes of memory)
+ Factor Ops : 1.833e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   3.10193653e+03  2.37645313e+04  6.83e+02 1.19e+01  4.37e+02     0s
+   1  -1.37457237e+04  2.35173436e+04  1.93e+02 7.87e+00  1.27e+02     0s
+   2  -2.67498138e+03  6.58926141e+04  8.90e+01 3.06e+00  6.24e+01     0s
+   3  -4.90108995e+03  4.18592823e+04  5.99e+00 1.66e+00  7.46e+00     0s
+   4  -3.29672307e+03  7.02400403e+03  4.99e-01 3.16e-02  9.85e-01     0s
+   5  -1.17483549e+03  2.67560984e+03  1.25e-01 1.26e-02  3.03e-01     0s
+   6  -9.03019791e+02  1.69863866e+03  7.80e-02 8.13e-03  1.98e-01     0s
+   7  -7.27722306e+02  1.04111761e+03  4.79e-02 2.05e-03  1.32e-01     0s
+   8  -6.93632507e+02  5.47197639e+02  4.24e-02 9.30e-16  9.22e-02     0s
+   9  -5.80848574e+02  1.51889203e+02  2.56e-02 1.20e-15  5.39e-02     0s
+  10  -5.22087032e+02  1.58168849e+01  1.79e-02 9.78e-16  3.93e-02     0s
+  11  -4.76498387e+02 -1.39294287e+02  1.24e-02 1.90e-04  2.46e-02     0s
+  12  -4.29669048e+02 -1.82531997e+02  6.93e-03 1.74e-04  1.79e-02     0s
+  13  -4.24276881e+02 -2.19588443e+02  6.27e-03 1.55e-04  1.49e-02     0s
+  14  -4.17185962e+02 -2.24995559e+02  5.64e-03 1.44e-04  1.39e-02     0s
+  15  -4.10236462e+02 -2.40804041e+02  5.04e-03 1.30e-04  1.23e-02     0s
+  16  -4.07478687e+02 -2.55781200e+02  4.81e-03 1.13e-04  1.10e-02     0s
+  17  -4.06635539e+02 -2.59896669e+02  4.74e-03 1.08e-04  1.06e-02     0s
+  18  -4.00857442e+02 -2.68948122e+02  4.18e-03 9.62e-05  9.56e-03     0s
+  19  -3.88406492e+02 -2.78135915e+02  3.27e-03 7.35e-05  7.99e-03     0s
+  20  -3.82563461e+02 -2.85567750e+02  2.85e-03 5.88e-05  7.02e-03     0s
+  21  -3.74911701e+02 -2.95571569e+02  2.28e-03 4.08e-05  5.74e-03     0s
+  22  -3.69314067e+02 -3.12009452e+02  1.78e-03 1.27e-04  4.15e-03     0s
+  23  -3.60710075e+02 -3.22485853e+02  9.15e-04 1.06e-04  2.76e-03     0s
+  24  -3.58732802e+02 -3.26439120e+02  7.05e-04 8.98e-05  2.33e-03     0s
+  25  -3.59163051e+02 -3.29623109e+02  6.33e-04 7.80e-05  2.13e-03     0s
+  26  -3.56645956e+02 -3.30116858e+02  4.96e-04 7.57e-05  1.91e-03     0s
+  27  -3.56244683e+02 -3.30372699e+02  4.74e-04 7.45e-05  1.87e-03     0s
+  28  -3.55670207e+02 -3.31645553e+02  4.33e-04 6.12e-05  1.73e-03     0s
+  29  -3.54665944e+02 -3.32386794e+02  3.81e-04 5.01e-05  1.61e-03     0s
+  30  -3.52785055e+02 -3.34912013e+02  3.07e-04 1.80e-05  1.29e-03     0s
+  31  -3.52646321e+02 -3.37747969e+02  2.76e-04 1.45e-05  1.07e-03     0s
+  32  -3.52042068e+02 -3.37971429e+02  2.30e-04 1.41e-05  1.01e-03     0s
+
+Barrier performed 32 iterations in 0.15 seconds
+Barrier solve interrupted - model solved by another algorithm
+
+
+Solved with dual simplex
+Solved in 2225 iterations and 0.16 seconds
+Optimal objective -3.493609055e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:00:13 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 15001 rows, 26311 columns and 125541 nonzeros
+Coefficient statistics:
+  Matrix range    [2e-01, 1e+04]
+  Objective range [6e-03, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+
+Concurrent LP optimizer: dual simplex and barrier
+Showing barrier log only...
+
+Presolve removed 13605 rows and 13515 columns
+Presolve time: 0.04s
+Presolved: 1396 rows, 12796 columns, 62421 nonzeros
+
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 1
+ AA' NZ     : 6.876e+03
+ Factor NZ  : 1.153e+04 (roughly 6 MBytes of memory)
+ Factor Ops : 1.833e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   3.10193653e+03  2.37645313e+04  6.83e+02 1.19e+01  4.37e+02     0s
+   1  -1.37457237e+04  2.35173436e+04  1.93e+02 7.87e+00  1.27e+02     0s
+   2  -2.67498138e+03  6.58926141e+04  8.90e+01 3.06e+00  6.24e+01     0s
+   3  -4.90108995e+03  4.18592823e+04  5.99e+00 1.66e+00  7.46e+00     0s
+   4  -3.29672307e+03  7.02400403e+03  4.99e-01 3.16e-02  9.85e-01     0s
+   5  -1.17483549e+03  2.67560984e+03  1.25e-01 1.26e-02  3.03e-01     0s
+   6  -9.03019791e+02  1.69863866e+03  7.80e-02 8.13e-03  1.98e-01     0s
+   7  -7.27722306e+02  1.04111761e+03  4.79e-02 2.05e-03  1.32e-01     0s
+   8  -6.93632507e+02  5.47197639e+02  4.24e-02 9.30e-16  9.22e-02     0s
+   9  -5.80848574e+02  1.51889203e+02  2.56e-02 1.20e-15  5.39e-02     0s
+  10  -5.22087032e+02  1.58168849e+01  1.79e-02 9.78e-16  3.93e-02     0s
+  11  -4.76498387e+02 -1.39294287e+02  1.24e-02 1.90e-04  2.46e-02     0s
+  12  -4.29669048e+02 -1.82531997e+02  6.93e-03 1.74e-04  1.79e-02     0s
+  13  -4.24276881e+02 -2.19588443e+02  6.27e-03 1.55e-04  1.49e-02     0s
+  14  -4.17185962e+02 -2.24995559e+02  5.64e-03 1.44e-04  1.39e-02     0s
+  15  -4.10236462e+02 -2.40804041e+02  5.04e-03 1.30e-04  1.23e-02     0s
+  16  -4.07478687e+02 -2.55781200e+02  4.81e-03 1.13e-04  1.10e-02     0s
+  17  -4.06635539e+02 -2.59896669e+02  4.74e-03 1.08e-04  1.06e-02     0s
+  18  -4.00857442e+02 -2.68948122e+02  4.18e-03 9.62e-05  9.56e-03     0s
+  19  -3.88406492e+02 -2.78135915e+02  3.27e-03 7.35e-05  7.99e-03     0s
+  20  -3.82563461e+02 -2.85567750e+02  2.85e-03 5.88e-05  7.02e-03     0s
+  21  -3.74911701e+02 -2.95571569e+02  2.28e-03 4.08e-05  5.74e-03     0s
+  22  -3.69314067e+02 -3.12009452e+02  1.78e-03 1.27e-04  4.15e-03     0s
+  23  -3.60710075e+02 -3.22485853e+02  9.15e-04 1.06e-04  2.76e-03     0s
+  24  -3.58732802e+02 -3.26439120e+02  7.05e-04 8.98e-05  2.33e-03     0s
+  25  -3.59163051e+02 -3.29623109e+02  6.33e-04 7.80e-05  2.13e-03     0s
+  26  -3.56645956e+02 -3.30116858e+02  4.96e-04 7.57e-05  1.91e-03     0s
+  27  -3.56244683e+02 -3.30372699e+02  4.74e-04 7.45e-05  1.87e-03     0s
+  28  -3.55670207e+02 -3.31645553e+02  4.33e-04 6.12e-05  1.73e-03     0s
+  29  -3.54665944e+02 -3.32386794e+02  3.81e-04 5.01e-05  1.61e-03     0s
+  30  -3.52785055e+02 -3.34912013e+02  3.07e-04 1.80e-05  1.29e-03     0s
+  31  -3.52646321e+02 -3.37747969e+02  2.76e-04 1.45e-05  1.07e-03     0s
+  32  -3.52042068e+02 -3.37971429e+02  2.30e-04 1.41e-05  1.01e-03     0s
+  33  -3.51838553e+02 -3.38154663e+02  2.03e-04 1.40e-05  9.85e-04     0s
+  34  -3.51284229e+02 -3.38515698e+02  1.78e-04 1.15e-05  9.19e-04     0s
+
+Barrier performed 34 iterations in 0.14 seconds
+Barrier solve interrupted - model solved by another algorithm
+
+
+Solved with dual simplex
+Solved in 2225 iterations and 0.16 seconds
+Optimal objective -3.493609055e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:00:48 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 15001 rows, 26311 columns and 125541 nonzeros
+Coefficient statistics:
+  Matrix range    [2e-01, 1e+04]
+  Objective range [6e-03, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+
+Concurrent LP optimizer: dual simplex and barrier
+Showing barrier log only...
+
+Presolve removed 13605 rows and 13515 columns
+Presolve time: 0.04s
+Presolved: 1396 rows, 12796 columns, 62421 nonzeros
+
+Ordering time: 0.00s
+
+Barrier statistics:
+ Dense cols : 1
+ AA' NZ     : 6.876e+03
+ Factor NZ  : 1.153e+04 (roughly 6 MBytes of memory)
+ Factor Ops : 1.833e+05 (less than 1 second per iteration)
+ Threads    : 1
+
+                  Objective                Residual
+Iter       Primal          Dual         Primal    Dual     Compl     Time
+   0   3.10193653e+03  2.37645313e+04  6.83e+02 1.19e+01  4.37e+02     0s
+   1  -1.37457237e+04  2.35173436e+04  1.93e+02 7.87e+00  1.27e+02     0s
+   2  -2.67498138e+03  6.58926141e+04  8.90e+01 3.06e+00  6.24e+01     0s
+   3  -4.90108995e+03  4.18592823e+04  5.99e+00 1.66e+00  7.46e+00     0s
+   4  -3.29672307e+03  7.02400403e+03  4.99e-01 3.16e-02  9.85e-01     0s
+   5  -1.17483549e+03  2.67560984e+03  1.25e-01 1.26e-02  3.03e-01     0s
+   6  -9.03019791e+02  1.69863866e+03  7.80e-02 8.13e-03  1.98e-01     0s
+   7  -7.27722306e+02  1.04111761e+03  4.79e-02 2.05e-03  1.32e-01     0s
+   8  -6.93632507e+02  5.47197639e+02  4.24e-02 9.30e-16  9.22e-02     0s
+   9  -5.80848574e+02  1.51889203e+02  2.56e-02 1.20e-15  5.39e-02     0s
+  10  -5.22087032e+02  1.58168849e+01  1.79e-02 9.78e-16  3.93e-02     0s
+  11  -4.76498387e+02 -1.39294287e+02  1.24e-02 1.90e-04  2.46e-02     0s
+  12  -4.29669048e+02 -1.82531997e+02  6.93e-03 1.74e-04  1.79e-02     0s
+  13  -4.24276881e+02 -2.19588443e+02  6.27e-03 1.55e-04  1.49e-02     0s
+  14  -4.17185962e+02 -2.24995559e+02  5.64e-03 1.44e-04  1.39e-02     0s
+  15  -4.10236462e+02 -2.40804041e+02  5.04e-03 1.30e-04  1.23e-02     0s
+  16  -4.07478687e+02 -2.55781200e+02  4.81e-03 1.13e-04  1.10e-02     0s
+  17  -4.06635539e+02 -2.59896669e+02  4.74e-03 1.08e-04  1.06e-02     0s
+  18  -4.00857442e+02 -2.68948122e+02  4.18e-03 9.62e-05  9.56e-03     0s
+  19  -3.88406492e+02 -2.78135915e+02  3.27e-03 7.35e-05  7.99e-03     0s
+  20  -3.82563461e+02 -2.85567750e+02  2.85e-03 5.88e-05  7.02e-03     0s
+  21  -3.74911701e+02 -2.95571569e+02  2.28e-03 4.08e-05  5.74e-03     0s
+  22  -3.69314067e+02 -3.12009452e+02  1.78e-03 1.27e-04  4.15e-03     0s
+  23  -3.60710075e+02 -3.22485853e+02  9.15e-04 1.06e-04  2.76e-03     0s
+  24  -3.58732802e+02 -3.26439120e+02  7.05e-04 8.98e-05  2.33e-03     0s
+  25  -3.59163051e+02 -3.29623109e+02  6.33e-04 7.80e-05  2.13e-03     0s
+  26  -3.56645956e+02 -3.30116858e+02  4.96e-04 7.57e-05  1.91e-03     0s
+  27  -3.56244683e+02 -3.30372699e+02  4.74e-04 7.45e-05  1.87e-03     0s
+  28  -3.55670207e+02 -3.31645553e+02  4.33e-04 6.12e-05  1.73e-03     0s
+  29  -3.54665944e+02 -3.32386794e+02  3.81e-04 5.01e-05  1.61e-03     0s
+  30  -3.52785055e+02 -3.34912013e+02  3.07e-04 1.80e-05  1.29e-03     0s
+  31  -3.52646321e+02 -3.37747969e+02  2.76e-04 1.45e-05  1.07e-03     0s
+  32  -3.52042068e+02 -3.37971429e+02  2.30e-04 1.41e-05  1.01e-03     0s
+
+Barrier performed 32 iterations in 0.15 seconds
+Barrier solve interrupted - model solved by another algorithm
+
+
+Solved with dual simplex
+Solved in 2225 iterations and 0.17 seconds
+Optimal objective -3.493609055e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsg.lp' does not contain these changes.
+Optimize a model with 16531 rows, 27216 columns and 129405 nonzeros
+Coefficient statistics:
+  Matrix range    [2e-01, 1e+04]
+  Objective range [6e-03, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve time: 0.01s
+
+Explored 0 nodes (0 simplex iterations) in 0.04 seconds
+Thread count was 1 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:06:03 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 100 rows, 127 columns and 414 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 66 rows and 57 columns
+Presolve time: 0.00s
+Presolved: 34 rows, 70 columns, 291 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.625000e+30   8.000000e+00      0s
+      75   -5.0894106e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 75 iterations and 0.00 seconds
+Optimal objective -5.089410562e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 253 rows, 222 columns and 798 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1928
+Presolve removed 75 rows and 60 columns
+Presolve time: 0.00s
+Presolved: 178 rows, 162 columns, 636 nonzeros
+Variable types: 117 continuous, 45 integer (45 binary)
+
+Root relaxation: objective -1.629952e+03, 116 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -1629.951691 -1629.9517  0.00%     -    0s
+
+Explored 0 nodes (177 simplex iterations) in 0.00 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -1.629951690821e+03, best bound -1.629951690821e+03, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:06:22 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 662 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 381 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      82   -5.8720188e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 82 iterations and 0.00 seconds
+Optimal objective -5.872018837e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 421 rows, 366 columns and 1304 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1928
+Presolve removed 128 rows and 101 columns
+Presolve time: 0.00s
+Presolved: 293 rows, 265 columns, 1005 nonzeros
+Variable types: 190 continuous, 75 integer (75 binary)
+
+Root relaxation: objective -1.425455e+03, 115 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -1425.455183 -1425.4552  0.00%     -    0s
+
+Explored 0 nodes (149 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -1.425455183323e+03, best bound -1.425455183323e+03, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:06:36 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 662 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 381 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      84   -4.8195078e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 84 iterations and 0.00 seconds
+Optimal objective -4.819507768e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 421 rows, 366 columns and 1304 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1931.99
+Presolve removed 128 rows and 101 columns
+Presolve time: 0.00s
+Presolved: 293 rows, 265 columns, 1005 nonzeros
+Variable types: 190 continuous, 75 integer (75 binary)
+
+Root relaxation: objective -7.166693e+02, 173 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -716.66932    0    4 -1931.9934 -716.66932  62.9%     -    0s
+H    0     0                    -727.4854851 -716.66932  1.49%     -    0s
+     0     0 -716.66932    0    4 -727.48549 -716.66932  1.49%     -    0s
+H    0     0                    -724.0030767 -716.66932  1.01%     -    0s
+     0     0 -716.66932    0    6 -724.00308 -716.66932  1.01%     -    0s
+     0     0 -716.66932    0    6 -724.00308 -716.66932  1.01%     -    0s
+     0     0 -716.66932    0    3 -724.00308 -716.66932  1.01%     -    0s
+H    0     0                    -719.9100332 -716.66932  0.45%     -    0s
+     0     2 -716.66932    0    3 -719.91003 -716.66932  0.45%     -    0s
+H   27     1                    -718.5427334 -716.66932  0.26%   9.2    0s
+*   81     1              27    -717.8789654 -716.66932  0.17%   7.9    0s
+H  177    66                    -717.3120024 -716.66932  0.09%   7.8    0s
+H  385   101                    -717.1891811 -716.66932  0.07%   7.4    0s
+H  433   101                    -716.8724040 -716.66932  0.03%   7.7    0s
+H 3918   457                    -716.7615796 -716.66932  0.01%   8.5    0s
+ 67580  3376     cutoff   36      -716.76158 -716.66932  0.01%   8.3    5s
+ 145703  3501     cutoff   33      -716.76158 -716.66932  0.01%   8.5   10s
+
+Cutting planes:
+  Gomory: 13
+  MIR: 3
+  Flow cover: 8
+
+Explored 162195 nodes (1343327 simplex iterations) in 10.68 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -7.167615795543e+02, best bound -7.166992941250e+02, gap 0.0087%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:06:57 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 801 rows, 846 columns and 3298 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.00s
+Presolved: 471 rows, 561 columns, 2337 nonzeros
+Variable types: 436 continuous, 125 integer (125 binary)
+Found heuristic solution: objective -1928.000000
+
+Root relaxation: objective -5.560657e+02, 263 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -556.06568    0    7 -1928.0000 -556.06568  71.2%     -    0s
+H    0     0                    -576.3498698 -556.06568  3.52%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   11 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+     0     2 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+*  126    63              35    -575.3615746 -556.28667  3.32%   6.4    0s
+*  131    63              38    -575.3484822 -556.28667  3.31%   6.4    0s
+*  390   332              42    -575.2641613 -556.89827  3.19%   6.5    0s
+H 1351   853                    -571.8947729 -561.19136  1.87%   7.4    0s
+* 1634   806              62    -571.6560083 -561.19136  1.83%   7.1    0s
+H 2194   847                    -568.9467481 -561.19136  1.36%   6.7    0s
+* 3009   861              60    -568.0271060 -561.19136  1.20%   6.4    0s
+H10056  3853                    -567.8705644 -561.73230  1.08%   6.4    0s
+H10113  3789                    -567.7662033 -561.73230  1.06%   6.4    0s
+ 73781 13982 -565.08794   53    4 -567.76620 -565.08794  0.47%   5.7    5s
+ 192409 22223 -565.88997   70    3 -567.76620 -565.88997  0.33%   5.1   10s
+ 329957 16729 -566.59904   55    5 -567.76620 -566.59904  0.21%   5.1   15s
+ 487330  2164 -567.66463   62    4 -567.76620 -567.66463  0.02%   4.6   20s
+
+Cutting planes:
+  Gomory: 5
+  MIR: 1
+  Flow cover: 3
+
+Explored 495712 nodes (2281090 simplex iterations) in 20.22 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -5.677662032597e+02, best bound -5.677102565350e+02, gap 0.0099%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:08:15 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 801 rows, 846 columns and 3298 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.00s
+Presolved: 471 rows, 561 columns, 2337 nonzeros
+Variable types: 436 continuous, 125 integer (125 binary)
+Found heuristic solution: objective -1928.000000
+
+Root relaxation: objective -5.560657e+02, 263 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -556.06568    0    7 -1928.0000 -556.06568  71.2%     -    0s
+H    0     0                    -576.3498698 -556.06568  3.52%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   11 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+     0     2 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+*  126    63              35    -575.3615746 -556.28667  3.32%   6.4    0s
+*  131    63              38    -575.3484822 -556.28667  3.31%   6.4    0s
+*  390   332              42    -575.2641613 -556.89827  3.19%   6.5    0s
+H 1351   853                    -571.8947729 -561.19136  1.87%   7.4    0s
+* 1634   806              62    -571.6560083 -561.19136  1.83%   7.1    0s
+H 2194   847                    -568.9467481 -561.19136  1.36%   6.7    0s
+* 3009   861              60    -568.0271060 -561.19136  1.20%   6.4    0s
+H10056  3853                    -567.8705644 -561.73230  1.08%   6.4    0s
+H10113  3789                    -567.7662033 -561.73230  1.06%   6.4    0s
+ 73781 13982 -565.08794   53    4 -567.76620 -565.08794  0.47%   5.7    5s
+ 186930 23581 -565.88997   59    3 -567.76620 -565.88997  0.33%   5.1   10s
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:08:29 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 801 rows, 846 columns and 3298 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.00s
+Presolved: 471 rows, 561 columns, 2337 nonzeros
+Variable types: 436 continuous, 125 integer (125 binary)
+Found heuristic solution: objective -1928.000000
+
+Root relaxation: objective -5.560657e+02, 263 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -556.06568    0    7 -1928.0000 -556.06568  71.2%     -    0s
+H    0     0                    -576.3498698 -556.06568  3.52%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   11 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+     0     2 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+*  126    63              35    -575.3615746 -556.28667  3.32%   6.4    0s
+*  131    63              38    -575.3484822 -556.28667  3.31%   6.4    0s
+*  390   332              42    -575.2641613 -556.89827  3.19%   6.5    0s
+H 1351   853                    -571.8947729 -561.19136  1.87%   7.4    0s
+* 1634   806              62    -571.6560083 -561.19136  1.83%   7.1    0s
+H 2194   847                    -568.9467481 -561.19136  1.36%   6.7    0s
+* 3009   861              60    -568.0271060 -561.19136  1.20%   6.4    0s
+H10056  3853                    -567.8705644 -561.73230  1.08%   6.4    0s
+H10113  3789                    -567.7662033 -561.73230  1.06%   6.4    0s
+ 80709 15372 -565.90215   46    5 -567.76620 -565.33091  0.43%   5.5    5s
+ 195909 21643     cutoff   69      -567.76620 -566.01372  0.31%   5.1   10s
+ 333550 16743     cutoff   63      -567.76620 -566.61146  0.20%   5.1   15s
+ 475373  3679 -567.64907   56    4 -567.76620 -567.64907  0.02%   4.6   20s
+
+Cutting planes:
+  Gomory: 5
+  MIR: 1
+  Flow cover: 3
+
+Explored 495712 nodes (2281090 simplex iterations) in 20.70 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -5.677662032597e+02, best bound -5.677102565350e+02, gap 0.0099%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:09:02 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 801 rows, 846 columns and 3298 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.00s
+Presolved: 471 rows, 561 columns, 2337 nonzeros
+Variable types: 436 continuous, 125 integer (125 binary)
+Found heuristic solution: objective -1928.000000
+
+Root relaxation: objective -5.560657e+02, 263 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -556.06568    0    7 -1928.0000 -556.06568  71.2%     -    0s
+H    0     0                    -576.3498698 -556.06568  3.52%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   11 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0   10 -576.34987 -556.27138  3.48%     -    0s
+     0     0 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+     0     2 -556.27138    0    9 -576.34987 -556.27138  3.48%     -    0s
+*  126    63              35    -575.3615746 -556.28667  3.32%   6.4    0s
+*  131    63              38    -575.3484822 -556.28667  3.31%   6.4    0s
+*  390   332              42    -575.2641613 -556.89827  3.19%   6.5    0s
+H 1351   853                    -571.8947729 -561.19136  1.87%   7.4    0s
+* 1634   806              62    -571.6560083 -561.19136  1.83%   7.1    0s
+H 2194   847                    -568.9467481 -561.19136  1.36%   6.7    0s
+* 3009   861              60    -568.0271060 -561.19136  1.20%   6.4    0s
+H10056  3853                    -567.8705644 -561.73230  1.08%   6.4    0s
+H10113  3789                    -567.7662033 -561.73230  1.06%   6.4    0s
+ 78838 14929 -567.66093   39    5 -567.76620 -565.33091  0.43%   5.6    5s
+ 202502 20486 -566.05659   66    3 -567.76620 -566.05659  0.30%   5.1   10s
+ 341669 16493 -566.66190   63    4 -567.76620 -566.66190  0.19%   5.1   15s
+
+Cutting planes:
+  Gomory: 5
+  MIR: 1
+  Flow cover: 3
+
+Explored 495712 nodes (2281090 simplex iterations) in 19.98 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -5.677662032597e+02, best bound -5.677102565350e+02, gap 0.0099%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:09:54 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 1176 rows, 1101 columns and 4298 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.01s
+Presolved: 846 rows, 816 columns, 3337 nonzeros
+Variable types: 566 continuous, 250 integer (250 binary)
+Found heuristic solution: objective -1928.000000
+
+Root relaxation: objective -5.403685e+02, 451 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -540.36855    0    3 -1928.0000 -540.36855  72.0%     -    0s
+H    0     0                    -550.6305726 -540.36855  1.86%     -    0s
+     0     0 -540.36855    0    4 -550.63057 -540.36855  1.86%     -    0s
+H    0     0                    -550.1714540 -540.36855  1.78%     -    0s
+     0     0 -540.36855    0    8 -550.17145 -540.36855  1.78%     -    0s
+     0     0 -540.36855    0    6 -550.17145 -540.36855  1.78%     -    0s
+     0     0 -540.36855    0    7 -550.17145 -540.36855  1.78%     -    0s
+     0     0 -540.36855    0    3 -550.17145 -540.36855  1.78%     -    0s
+H    0     0                    -542.2065086 -540.36855  0.34%     -    0s
+     0     2 -540.36855    0    3 -542.20651 -540.36855  0.34%     -    0s
+H  173   171                    -541.2194317 -540.36855  0.16%  10.3    0s
+H  194   185                    -540.7512279 -540.36855  0.07%  11.1    0s
+*  331   210              77    -540.4227427 -540.36855  0.01%  10.9    0s
+H  580   328                    -540.3772075 -540.36855  0.00%  11.3    0s
+
+Cutting planes:
+  Gomory: 3
+  MIR: 1
+  Flow cover: 2
+
+Explored 693 nodes (8959 simplex iterations) in 0.21 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -5.403772075206e+02, best bound -5.403685481599e+02, gap 0.0016%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:11:20 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: model has pending changes.
+File 'tsgkp.lp' does not contain these changes.
+Optimize a model with 1177 rows, 1101 columns and 4308 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.01s
+Presolved: 847 rows, 816 columns, 3347 nonzeros
+Variable types: 566 continuous, 250 integer (250 binary)
+
+Root relaxation: infeasible, 211 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (211 simplex iterations) in 0.02 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:12:18 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 1177 rows, 1101 columns and 4308 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 330 rows and 285 columns
+Presolve time: 0.01s
+Presolved: 847 rows, 816 columns, 3347 nonzeros
+Variable types: 566 continuous, 250 integer (250 binary)
+
+Root relaxation: infeasible, 211 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (211 simplex iterations) in 0.03 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:17:02 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 1152 rows, 1101 columns and 4263 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 320 rows and 280 columns
+Presolve time: 0.01s
+Presolved: 832 rows, 821 columns, 3322 nonzeros
+Variable types: 571 continuous, 250 integer (250 binary)
+
+Root relaxation: infeasible, 181 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (181 simplex iterations) in 0.02 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:17:28 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 376 rows, 591 columns and 2228 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 315 rows and 275 columns
+Presolve time: 0.00s
+Presolved: 61 rows, 316 columns, 1297 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   4.281250e+30   1.600000e+01      0s
+     119   -2.4188297e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 119 iterations and 0.00 seconds
+Optimal objective -2.418829700e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 1152 rows, 1101 columns and 4263 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [4e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 320 rows and 280 columns
+Presolve time: 0.01s
+Presolved: 832 rows, 821 columns, 3322 nonzeros
+Variable types: 571 continuous, 250 integer (250 binary)
+
+Root relaxation: infeasible, 181 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (181 simplex iterations) in 0.02 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:23:01 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 76 rows, 76 columns and 207 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 1e+03]
+Presolve removed 46 rows and 30 columns
+Presolve time: 0.00s
+Presolved: 30 rows, 46 columns, 121 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   1.515625e+30   1.600000e+01      0s
+      21   -4.1328000e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 21 iterations and 0.00 seconds
+Optimal objective -4.132800000e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 387 rows, 286 columns and 1027 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 1e+03]
+Found heuristic solution: objective -1478.52
+Presolve removed 48 rows and 32 columns
+Presolve time: 0.00s
+Presolved: 339 rows, 254 columns, 937 nonzeros
+Variable types: 154 continuous, 100 integer (100 binary)
+
+Root relaxation: objective -1.476000e+03, 83 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -1476.000000 -1476.0000  0.00%     -    0s
+
+Explored 0 nodes (139 simplex iterations) in 0.00 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -1.476000000000e+03, best bound -1.476000000000e+03, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:23:10 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 121 columns and 329 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 71 rows and 55 columns
+Presolve time: 0.00s
+Presolved: 40 rows, 66 columns, 185 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.703125e+30   8.000000e+00      0s
+      47   -5.3984000e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 47 iterations and 0.00 seconds
+Optimal objective -5.398400000e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 422 rows, 331 columns and 1149 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 73 rows and 57 columns
+Presolve time: 0.00s
+Presolved: 349 rows, 274 columns, 1001 nonzeros
+Variable types: 174 continuous, 100 integer (100 binary)
+
+Root relaxation: infeasible, 234 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (234 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:23:29 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 121 columns and 332 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 71 rows and 55 columns
+Presolve time: 0.00s
+Presolved: 40 rows, 66 columns, 188 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.703125e+30   8.000000e+00      0s
+      47   -5.3984000e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 47 iterations and 0.00 seconds
+Optimal objective -5.398400000e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 422 rows, 331 columns and 1152 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 73 rows and 57 columns
+Presolve time: 0.00s
+Presolved: 349 rows, 274 columns, 1004 nonzeros
+Variable types: 174 continuous, 100 integer (100 binary)
+
+Root relaxation: infeasible, 199 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (199 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:23:38 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 121 columns and 332 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 71 rows and 55 columns
+Presolve time: 0.00s
+Presolved: 40 rows, 66 columns, 188 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.703125e+30   8.000000e+00      0s
+      36   -5.3984000e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 36 iterations and 0.00 seconds
+Optimal objective -5.398400000e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 422 rows, 331 columns and 1152 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 73 rows and 57 columns
+Presolve time: 0.00s
+Presolved: 349 rows, 274 columns, 1004 nonzeros
+Variable types: 174 continuous, 100 integer (100 binary)
+
+Root relaxation: infeasible, 220 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (220 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:23:49 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 121 columns and 332 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 71 rows and 55 columns
+Presolve time: 0.00s
+Presolved: 40 rows, 66 columns, 188 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.703125e+30   8.000000e+00      0s
+      35   -5.3984000e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 35 iterations and 0.00 seconds
+Optimal objective -5.398400000e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 422 rows, 331 columns and 1152 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 73 rows and 57 columns
+Presolve time: 0.00s
+Presolved: 349 rows, 274 columns, 1004 nonzeros
+Variable types: 174 continuous, 100 integer (100 binary)
+
+Root relaxation: infeasible, 226 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (226 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:24:02 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 121 columns and 332 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 71 rows and 55 columns
+Presolve time: 0.00s
+Presolved: 40 rows, 66 columns, 188 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.703125e+30   8.000000e+00      0s
+      47   -5.3984000e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 47 iterations and 0.00 seconds
+Optimal objective -5.398400000e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 422 rows, 331 columns and 1152 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [5e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 73 rows and 57 columns
+Presolve time: 0.00s
+Presolved: 349 rows, 274 columns, 1004 nonzeros
+Variable types: 174 continuous, 100 integer (100 binary)
+
+Root relaxation: infeasible, 199 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (199 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:24:11 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 632 rows, 521 columns and 1890 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 122 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 510 rows, 423 columns, 1603 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 242 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (242 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:24:16 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 632 rows, 521 columns and 1890 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 122 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 510 rows, 423 columns, 1603 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 242 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (242 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:24:36 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 126 columns and 391 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 1e+03]
+Presolve removed 74 rows and 50 columns
+Presolve time: 0.00s
+Presolved: 37 rows, 76 columns, 232 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   1.390625e+30   1.600000e+01      0s
+      41   -2.4921565e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 41 iterations and 0.00 seconds
+Optimal objective -2.492156502e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 577 rows, 436 columns and 1616 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 1e+03]
+Found heuristic solution: objective -1476
+Presolve removed 77 rows and 53 columns
+Presolve time: 0.00s
+Presolved: 500 rows, 383 columns, 1451 nonzeros
+Variable types: 233 continuous, 150 integer (150 binary)
+
+Root relaxation: objective -6.206686e+02, 186 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -620.6685901 -620.66859  0.00%     -    0s
+
+Explored 0 nodes (254 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -6.206685901482e+02, best bound -6.206685901482e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:25:05 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 221 rows, 296 columns and 939 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 66 rows, 156 columns, 548 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   4.023437e+30   8.000000e+00      0s
+     112   -4.6207115e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 112 iterations and 0.00 seconds
+Optimal objective -4.620711537e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 687 rows, 606 columns and 2164 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 532 rows, 466 columns, 1773 nonzeros
+Variable types: 316 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 153 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (153 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:27:15 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 221 rows, 296 columns and 939 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 66 rows, 156 columns, 548 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   4.023437e+30   8.000000e+00      0s
+     112   -4.6207115e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 112 iterations and 0.00 seconds
+Optimal objective -4.620711537e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 672 rows, 606 columns and 1969 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 2e+03]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 517 rows, 466 columns, 1650 nonzeros
+Variable types: 316 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 183 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (183 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:27:39 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 221 rows, 296 columns and 939 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 66 rows, 156 columns, 548 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   4.023437e+30   8.000000e+00      0s
+     112   -4.6207115e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 112 iterations and 0.00 seconds
+Optimal objective -4.620711537e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 675 rows, 606 columns and 1984 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 520 rows, 466 columns, 1653 nonzeros
+Variable types: 316 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 138 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (138 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:27:49 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 221 rows, 296 columns and 939 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 66 rows, 156 columns, 548 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   4.023437e+30   8.000000e+00      0s
+     112   -4.6207115e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 112 iterations and 0.00 seconds
+Optimal objective -4.620711537e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 672 rows, 606 columns and 1942 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 155 rows and 140 columns
+Presolve time: 0.00s
+Presolved: 517 rows, 466 columns, 1623 nonzeros
+Variable types: 316 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 129 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (129 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:28:42 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 111 rows, 126 columns and 391 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 1e+03]
+Presolve removed 74 rows and 50 columns
+Presolve time: 0.00s
+Presolved: 37 rows, 76 columns, 232 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    1.6000000e+31   1.390625e+30   1.600000e+01      0s
+      41   -2.4921565e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 41 iterations and 0.00 seconds
+Optimal objective -2.492156502e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 577 rows, 436 columns and 1616 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 1e+03]
+Found heuristic solution: objective -1476
+Presolve removed 77 rows and 53 columns
+Presolve time: 0.00s
+Presolved: 500 rows, 383 columns, 1451 nonzeros
+Variable types: 233 continuous, 150 integer (150 binary)
+
+Root relaxation: objective -6.206686e+02, 186 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -620.6685901 -620.66859  0.00%     -    0s
+
+Explored 0 nodes (254 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -6.206685901482e+02, best bound -6.206685901482e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:28:47 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 632 rows, 521 columns and 1890 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 122 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 510 rows, 423 columns, 1603 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 242 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (242 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:30:02 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 631 rows, 521 columns and 1880 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1935.41
+Presolve removed 122 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 509 rows, 423 columns, 1593 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: objective -4.652792e+02, 264 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -465.27919    0    2 -1935.4088 -465.27919  76.0%     -    0s
+H    0     0                    -465.2980868 -465.27919  0.00%     -    0s
+
+Explored 0 nodes (480 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.652980868271e+02, best bound -4.652791884695e+02, gap 0.0041%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:33:48 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 632 rows, 521 columns and 1890 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 122 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 510 rows, 423 columns, 1603 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 242 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (242 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:36:43 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 617 rows, 521 columns and 1755 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 2e+03]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 116 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 501 rows, 423 columns, 1522 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 192 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (192 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:37:15 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 627 rows, 521 columns and 1870 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 124 rows and 99 columns
+Presolve time: 0.00s
+Presolved: 503 rows, 422 columns, 1543 nonzeros
+Variable types: 272 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 301 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (301 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:37:25 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 617 rows, 521 columns and 1875 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 107 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 510 rows, 423 columns, 1603 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+
+Root relaxation: infeasible, 242 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 infeasible    0               - infeasible      -     -    0s
+
+Explored 0 nodes (242 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Model is infeasible
+Best objective -, best bound -, gap -
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:38:13 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 617 rows, 521 columns and 1725 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1986.66
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 498 rows, 426 columns, 1444 nonzeros
+Variable types: 276 continuous, 150 integer (150 binary)
+
+Root relaxation: objective -4.652792e+02, 95 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -465.2791885 -465.27919  0.00%     -    0s
+
+Explored 0 nodes (95 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.652791884695e+02, best bound -4.652791884695e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:38:54 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 632 rows, 521 columns and 1890 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 125 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 507 rows, 423 columns, 1576 nonzeros
+Variable types: 273 continuous, 150 integer (150 binary)
+Found heuristic solution: objective -1351.040297
+
+Root relaxation: objective -4.652792e+02, 285 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -465.27919    0    2 -1351.0403 -465.27919  65.6%     -    0s
+H    0     0                    -465.6140709 -465.27919  0.07%     -    0s
+     0     0 -465.27919    0    3 -465.61407 -465.27919  0.07%     -    0s
+     0     0 -465.27919    0    3 -465.61407 -465.27919  0.07%     -    0s
+     0     0 -465.27919    0    2 -465.61407 -465.27919  0.07%     -    0s
+     0     2 -465.27919    0    2 -465.61407 -465.27919  0.07%     -    0s
+H   27    20                    -465.4490902 -465.27919  0.04%  19.9    0s
+H   80    72                    -465.2871168 -465.27919  0.00%  13.8    0s
+H  140   131                    -465.2805912 -465.27919  0.00%  12.3    0s
+H  174   163                    -465.2796313 -465.27919  0.00%  12.3    0s
+
+Cutting planes:
+  Flow cover: 3
+
+Explored 205 nodes (3315 simplex iterations) in 0.06 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.652796313212e+02, best bound -4.652791884695e+02, gap 0.0001%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:39:32 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 407 rows, 366 columns and 1285 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -2042.06
+Presolve removed 125 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 282 rows, 268 columns, 971 nonzeros
+Variable types: 193 continuous, 75 integer (75 binary)
+
+Root relaxation: objective -4.652792e+02, 195 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -465.27919    0    8 -2042.0636 -465.27919  77.2%     -    0s
+H    0     0                    -953.2232063 -465.27919  51.2%     -    0s
+     0     0 -465.27919    0   10 -953.22321 -465.27919  51.2%     -    0s
+H    0     0                    -477.4732854 -465.27919  2.55%     -    0s
+     0     0 -465.27919    0   13 -477.47329 -465.27919  2.55%     -    0s
+     0     0 -465.27919    0   14 -477.47329 -465.27919  2.55%     -    0s
+     0     0 -465.27919    0    6 -477.47329 -465.27919  2.55%     -    0s
+H    0     0                    -468.1524703 -465.27919  0.61%     -    0s
+     0     0 -465.27919    0    6 -468.15247 -465.27919  0.61%     -    0s
+     0     0 -465.27919    0    6 -468.15247 -465.27919  0.61%     -    0s
+     0     2 -465.27919    0    6 -468.15247 -465.27919  0.61%     -    0s
+*   76     5              46    -466.0915016 -465.27919  0.17%  13.1    0s
+H  175    93                    -465.7987140 -465.27919  0.11%  12.6    0s
+H  310   178                    -465.5841738 -465.27919  0.07%  12.3    0s
+*  486   201              54    -465.4553583 -465.27919  0.04%  12.1    0s
+* 1905   724              45    -465.4343951 -465.27919  0.03%  10.3    0s
+* 2025   682              50    -465.3809966 -465.27919  0.02%  10.1    0s
+* 2214   641              64    -465.3789115 -465.27919  0.02%   9.8    0s
+* 2329   620              48    -465.3520431 -465.27919  0.02%   9.7    0s
+* 2450   612              58    -465.3415861 -465.27919  0.01%   9.6    0s
+* 4097  1312              68    -465.3220064 -465.27919  0.01%   8.3    0s
+
+Cutting planes:
+  Gomory: 5
+  MIR: 1
+  Flow cover: 5
+
+Explored 4185 nodes (35187 simplex iterations) in 0.38 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.653220063847e+02, best bound -4.652791884695e+02, gap 0.0092%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:39:55 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 857 rows, 676 columns and 2495 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 125 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 732 rows, 578 columns, 2181 nonzeros
+Variable types: 353 continuous, 225 integer (225 binary)
+Found heuristic solution: objective -1351.040297
+
+Root relaxation: objective -4.652792e+02, 314 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -465.27919    0    8 -1351.0403 -465.27919  65.6%     -    0s
+H    0     0                    -1349.600000 -465.27919  65.5%     -    0s
+     0     0 -465.27919    0   10 -1349.6000 -465.27919  65.5%     -    0s
+H    0     0                    -845.1823121 -465.27919  44.9%     -    0s
+     0     0 -465.27919    0   13 -845.18231 -465.27919  44.9%     -    0s
+*    0     0               0    -465.2791885 -465.27919  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 8
+
+Explored 0 nodes (1453 simplex iterations) in 0.05 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.652791884695e+02, best bound -4.652791884695e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:41:21 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 857 rows, 676 columns and 2495 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 125 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 732 rows, 578 columns, 2181 nonzeros
+Variable types: 353 continuous, 225 integer (225 binary)
+Found heuristic solution: objective -1351.040297
+
+Root relaxation: objective -4.652792e+02, 314 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -465.27919    0    8 -1351.0403 -465.27919  65.6%     -    0s
+H    0     0                    -1349.600000 -465.27919  65.5%     -    0s
+     0     0 -465.27919    0   10 -1349.6000 -465.27919  65.5%     -    0s
+H    0     0                    -845.1823121 -465.27919  44.9%     -    0s
+     0     0 -465.27919    0   13 -845.18231 -465.27919  44.9%     -    0s
+*    0     0               0    -465.2791885 -465.27919  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 8
+
+Explored 0 nodes (1453 simplex iterations) in 0.04 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.652791884695e+02, best bound -4.652791884695e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:42:00 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 857 rows, 676 columns and 2495 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 125 rows and 98 columns
+Presolve time: 0.00s
+Presolved: 732 rows, 578 columns, 2181 nonzeros
+Variable types: 353 continuous, 225 integer (225 binary)
+Found heuristic solution: objective -1351.040297
+
+Root relaxation: objective -4.652792e+02, 314 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0 -465.27919    0    8 -1351.0403 -465.27919  65.6%     -    0s
+H    0     0                    -1349.600000 -465.27919  65.5%     -    0s
+     0     0 -465.27919    0   10 -1349.6000 -465.27919  65.5%     -    0s
+H    0     0                    -845.1823121 -465.27919  44.9%     -    0s
+     0     0 -465.27919    0   13 -845.18231 -465.27919  44.9%     -    0s
+*    0     0               0    -465.2791885 -465.27919  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 8
+
+Explored 0 nodes (1453 simplex iterations) in 0.04 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -4.652791884695e+02, best bound -4.652791884695e+02, gap 0.0%

@@ -46,12 +46,14 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
             tmp_overflow_var = model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="o_w{0}_r{1}".format(w, r)) # this is original integer but can be approximated by continuous value
             overflow[w].append(tmp_overflow_var)
 
+    var = GRB.INTEGER
+    if integer == 1: var = GRB.CONTINUOUS
     y = [] # y[w][r]: number of operating resources r at time w
     for w in range(W):
         y.append([])
         for r in range(R):
             if (integer == 1) or (integer == 3):
-                tmp_resource_r = model.addVar(vtype=GRB.INTEGER, lb=0, name="y_w{0}_r{1}".format(w, r))
+                tmp_resource_r = model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="y_w{0}_r{1}".format(w, r))
             else:
                 tmp_resource_r = model.addVar(vtype=GRB.INTEGER, lb=0, name="y_w{0}_r{1}".format(w, r))
             y[w].append(tmp_resource_r)
@@ -59,8 +61,8 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     p = [] # available staff
     s = [] # working staff
     for w in range(W):
-        tmp_staff = model.addVar(vtype=GRB.INTEGER, name="p_w{0}".format(w))
-        tmp_working_staff = model.addVar(vtype=GRB.INTEGER, name="s_w{0}".format(w))
+        tmp_staff = model.addVar(vtype=var, name="p_w{0}".format(w))
+        tmp_working_staff = model.addVar(vtype=var, name="s_w{0}".format(w))
         p.append(tmp_staff)
         s.append(tmp_working_staff)
         
