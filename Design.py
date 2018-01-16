@@ -136,7 +136,7 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_
             
     for w in range(W):
         for r in range(R):
-            model.addConstr(y[w][r] - quicksum(X[i][w][r] for i in range(Q)) - miny[w][r] == 0, name="(11)_w{0}_r{1}".format(w, r))
+            model.addConstr(y[w][r] + quicksum(X[i][w][r] for i in range(Q)) - miny[w][r] == 0, name="(11)_w{0}_r{1}".format(w, r))
     
     tmp_sum = LinExpr([1]*Q, [q[i] for i in range(Q)])
     model.addConstr(tmp_sum == 1, name="sumQ")         
@@ -156,6 +156,9 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_
     tmp_sum = LinExpr([1]*W, [s[w] for w in range(W)])
     model.addConstr(tmp_sum - P <= 0, name="(9)")
     
+    tmp_sum = LinExpr([1]*Q, [q[i] for i in range(Q)])
+    model.addConstr(tmp_sum == 1, name="sumQ")
+   
     model.update()
 
     model.write("tsgkp.lp")

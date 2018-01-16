@@ -58888,3 +58888,99 @@ Thread count was 8 (of 8 available processors)
 
 Optimal solution found (tolerance 1.00e-04)
 Best objective -4.652791884695e+02, best bound -4.652791884695e+02, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:45:33 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: constraints 175 and 857 have the same name "sumQ"
+Optimize a model with 858 rows, 676 columns and 2510 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1928.75
+Presolve removed 474 rows and 313 columns
+Presolve time: 0.00s
+Presolved: 384 rows, 363 columns, 971 nonzeros
+Variable types: 138 continuous, 225 integer (225 binary)
+
+Root relaxation: objective -1.351040e+03, 30 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -1351.040297 -1351.0403  0.00%     -    0s
+
+Explored 0 nodes (46 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -1.351040297088e+03, best bound -1.351040297088e+03, gap 0.0%
+
+Gurobi 6.5.2 (mac64) logging started Mon Jan 15 17:45:47 2018
+
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Optimize a model with 166 rows, 211 columns and 665 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+04, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Presolve removed 119 rows and 95 columns
+Presolve time: 0.00s
+Presolved: 47 rows, 116 columns, 384 nonzeros
+
+Iteration    Objective       Primal Inf.    Dual Inf.      Time
+       0    8.0000000e+30   3.640625e+30   8.000000e+00      0s
+      78   -4.6527919e+02   0.000000e+00   0.000000e+00      0s
+
+Solved in 78 iterations and 0.00 seconds
+Optimal objective -4.652791885e+02
+Changed value of parameter DualReductions to 0
+   Prev: 1  Min: 0  Max: 1  Default: 1
+Warning: constraints 175 and 857 have the same name "sumQ"
+Optimize a model with 858 rows, 676 columns and 2510 nonzeros
+Coefficient statistics:
+  Matrix range    [3e-01, 1e+04]
+  Objective range [1e-02, 1e+00]
+  Bounds range    [1e+00, 1e+04]
+  RHS range       [1e+00, 2e+03]
+Found heuristic solution: objective -1928.75
+Presolve removed 474 rows and 313 columns
+Presolve time: 0.00s
+Presolved: 384 rows, 363 columns, 971 nonzeros
+Variable types: 138 continuous, 225 integer (225 binary)
+
+Root relaxation: objective -1.351040e+03, 30 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+*    0     0               0    -1351.040297 -1351.0403  0.00%     -    0s
+
+Explored 0 nodes (46 simplex iterations) in 0.01 seconds
+Thread count was 8 (of 8 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective -1.351040297088e+03, best bound -1.351040297088e+03, gap 0.0%
