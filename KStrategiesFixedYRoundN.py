@@ -6,7 +6,7 @@ import time
 from relaxed_feed import LPsolver
 import pickle
 
-def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, N_marginal, O_marginal, y_marginal, s_marginal, p_marginal, integer=0, OverConstr=False): # integer indicates different relaxation method
+def Ksolver(W, K, R, mR, M, P, Q, QN, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, N_marginal, O_marginal, y_marginal, s_marginal, p_marginal, integer=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Variables =================================
     #
     #
@@ -18,22 +18,18 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
     
     # Pure strategy probability
-    q = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="q_s{0}".format(i)) for i in range(Q)]
+    q = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="q_s{0}_sn{1}".format(i,i2)) for i in range(Q)] for i2 in range(QN)]
   
     # binary variables for pure strateies
-    OS = [[[model.addVar(lb=0.0, vtype=GRB.CONTINUOUS, name="Op(s%d,w%d,r%d)" %(i,w,r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    OS = [[[[model.addVar(lb=0.0, vtype=GRB.CONTINUOUS, name="Op(s%d,sn%d,w%d,r%d)" %(i,i2,w,r)) for r in range(R)] for w in range(W)] for i in range(Q)] for i2 in range(QN)]
     test = [[[model.addVar(lb=0.0, vtype=GRB.CONTINUOUS, name="ONP(s%d,w%d,r%d)" %(i,w,r)) for r in range(R)] for w in range(W)] for i in range(Q)]
 
-    #Oplus = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="Op(s%d,w%d,r%d,t%d)" %(i,w,r, t)) for t in range(len(resource2team[r])) ] for r in range(R)] for w in range(W)] for i in range(Q)]
-    #Ominus = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="Op(s%d,w%d,r%d,t%d)" %(i,w,r, t)) for t in range(len(resource2team[r])) ] for r in range(R)] for w in range(W)] for i in range(Q)]
-
-    Nplus = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="Np(s%d,w%d,k%d,t%d)" %(i,w,k,t))  for k in range(K)]  for t in range(T)] for w in range(W)] for i in range(Q)]
+   
+    Nplus = [[[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="Np(s%d,sn%d,w%d,k%d,t%d)" %(i,i2,w,k,t))  for k in range(K)]  for t in range(T)] for w in range(W)] for i in range(Q)] for i2 in range(QN)]
 
     # linearization variables
-    #Up = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="U(s%d,w%d,r%d,t%d)" %(i,w,r,t)) for t in range(len(resource2team[r])) ] for r in range(R)] for w in range(W)]for i in range(Q)]
-    #Um = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="U(s%d,w%d,r%d,t%d)" %(i,w,r,t)) for t in range(len(resource2team[r])) ] for r in range(R)] for w in range(W)]for i in range(Q)]
 
-    X = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="X(s%d,w%d,k%d,t%d)" %(i,w,k,t))  for k in range(K)] for t in range(T)] for w in range(W)] for i in range(Q)]
+    X = [[[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="X(s%d,sn%d,w%d,k%d,t%d)" %(i,i2, w,k,t))  for k in range(K)] for t in range(T)] for w in range(W)] for i in range(Q)] for i2 in range(QN)]
  
     # z[w][k][m]   
     z = [[[ model.addVar(vtype=GRB.CONTINUOUS, name="z_w{0}_k{1}_m{2}".format(w, k, m)) for m in range(M)] for k in range(K)] for w in range(W)]
@@ -80,9 +76,9 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
     # ==========================================================================
     
   
-    def Overflow(i, w, r):
+    def Overflow(i, i2,  w, r):
         #return quicksum(Oplus[i][w][r][i] for t in range(len(resource2team[r]))) + quicksum(-Ominus[i][w][r][i] for t in range(len(resource2team[r]))) +np.floor(O_marginal[w][r])
-        return OS[i][w][r]
+        return OS[i2][i][w][r]
 
     for w in range(W):
         for k in range(K):
@@ -105,49 +101,48 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
             for k in range(K):
                 model.addConstr(pi[w][t][k] * N_wk[w][k] - n_wtk[w][t][k] == 0, name="(3.5)_w{0}_t{1}_k{2}".format(w,t,k))
 
-    # Throughput constriaints
+    # Throughput constraints
     
     #pre_overflow = np.random.randint(0, 100, R)
     pre_overflow = [0] * R
-    for i in range(Q):
-        for w in range(W):
-            for r in range(R):
-                #n_wtk = [ Screening(s, w, k, t) for t in resource2team[r] for k in range(K)]
-                nmarginal = quicksum(np.floor(N_marginal[w][t][k]) for t in resource2team[r] for k in range(K))
-                nbinary = [ Nplus[i][w][t][k] for t in resource2team[r] for k in range(K)]
-                
-                tmp_sum = LinExpr([1 for k in range(K)]*len(resource2team[r]), nbinary)
-                
-                overflow_w = Overflow(i, w, r)
-                model.addConstr(tmp_sum + nmarginal == test[i][w][r], name="(4)test_w{0}_r{1}_s{2}".format(w, r,i))
-
-                if w == 0:
-                    model.addConstr(tmp_sum + nmarginal + pre_overflow[r] - y[w][r] * C[r] - overflow_w <= 0, name="(4)_w{0}_r{1}_s{2}".format(w, r,i))
-                else:
-                    overflow_w2 = Overflow(i, w-1, r)
-                    model.addConstr(tmp_sum + nmarginal + overflow_w2 - y[w][r] * C[r] - overflow_w <= 0, name="(4)_w{0}_r{1}_s{2}".format(w, r,i))
+    for i2 in range(QN):
+       for i in range(Q):
+            for w in range(W):
+                for r in range(R):
+                    #n_wtk = [ Screening(s, w, k, t) for t in resource2team[r] for k in range(K)]
+                    nmarginal = quicksum(np.floor(N_marginal[i][w][t][k]) for t in resource2team[r] for k in range(K))
+                    nbinary = [ Nplus[i2][i][w][t][k] for t in resource2team[r] for k in range(K)]
+                    
+                    tmp_sum = LinExpr([1 for k in range(K)]*len(resource2team[r]), nbinary)
+                    
+                    overflow_w = Overflow(i, i2, w, r)    
+                    if w == 0:
+                        model.addConstr(tmp_sum + nmarginal + pre_overflow[r] - y[i][w][r] * C[r] - overflow_w <= 0, name="(4)_w{0}_r{1}_s{2}{3}".format(w, r,i,i2))
+                    else:
+                        overflow_w2 = Overflow(i,i2, w-1, r)
+                        model.addConstr(tmp_sum + nmarginal + overflow_w2 - y[i][w][r] * C[r] - overflow_w <= 0, name="(4)_w{0}_r{1}_s{2}{3}".format(w, r,i,i2))      
     if OverConstr :
         for i in range(Q):
             for r in range(R): # OPTIONAL
-                overflow_w = Overflow(i, W-1, r)
+                overflow_w = Overflow(i, i2, W-1, r)
                # model.addConstr(overflow_w == 0, name="(5)_r{0}_s{1}".format(r,i))
         
         for i in range(Q):
             for w in range(W):
                 for r in range(R):
-                    overflow_w = Overflow(i, w, r)
+                    overflow_w = Overflow(i, i2, w, r)
                     if w > 0:
-                        model.addConstr(y[w][r] * C[r] - overflow_w >= 0, name="(5.5)_w{0}_r{1}_s{2}".format(w, r,i))
+                        model.addConstr(y[i][w][r] * C[r] - overflow_w >= 0, name="(5.5)_w{0}_r{1}_s{2}".format(w, r,i))
 
     if False: 
         for w in range(W):
             #tmp_sum = LinExpr(ar, [y[w][r] for r in range(R)])
-            tmp_sum = quicksum( ar[r]*y[w][r] for r in range(R) )
+            tmp_sum = quicksum( ar[r]*y[i][w][r] for r in range(R) )
             model.addConstr(tmp_sum - p[w] <= 0, name="(6)_w{0}".format(w))
     
         for w in range(W):
             for r in range(R):
-                model.addConstr(y[w][r] - mr[r] <= 0, name="(7)_w{0}_r{1}".format(w, r))
+                model.addConstr(y[i][w][r] - mr[r] <= 0, name="(7)_w{0}_r{1}".format(w, r))
     
         for w in range(W):
             start_index = max(0, w - shift + 1)
@@ -159,23 +154,21 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
         tmp_sum = quicksum(s[w] for w in range(W))
         model.addConstr(tmp_sum - P <= 0, name="(9)")
 
-    for i in range(Q-1):
-        model.addConstr(q[i] >= q[i+1])
 
-
-    tmp_sum = LinExpr([1]*Q, [q[i] for i in range(Q)])
+    tmp_sum = LinExpr([1]*Q, [q[i2][i] for i in range(Q) for i2 in range(QN)])
     model.addConstr(tmp_sum == 1, name="sumQ")
     
     
     # Linearization Constraints
     for i in range(Q):
-        for w in range(W):
-            for k in range(K):
-                model.addConstr( quicksum(np.floor(N_marginal[w][t][k]) + Nplus[i][w][t][k] for t in range(T)) == N_wk[w][k])  
-                for t in range(T):
-                    model.addConstr(X[i][w][t][k] <= q[i]) 
-                    model.addConstr(X[i][w][t][k] <= Nplus[i][w][t][k] ) 
-                    model.addConstr(X[i][w][t][k] >= q[i] -(1-Nplus[i][w][t][k])) 
+        for i2 in range(QN):
+            for w in range(W):
+                for k in range(K):
+                    model.addConstr( quicksum(np.floor(N_marginal[i][w][t][k]) + Nplus[i2][i][w][t][k] for t in range(T)) == N_wk[w][k])  
+                    for t in range(T):
+                        model.addConstr(X[i2][i][w][t][k] <= q[i2][i]) 
+                        model.addConstr(X[i2][i][w][t][k] <= Nplus[i2][i][w][t][k] ) 
+                        model.addConstr(X[i2][i][w][t][k] >= q[i2][i] -(1-Nplus[i2][i][w][t][k])) 
 
             """
             for r in range(R):
@@ -193,33 +186,20 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
     for w in range(W):
         for k in range(K):
             for t in range(T):
-                model.addConstr(n_wtk[w][t][k] == np.floor(N_marginal[w][t][k]) + quicksum(X[i][w][t][k] for i in range(Q)))
+                model.addConstr(n_wtk[w][t][k] == quicksum(quicksum(q[i2][i]*np.floor(N_marginal[i][w][t][k]) for i in range(Q)) + quicksum(X[i2][i][w][t][k] for i in range(Q)) for i2 in range(QN)))
         for r in range(R):
-            nmarginal = quicksum(np.floor(N_marginal[w][t][k])*q[i] for t in resource2team[r] for k in range(K) for i in range(Q))
-            nX = [ X[i][w][t][k] for t in resource2team[r] for k in range(K) for i in range(Q)]
+            nmarginal = quicksum(np.floor(N_marginal[i][w][t][k])*q[i2][i] for t in resource2team[r] for k in range(K) for i in range(Q) for i2 in range(QN))
+            nX = [ X[i2][i][w][t][k] for t in resource2team[r] for k in range(K) for i in range(Q) for i2 in range(QN)]
                 
             tmp_sum = LinExpr([1 for k in range(K) for i in range(Q)]*len(resource2team[r]), nX)
-            #tmp_sum_pass = LinExpr([N_wk[w][k] for k in range(K)]*len(resource2team[r]), nX)
-            #nmarginal_pass = quicksum(np.floor(N_marginal[w][t][k])*q[i]*N_wk[w][k] for t in resource2team[r] for k in range(K) for i in range(Q))
-
-            model.addConstr( tmp_sum + nmarginal - y[w][r]*10000 <=0 , name="(5.6)_w{0}_r{1}".format(w, r))    
+ 
+            model.addConstr( tmp_sum + nmarginal - quicksum(q[i2][i]*y[i][w][r] for i in range(Q) for i2 in range(QN))*10000 <=0 , name="(5.6)_w{0}_r{1}".format(w, r))    
             if w == 0:
-                model.addConstr(tmp_sum + nmarginal - y[w][r] * C[r] - overflow[w][r] <= 0)
+                model.addConstr(tmp_sum + nmarginal - quicksum(q[i2][i]*y[i][w][r] for i in range(Q) for i2 in range(QN)) * C[r] - overflow[w][r] <= 0)
             else:
-                model.addConstr(tmp_sum + nmarginal + overflow[w-1][r] - y[w][r] * C[r] - overflow[w][r] <= 0)
+                model.addConstr(tmp_sum + nmarginal + overflow[w-1][r] - quicksum(q[i2][i]*y[i][w][r] for i in range(Q) for i2 in range(QN)) * C[r] - overflow[w][r] <= 0)
             #model.addConstr(overflow[w][r] == quicksum(Overflow(i,w,r) for i in range(Q))) 
-    for i in range(Q):
-        for r in range(R): # OPTIONAL
-            overflow_w = overflow[W-1][r]
-            # model.addConstr(overflow_w == 0, name="(5)_r{0}_s{1}".format(r,i))
-        
-    for i in range(Q):
-        for w in range(W):
-            for r in range(R):
-                overflow_w = overflow[w][r]
-                if w > 0:
-                    model.addConstr(y[w][r] * C[r] - overflow_w >= 0, name="(5.5)_w{0}_r{1}_s{2}".format(w, r,i))
-        
+            
     
     model.update()
     
@@ -255,32 +235,23 @@ def Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus
     for w in range(W):
         s_value[w] = s[w].x
     """
-    n_binary = np.zeros((Q,W,T,K))
-    X_sol = np.zeros((Q,W,T,K))
+    n_binary = np.zeros((Q,QN,W,T,K))
+    X_sol = np.zeros((Q,QN,W,T,K))
 
-    mixed_strategy = np.zeros((Q))
+    mixed_strategy = np.zeros((Q,QN))
     for i in range(Q):
-        mixed_strategy[i] = q[i].x
+        for i2 in range(QN):
+            mixed_strategy[i][i2] = q[i2][i].x
     
     for w in range(W):
         for t in range(T):
             for k in range(K):
                 sum_q = 0
                 for i in range(Q):
-                    X_sol [i][w][t][k] = X[i][w][t][k].x
-    epsilon = 0.00001                
-    for w in range(W):
-        for t in range(T):
-            for k in range(K):
-                sum_q = 0
-                for i in range(Q):
-                    n_binary[i][w][t][k] = Nplus[i][w][t][k].x
-                    if X_sol[i][w][t][k] != mixed_strategy[i]*n_binary[i][w][t][k]:
-                        print X_sol[i][w][t][k] - mixed_strategy[i]*n_binary[i][w][t][k], mixed_strategy[i], n_binary[i][w][t][k]
-                    sum_q += mixed_strategy[i]*n_binary[i][w][t][k]
-                sum_q+=np.floor(N_marginal[w][t][k])
-                if n_value[w][t][k] != sum_q:                                                                                 
-                    print n_value[w][t][k] - sum_q
+                    for i2 in range(QN):
+
+                        X_sol [i][i2][w][t][k] = X[i2][i][w][t][k].x
+    
     attack_set = 0
     AV = theta.x
     for w in range(W):
