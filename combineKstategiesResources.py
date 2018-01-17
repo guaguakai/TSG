@@ -18,7 +18,7 @@ if __name__ == "__main__":
     mR = 10 # max number of reosurces
     M = 2 # number of attack methods
     P = 10 # number of staff
-    Q = 15 # number of pure strategies
+    Q = 5 # number of pure strategies
     shift = 3 # d
 
     nT = 20
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     
     print "============================ MIP SOLVER =============================="
 
-    obj15, rt, q15, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, n_value, overflow_value, y_value, s_value,p_value,integer=0,OverConstr=False)
+    obj15, rt, q15, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, n_value, overflow_value, y_value, s_value, p_value, integer=0, OverConstr=False)
     walltime = time.time() - start_time
     
     
