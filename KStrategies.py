@@ -390,7 +390,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 
     N_wk = [[ 0 for k in range(K)] for w in range(W)] # N_wk[w][k] represents the number of people getting in time window w with type k
     
-    arrival_window=3
+    arrival_window= np.minimum(3,W)
 
     for k in range(K):
         flight_time = random.randint(0, W-arrival_window)+arrival_window

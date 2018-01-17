@@ -109,7 +109,6 @@ def Ksolver(W, K, R, mR, M, P, Q, QN, teams, resource2team, T, E, C, U_plus, U_m
        for i in range(Q):
             for w in range(W):
                 for r in range(R):
-                    #n_wtk = [ Screening(s, w, k, t) for t in resource2team[r] for k in range(K)]
                     nmarginal = quicksum(np.floor(N_marginal[i][w][t][k]) for t in resource2team[r] for k in range(K))
                     nbinary = [ Nplus[i2][i][w][t][k] for t in resource2team[r] for k in range(K)]
                     
