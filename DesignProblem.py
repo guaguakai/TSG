@@ -699,12 +699,12 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 15 # number of time windows
+    W = 20 # number of time windows
     K = 10 # number of passenger types
-    R = 5 # number of resources
+    R = 7 # number of resources
     mR = 10 # max number of reosurces
     M = 3 # number of attack methods
-    P = 7 # number of staff
+    P = 10 # number of staff
     shift = 5 # d
     Q = 10
     nT = 20
