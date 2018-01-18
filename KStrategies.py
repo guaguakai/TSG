@@ -356,6 +356,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     random.seed(seed)
 
     T = len(teams)
+    print T
     resource2team = util.resourceTeamDict(R, T, teams)
     print resource2team
 
