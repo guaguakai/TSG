@@ -694,13 +694,49 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     #phi = np.random.rand(W, R) # phi[w][r] overflow penalty
 
     return resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi
+def solve():
+    
+    print "============================ FULL LP relaxation =============================="
+    obj_relax, n_value0, overflow_value0, y_value0, s_value0, p, attset, f = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1, OverConstr=True)
+    for w in range(W):
+        for r in range(R):
+            minr[w][r] = math.floor(y_value0[w][r])
+            print y_value0[w][r]
+            
+    print "============================ Binary Y / single relaxed n_wtk (allocated arrivals) MIP ======================"
+    objy, n_value, overflow_value, y_value, ys,  s_value, p_value, q = KStrategiesY( Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, OverConstr=True)
+    
+    print "============================ multiple relaxed n_wtk (allocated arrivals) MIP ==============================="
 
+    objyn, n_val, n = KStrategiesYN(Q, W, K, R, M, P, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, y_value, ys, q, p_value, s_value, ar, phi, integer=0, OverConstr=True, OverConstr2=False)
+    
+    minn = np.zeros((Q,W,T,K))
+    
+    for i in range(Q):
+        for w in range(W):
+            for k in range(K):
+                sum = 0 
+                for t in range(T):
+                    minn[i][w][t][k] = math.floor(n[i][w][t][k])
+                    sum += math.floor(n[i][w][t][k])
+                print "n",i,w,k," ", sum, " ", N_wk[w][k],  q[i]
+     
+    print "============================ Integer n_wtk  MIP ==============================="
+
+    obj, rt  = KStrategiesYNB(Q, W, K, R, M, resource2team, T, E, C, U_plus, U_minus, N_wk, y_value, ys, minn, p, s_value, phi, integer=0, OverConstr=True, OverConstr2=False)
+    walltime = time.time() - start_time
+
+    print "Runtime/walltime ", rt, " ", walltime
+   
+    print obj_relax, objy, objyn, obj
+    
+    return [obj_relax, objy, objyn, obj], walltime
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 20 # number of time windows
-    K = 10 # number of passenger types
+    K = 1 # number of passenger types
     R = 7 # number of resources
     mR = 10 # max number of reosurces
     M = 3 # number of attack methods
