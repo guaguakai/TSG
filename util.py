@@ -25,7 +25,7 @@ def generateAllTeams(R, mR):
             i+=1
             teams.append(x)
             print i, x
-    teams.append([])
+    #teams.append([])
     print teams
     print len(teams)
     return teams
@@ -38,7 +38,7 @@ def computeTeamsRate(R, M, T, teams, Er):
             for r in teams[t]:
                 tmp_rate *= (1 - Er[r][m])
             E[t][m] = 1 - tmp_rate
-    print E[31][0]
+    #print E[31][0]
     return E
 
 def randomGenerateTeams(R, mR, nT):
