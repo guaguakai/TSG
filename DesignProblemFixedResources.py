@@ -113,10 +113,10 @@ def KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus,
     #TEAM CONSTRAINTS 
     for i in range(Q):
         for w in range(W):
-            for t in range(T):
+            for k in range(K):
                 for t in range(T):
                     #tmp = LinExpr([1/(np.maximum(N_wk[w][k],1)) for w in range(W) for k in range(K)], [ni[i][w][t][k] for w in range(W) for k in range(K)])
-                    model.addConstr( n[i][w][t][k]+nb[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}".format(t))         
+                    model.addConstr( n[i][w][t][k]+nb[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}{1}{2}{3}".format(t,i,k,w))         
         model.addConstr(quicksum(team[i][t] for t in range(T)) <= maxT)
 
 
@@ -391,10 +391,10 @@ def KStrategiesYN(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minu
     if True:
         for i in range(Q):
             for w in range(W):
-                for t in range(T):
+                for k in range(K):
                     for t in range(T):
                         #tmp = LinExpr([1/(np.maximum(N_wk[w][k],1)) for w in range(W) for k in range(K)], [ni[i][w][t][k] for w in range(W) for k in range(K)])
-                        model.addConstr( ni[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}".format(t))         
+                        model.addConstr( ni[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}{1}{2}{3}".format(t,i,k,w))         
             model.addConstr(quicksum(team[i][t] for t in range(T)) <= maxT)
    
     model.update()
@@ -548,7 +548,7 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_pl
         for w in range(W):
             for k in range(K):
                 for t in range(T):
-                    model.addConstr( pi[w][t][k] <= team[t], name="team{0}".format(t))         
+                    model.addConstr( pi[w][t][k] <= team[t], name="team{0}{1}{2}".format(t,w,k))         
         model.addConstr(quicksum(team[t] for t in range(T)) <= MaxT*Q)
     
     
