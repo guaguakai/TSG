@@ -84,8 +84,9 @@ def KStrategiesYNB(Q, W, K, R, M, resource2team, T, E, C, U_plus, U_minus, N_wk,
     # ======================= Gurobi Constraints ===============================
     for w in range(W):
         for k in range(K):
-            for m in range(M):
-                model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
+            if N_wk[w][k] > 0 :          
+                for m in range(M):
+                    model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
 
     for w in range(W):
         for k in range(K):
@@ -280,8 +281,9 @@ def KStrategiesYN(Q, W, K, R, M, P, resource2team, T, E, C, U_plus, U_minus, N_w
     # ======================= Gurobi Constraints ===============================
     for w in range(W):
         for k in range(K):
-            for m in range(M):
-                model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
+            if N_wk[w][k] > 0 :          
+                for m in range(M):
+                    model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
 
     for w in range(W):
         for k in range(K):
@@ -484,8 +486,9 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_
     # ======================= Gurobi Constraints ===============================
     for w in range(W):
         for k in range(K):
-            for m in range(M):
-                model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
+            if N_wk[w][k] > 0 :          
+                for m in range(M):
+                    model.addConstr(theta - z[w][k][m]*(U_plus[k] - U_minus[k]) - U_minus[k] <= 0, "(1)_w{0}_k{1}_m{2}".format(w,k,m))
 
     for w in range(W):
         for k in range(K):

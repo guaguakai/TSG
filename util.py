@@ -17,11 +17,16 @@ def genResources(R, M, NP):
         
 def generateAllTeams(R, mR):
     teams = []
+    i =0
     for nR in range(mR):
         iterator = itertools.combinations(range(R), nR+1)
         for x in iterator:
+            i+=1
             teams.append(x)
+            print i, x
     teams.append([])
+    print teams
+    print len(teams)
     return teams
 
 def computeTeamsRate(R, M, T, teams, Er):
@@ -32,6 +37,7 @@ def computeTeamsRate(R, M, T, teams, Er):
             for r in teams[t]:
                 tmp_rate *= (1 - Er[r][m])
             E[t][m] = 1 - tmp_rate
+    print E[31][0]
     return E
 
 def randomGenerateTeams(R, mR, nT):
@@ -47,10 +53,12 @@ def randomGenerateTeams(R, mR, nT):
     return teams
 
 def resourceTeamDict(R, T, teams):
+    print T
     resource2team = []
     for r in range(R):
         resource2team.append([])
     for t in range(T):
+        print t, teams[t]
         for tmp_r in teams[t]:
             resource2team[tmp_r].append(t)
 
