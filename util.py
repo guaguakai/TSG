@@ -2,6 +2,7 @@ import numpy as np
 from gurobipy import *
 import itertools
 import random
+import math
 
 
 def genResources(R, M, NP):
@@ -9,7 +10,7 @@ def genResources(R, M, NP):
     capacity = []
     for r in range(R):
         E = np.random.rand(M)
-        cap = (1-np.max(E))*NP
+        cap = math.floor((1-np.max(E))*NP)
         
         ER.append(E)
         capacity.append(cap)

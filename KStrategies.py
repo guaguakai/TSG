@@ -367,7 +367,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     #Er = [[0.3, 0.5, 0.2], [0.6, 0.3, 0.4], [0.4, 0.6, 0.5]
     #     ,[0.6, 0.3, 0.8], [0.7, 0.4, 0.7], [0.7, 0.6, 0.9]]
 
-    Er, C = util.genResources(R, M, 100)
+    Er, C = util.genResources(R, M, 500)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
@@ -419,7 +419,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     print "\nC"
     print C
     #C = [100,80,75,50,30,15]
-    mr = np.random.randint(10, 30, R)
+    mr = np.random.randint(5, 20, R)
     print "\nmr"
     print mr
     #mr = [5, 5, 5, 3, 2, 4] # maximum number of people to operate resource r
@@ -433,7 +433,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     print phi
     #phi = np.random.rand(W, R) # phi[w][r] overflow penalty
 
-    return resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi
+    return resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi
 
 def bigSetting(W, K, mR, P, teams, shift):
     # ========================== Random Seed ===================================
