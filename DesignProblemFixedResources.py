@@ -12,7 +12,7 @@ def KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus,
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
-    model.params.MIPGap=0.0005;
+    model.params.MIPGap=0.00005;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
@@ -190,12 +190,12 @@ def KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus,
    
     model.update()
 
-    model.write("tsgkpMIP.lp")
+    model.write("tsgkpMIPteam.lp")
     start_time = time.time()
     model.optimize()
     runtime = time.time() - start_time
 
-    model.write("tsgkpMIP.sol")
+    model.write("tsgkpMIPteam.sol")
 
     
 
@@ -207,12 +207,16 @@ def KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus,
                 #if n_value[w][t][k] != int(n_value[w][t][k]):
                     #print n_value[w][t][k]
     
-    
+    team_val = np.zeros((Q,T))
+    for i in range(Q):
+        for t in range(T):
+            team_val[i][t] = team[i][t].x
     
     obj = model.getAttr('ObjVal')
 
+    model.terminate()
 
-    return obj, runtime
+    return obj, runtime, team_val
     
 
 
@@ -346,9 +350,9 @@ def KStrategiesYN(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minu
             for r in range(R):  
                 tmp_sum = LinExpr([1 for k in range(K)]*len(resource2team[r]), [ni[i][w][t][k] for t in resource2team[r] for k in range(K)])
                 if w == 0:
-                    model.addConstr(tmp_sum + pre_overflow[r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}".format(w, r))
+                    model.addConstr(tmp_sum + pre_overflow[r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_s{2}".format(w, r, i))
                 else:
-                    model.addConstr(tmp_sum + O[i][w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}".format(w, r))
+                    model.addConstr(tmp_sum + O[i][w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_s{2}".format(w, r, i ))
     
                 model.addConstr( tmp_sum <= y[w][r]*10000, name="(10.5)_w{0}_r{1}".format(w, r))
     
@@ -374,20 +378,21 @@ def KStrategiesYN(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minu
     
 
     #TEAM CONSTRAINTS 
-    for i in range(Q):
-        for w in range(W):
-            for t in range(T):
+    if True:
+        for i in range(Q):
+            for w in range(W):
                 for t in range(T):
-                    #tmp = LinExpr([1/(np.maximum(N_wk[w][k],1)) for w in range(W) for k in range(K)], [ni[i][w][t][k] for w in range(W) for k in range(K)])
-                    model.addConstr( ni[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}".format(t))         
-        model.addConstr(quicksum(team[i][t] for t in range(T)) <= maxT)
+                    for t in range(T):
+                        #tmp = LinExpr([1/(np.maximum(N_wk[w][k],1)) for w in range(W) for k in range(K)], [ni[i][w][t][k] for w in range(W) for k in range(K)])
+                        model.addConstr( ni[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}".format(t))         
+            model.addConstr(quicksum(team[i][t] for t in range(T)) <= maxT)
    
     model.update()
 
-    model.write("tsgkyn.lp")
+    model.write("tsgkynteam.lp")
 
     model.optimize()
-    model.write("tsgkyn.sol")
+    model.write("tsgkynteam.sol")
 
     
 
@@ -410,22 +415,27 @@ def KStrategiesYN(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minu
     for w in range(W):
         for r in range(R):
             overflow_value[w][r] = overflow[w][r].x
-
+    
+    team_val = np.zeros((Q,T))
+    for i in range(Q):
+        for t in range(T):
+            team_val[i][t] = team[i][t].x
     
     obj = model.getAttr('ObjVal')
 
+    model.terminate()
 
-    return obj, n_value, ns_value
+    return obj, n_value, ns_value, team_val
     
 
 
-def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_plus, U_minus, N_wk, shift, mr, miny, ar, phi, integer=0, OverConstr=False): # integer indicates different relaxation method
+def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_plus, U_minus, N_wk, shift, mr, miny, ar, phi, integer=0, OverConstr=False,  TeamConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
     model.params.MIPGap=0.0005;
 
-    team = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}".format(t)) for t in range(T)] 
+    if TeamConstr: team = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}".format(t)) for t in range(T)] 
     #team_i = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.INTEGER, name="team{0}".format(t)) for t in range(T)] for i in range(Q)]
 
     q = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="q_s{0}".format(i)) for i in range(Q)]
@@ -519,11 +529,12 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_pl
                 model.addConstr(pi[w][t][k] * N_wk[w][k] - n_wtk[w][t][k] == 0, name="(3.5)_w{0}_t{1}_k{2}".format(w,t,k))
 
     #TEAM CONSTRAINTS  
-    for w in range(W):
-        for k in range(K):
-            for t in range(T):
-                model.addConstr( pi[w][t][k] <= team[t], name="team{0}".format(t))         
-    model.addConstr(quicksum(team[t] for t in range(T)) <= MaxT*Q)
+    if TeamConstr:
+        for w in range(W):
+            for k in range(K):
+                for t in range(T):
+                    model.addConstr( pi[w][t][k] <= team[t], name="team{0}".format(t))         
+        model.addConstr(quicksum(team[t] for t in range(T)) <= MaxT*Q)
     
     
     #pre_overflow = np.random.randint(0, 100, R)
@@ -589,18 +600,19 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_pl
    
     model.update()
 
-    model.write("tsgkp.lp")
+    model.write("tsgkpteam.lp")
 
     model.optimize()
-    model.write("tsgkp.sol")
+    model.write("tsgkpteam.sol")
 
-    
-
+    team_val = np.zeros(T)
     n_value = np.zeros((W,T,K))
     for w in range(W):
         for t in range(T):
             for k in range(K):
                 n_value[w][t][k] = n_wtk[w][t][k].x
+                if n_value[w][t][k]>0:
+                    team_val[t]=1
                 #if n_value[w][t][k] != int(n_value[w][t][k]):
                     #print n_value[w][t][k]
 
@@ -629,10 +641,17 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_pl
     q_val = np.zeros(Q)
     for i in range(Q):
         q_val[i]=q[i].x
+      
+    if TeamConstr:  
+        team_val = np.zeros(T)
+        for t in range(T):
+            team_val[t] = team[t].x
+        
     obj = model.getAttr('ObjVal')
 
+    model.terminate()
 
-    return obj, n_value, overflow_value, y_value, ys_value, s_value, p_value, q_val
+    return obj, n_value, overflow_value, y_value, ys_value, s_value, p_value, q_val, team_val
     
 
 def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
@@ -727,22 +746,28 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 
     return resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi
 
-def solve():
+def solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, TeamConstr=False):
    
+    start_time = time.time()
+
     print "============================ FULL LP relaxation =============================="
-    obj_relax, n_value0, overflow_value0, y_value0, s_value0, p, attset, f = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1, OverConstr=True)
+    obj_relax, n_value0, overflow_value0, y_value0, s_value0, p, attset, f = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1, OverConstr=True, TeamConstr=TeamConstr, MaxT=maxT, Q=Q)
     
+    minr = np.zeros((W,R))
+
     for w in range(W):
         for r in range(R):
             minr[w][r] = math.floor(y_value0[w][r])
             print y_value0[w][r]
             
     print "============================ Binary Y / single relaxed n_wtk (allocated arrivals) MIP ======================"
-    objy, n_value, overflow_value, y_value, ys,  s_value, p_value, q = KStrategiesY( Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, OverConstr=True)
+    [x] = KStrategiesY( Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, OverConstr=True,  TeamConstr=TeamConstr), 
+    #objy, n_value, overflow_value, y_value, ys,  s_value, p_value, q, t1
     
+    [objy, y_value, ys,  s_value, p_value, q, t1] = [x[0],x[3],x[4],x[5],x[6],x[7],x[8]]
     print "============================ multiple relaxed n_wtk (allocated arrivals) MIP ==============================="
 
-    objyn, n_val, n = KStrategiesYN(Q, W, K, R, M, P, resource2team, T,maxT,  E, C, U_plus, U_minus, N_wk, shift, mr, y_value, ys, q, p_value, s_value, ar, phi, integer=0, OverConstr=True, OverConstr2=False)
+    objyn, n_val, n, t2 = KStrategiesYN(Q, W, K, R, M, P, resource2team, T,maxT,  E, C, U_plus, U_minus, N_wk, shift, mr, y_value, ys, q, p_value, s_value, ar, phi, integer=0, OverConstr=True, OverConstr2=False)
     
     minn = np.zeros((Q,W,T,K))
     
@@ -753,23 +778,22 @@ def solve():
                 for t in range(T):
                     minn[i][w][t][k] = math.floor(n[i][w][t][k])
                     sum += math.floor(n[i][w][t][k])
-                print "n",i,w,k," ", sum, " ", N_wk[w][k],  q[i]
     
     print "============================ Integer n_wtk  MIP ==============================="
 
-    obj, rt  = KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, y_value, ys, minn, p, s_value, phi, integer=0, OverConstr=True, OverConstr2=False)
+    obj, rt, t3  = KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, y_value, ys, minn, p, s_value, phi, integer=0, OverConstr=True, OverConstr2=False)
     walltime = time.time() - start_time
-
+    
     print "Runtime/walltime ", rt, " ", walltime
     
     print obj_relax, objy, objyn, obj
     
-    return [obj_relax, objy, objyn, obj], walltime
+    return [obj_relax, objy, objyn, obj], walltime, [t1, t2, t3]
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 15 # number of time windows
+    W = 10 # number of time windows
     K = 5 # number of passenger types
     R = 5 # number of resources
     mR = 10 # max number of reosurces
@@ -790,56 +814,9 @@ if __name__ == "__main__":
 
     minr = np.zeros((W,R))
     start_time = time.time()
-
-    print "============================ FULL LP relaxation =============================="
-    obj_relax, n_value0, overflow_value0, y_value0, s_value0, p, attset, f = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1, OverConstr=True)
-    for w in range(W):
-        for r in range(R):
-            minr[w][r] = math.floor(y_value0[w][r])
-            print y_value0[w][r]
-            
-    print "============================ Binary Y / single relaxed n_wtk (allocated arrivals) MIP ======================"
-    objy, n_value, overflow_value, y_value, ys,  s_value, p_value, q = KStrategiesY( Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, OverConstr=True)
     
-    print "============================ multiple relaxed n_wtk (allocated arrivals) MIP ==============================="
+    solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=True)
 
-    objyn, n_val, n = KStrategiesYN(Q, W, K, R, M, P, resource2team, T,maxT,  E, C, U_plus, U_minus, N_wk, shift, mr, y_value, ys, q, p_value, s_value, ar, phi, integer=0, OverConstr=True, OverConstr2=False)
-    
-    minn = np.zeros((Q,W,T,K))
-    
-    for i in range(Q):
-        for w in range(W):
-            for k in range(K):
-                sum = 0 
-                for t in range(T):
-                    minn[i][w][t][k] = math.floor(n[i][w][t][k])
-                    sum += math.floor(n[i][w][t][k])
-                print "n",i,w,k," ", sum, " ", N_wk[w][k],  q[i]
-    #n =[]
-    #objs =[]
-    #for i in range(Q):
-    #    obj_relaxi, n_value0, overflow_value0, attset, f = LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, ys[i], s_value, p_value, mr, ar, phi, integer=0, OverConstr=True)
-    #    n.append(n_value0)
-    #    objs.append(obj_relaxi)
-    #obj, rt, q, n2, o, att_set = Ksolver(W, K, R, mR, M, P, Q,1, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, minn, overflow_value, ys, s_value, p_value, integer=0, OverConstr=False)
-    
-    print "============================ Integer n_wtk  MIP ==============================="
-
-    obj, rt  = KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, y_value, ys, minn, p, s_value, phi, integer=0, OverConstr=True, OverConstr2=False)
-    walltime = time.time() - start_time
-
-    print "Runtime/walltime ", rt, " ", walltime
-
-    #print y_value0
-
-    #print y_value
-    
-    print obj_relax, objy, objyn, obj, 
-    #print y_value
-    #for i in range(Q):
-    #    if q[i]>0:
-    #        print q[i]
-    #        print ys[i]
 
 
 

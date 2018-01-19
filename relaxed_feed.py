@@ -175,10 +175,13 @@ def LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus,
     return obj, n_value, overflow_value, attack_set, fractional_vals
 
 
-def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, OverConstr=False): # integer indicates different relaxation method
+def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, OverConstr=False, TeamConstr=False, MaxT=0, Q=0): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
+
+
+    if TeamConstr: team = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}".format(t)) for t in range(T)] 
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
     z = [] # z[w][k][m]
@@ -251,6 +254,15 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     model.setObjective(objective_value, GRB.MAXIMIZE)
     model.update()
     # ======================= Gurobi Constraints ===============================
+    
+    #TEAM CONSTRAINTS  
+    if TeamConstr:
+        for w in range(W):
+            for k in range(K):
+                for t in range(T):
+                    model.addConstr( pi[w][t][k] <= team[t], name="team{0}{1}{2}".format(t,w,k))         
+        model.addConstr(quicksum(team[t] for t in range(T)) <= MaxT*Q)
+        
     for w in range(W):
         for k in range(K):
             for m in range(M):
