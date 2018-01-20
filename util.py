@@ -24,14 +24,10 @@ def generateAllTeams(R, mR):
         for x in iterator:
             i+=1
             teams.append(x)
-<<<<<<< HEAD
     #teams.append([])
-=======
-            print i, x
     #teams.append([])
     print teams
     print len(teams)
->>>>>>> origin/master
     return teams
 
 def computeTeamsRate(R, M, T, teams, Er):
@@ -42,10 +38,6 @@ def computeTeamsRate(R, M, T, teams, Er):
             for r in teams[t]:
                 tmp_rate *= (1 - Er[r][m])
             E[t][m] = 1 - tmp_rate
-<<<<<<< HEAD
-=======
-    #print E[31][0]
->>>>>>> origin/master
     return E
 
 def randomGenerateTeams(R, mR, nT):
