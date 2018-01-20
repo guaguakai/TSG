@@ -331,7 +331,7 @@ if __name__ == "__main__":
     mR = 2 # max number of reosurces
     M = 1 # number of attack methods
     P = 3 # number of staff
-    Q= 2
+    Q= 1
     shift = 1 # d
 
     nT = 22
