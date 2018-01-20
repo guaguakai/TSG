@@ -367,7 +367,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     #Er = [[0.3, 0.5, 0.2], [0.6, 0.3, 0.4], [0.4, 0.6, 0.5]
     #     ,[0.6, 0.3, 0.8], [0.7, 0.4, 0.7], [0.7, 0.6, 0.9]]
 
-    Er, C = util.genResources(R, M, 500)
+    Er, C = util.genResources(R, M, 200)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
