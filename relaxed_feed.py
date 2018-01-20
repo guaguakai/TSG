@@ -369,12 +369,14 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     #            print "utility of w={0}, k={1}, m={2} is: {3}".format(w,k,m, tmp_utility)
 
     #print "defender utility: {0}".format(defender_utility)
-
+    team_val = []
     n_value = np.zeros((W,T,K))
     for w in range(W):
         for t in range(T):
             for k in range(K):
                 n_value[w][t][k] = n_wtk[w][t][k].x
+                if n_value[w][t][k]>0 and t not in team_val:
+                    team_val.append(t)
                 #if n_value[w][t][k] != int(n_value[w][t][k]):
                     #print n_value[w][t][k]
 
@@ -407,7 +409,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
                 diff = np.abs(AV - att_val)
                 if(diff>0.0001): attack_set+=1
                 if(n_value[w][t][k]!=np.floor(n_value[w][t][k])): fractional_vals+=1
-    return obj, n_value, overflow_value, y_value, s_value, p_value, attack_set, fractional_vals
+    return obj, n_value, overflow_value, y_value, s_value, p_value, attack_set, fractional_vals, team_val
     
 
 def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):

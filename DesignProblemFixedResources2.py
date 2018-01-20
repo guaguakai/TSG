@@ -62,7 +62,7 @@ def KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus,
             overflow[w].append(tmp_overflow_var)
     
     O = [[[model.addVar(vtype=GRB.CONTINUOUS, name="O_{0}_w{1}_r{2}".format(i, w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
-    y = y
+    y = [[[model.addVar(vtype=GRB.CONTINUOUS, name="O_{0}_w{1}_r{2}".format(i, w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     yi = yi 
      # y[i][w][r]: number of operating resources r at time w
     
@@ -640,7 +640,8 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_pl
     tmp_sum = LinExpr([1]*W, [s[w] for w in range(W)])
     model.addConstr(tmp_sum - P <= 0, name="(9)")
     
-    
+    tmp_sum = LinExpr([1]*Q, [q[i] for i in range(Q)])
+    model.addConstr(tmp_sum == 1, name="sumQ")
    
     model.update()
 
@@ -879,7 +880,7 @@ if __name__ == "__main__":
     M = 2 # number of attack methods
     P = 10 # number of staff
     shift = 5 # d
-    Q = 5
+    Q = 20
     nT = 20
     teams = util.generateAllTeams(R, mR)
     maxT = 3
@@ -889,12 +890,12 @@ if __name__ == "__main__":
     # ================= random generate game setting ===========================
     seed = 2345
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
-    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = rs(seed, W, K ,R, mR, M, P, teams, shift)
+    resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = rs(seed, W, K ,R, mR, M, P, teams, shift)
 
     minr = np.zeros((W,R))
     start_time = time.time()
     
-    solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=False)
+    solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=True)
 
 
 
