@@ -367,7 +367,11 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     #Er = [[0.3, 0.5, 0.2], [0.6, 0.3, 0.4], [0.4, 0.6, 0.5]
     #     ,[0.6, 0.3, 0.8], [0.7, 0.4, 0.7], [0.7, 0.6, 0.9]]
 
+<<<<<<< HEAD
     Er, C = util.genResources(R, M, 200)
+=======
+    Er, C = util.genResources(R, M, 30)
+>>>>>>> origin/master
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
@@ -398,7 +402,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
         for w in range(flight_time-arrival_window, flight_time):
             large_or_small = random.random()
             if large_or_small > 0.5:
-                tmp_N = random.randint(100, 300)
+                tmp_N = random.randint(10, 30)
             else:
                 tmp_N = random.randint(10, 30)
             N_wk[w][k] = tmp_N

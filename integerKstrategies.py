@@ -101,20 +101,8 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
     q = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="q_s{0}".format(i)) for i in range(Q)]
     
     
-    X = [[[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="X_{0}_w{1}_t{2}_{3}_{4}".format(w,t,k,i,j)) for j in range(Nmax)] for i in range(Q)]for k in range(K)] for t in range(T)] for w in range(W)]
-    
-                        
-    O = [] # overflow[w][r]
-    for w in range(W):
-        O.append([])
-        for r in range(R):
-            O[w].append([])
-            for i in range(Q):
-                O[w][r].append([])
-                for j in range(Nmax):
-                    tmp_overflow_var = model.addVar(vtype=GRB.BINARY, lb=0, name="o_w{0}_r{1}_s{2}".format(w, r,i,j)) # this is original integer but can be approximated by continuous value
-                    O[w][r][i].append(tmp_overflow_var)
-    #O = [[[[model.addVar(vtype=GRB.BINARY, name="O_w{0}_r{1}_{2}_{3}".format(w, r,i,j)) for j in range(Nmax)] for i in range(Q)] for r in range(R)] for w in range(W)]
+    X = [[[[[model.addVar(vtype=GRB.BINARY, name="X_{0}_w{1}_t{2}_{3}_{4}".format(w,t,k,i,j)) for j in range(Nmax)] for i in range(Q)]for k in range(K)] for t in range(T)] for w in range(W)]                    
+    O = [[[[model.addVar(vtype=GRB.BINARY, name="O_w{0}_r{1}_{2}_{3}".format(w, r,i,j)) for j in range(Nmax)] for i in range(Q)] for r in range(R)] for w in range(W)]
     XC = [[[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="XC_{0}_w{1}_t{2}_{3}_{4}".format(w,t,k,i,j)) for j in range(Nmax)] for i in range(Q)]  for k in range(K)] for t in range(T)] for w in range(W)]
     OC = [[[[model.addVar(vtype=GRB.CONTINUOUS, name="OC_{0}_w{1}_r{2}_{3}".format(w, r,i,j)) for j in range(Nmax)] for i in range(Q)] for r in range(R)] for w in range(W)]
     # ========================= Gurobi Objective ===============================
@@ -295,7 +283,7 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
     for w in range(W):
         s_value[w] = s[w].x
         
-        p_value = np.zeros(W)
+    p_value = np.zeros(W)
     for w in range(W):
         p_value[w] = p[w].x
     
@@ -313,39 +301,53 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
             for i in range(Q):
                 yi_value[w][r][i] = yi[w][r][i].x
                 
+    ni_value = np.zeros((W,T,K,Q))
+    for w in range(W):
+        for t in range(T):
+            for k in range(K):
+                for i in range(Q):
+                    ni_value[w][t][k][i] = ni_wtk[w][t][k][i].x
+                
     q_value = np.zeros(Q)
     for i in range(Q):
         q_value[i] = q[i].x
+        
+    z_value = np.zeros((W,K,M))
+    for w in range(W):
+        for k in range(K):
+            for m in range(M):
+                z_value[w][k][m] = z[w][k][m].x
     
 
-    return obj, n_value, overflow_value, y_value, s_value, p_value,oi_value,yi_value,q_value
+    return obj, n_value, overflow_value, y_value, s_value, p_value,ni_value,oi_value,yi_value,q_value,z_value
 
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 5 # number of time windows
+    W = 2 # number of time windows
     K = 3 # number of passenger types
     R = 2 # number of resources
-    mR = 3 # max number of reosurces
+    mR = 2 # max number of reosurces
     M = 1 # number of attack methods
-    P = 10 # number of staff
-    Q=2
-    shift = 2 # d
+    P = 3 # number of staff
+    Q= 2
+    shift = 1 # d
 
-    nT = 20
+    nT = 22
     teams = util.generateAllTeams(R, mR)
     #teams = util.randomGenerateTeams(R, mR, nT)
-    Nmax = 285
+    Nmax = 150
 
     #print teams
 
     # ================= random generate game setting ===========================
     seed = 2345
-    resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
+    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
     
     minr = np.zeros((W,R))
     
-    obj, n_value, overflow_value, y_value, s_value, p_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+    obj, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
+    #obj1, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
 
-    obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0,oi_value,yi_value,q_value = integerSolution(Nmax,Q,W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, binary_y=0, OverConstr = 1)
+    obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0,ni_value,oi_value,yi_value,q_value,z_value0 = integerSolution(Nmax,Q,W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, binary_y=0, OverConstr = 0)

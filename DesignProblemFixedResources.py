@@ -879,7 +879,7 @@ if __name__ == "__main__":
     M = 2 # number of attack methods
     P = 10 # number of staff
     shift = 5 # d
-    Q = 20
+    Q = 5
     nT = 20
     teams = util.generateAllTeams(R, mR)
     maxT = 3
@@ -889,12 +889,12 @@ if __name__ == "__main__":
     # ================= random generate game setting ===========================
     seed = 2345
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
-    resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = rs(seed, W, K ,R, mR, M, P, teams, shift)
+    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = rs(seed, W, K ,R, mR, M, P, teams, shift)
 
     minr = np.zeros((W,R))
     start_time = time.time()
     
-    solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=True)
+    solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=False)
 
 
 

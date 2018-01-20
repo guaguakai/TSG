@@ -61,7 +61,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     p = [] # available staff
     s = [] # working staff
     for w in range(W):
-        tmp_staff = model.addVar(vtype=GRB.CONTINUOUS, name="p_w{0}".format(w))
+        tmp_staff = model.addVar(vtype=GRB.INTEGER, name="p_w{0}".format(w))
         tmp_working_staff = model.addVar(vtype=GRB.CONTINUOUS, name="s_w{0}".format(w))
         p.append(tmp_staff)
         s.append(tmp_working_staff)
@@ -220,10 +220,17 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
         p_value = np.zeros(W)
     for w in range(W):
         p_value[w] = p[w].x
+        
+    
+    z_value = np.zeros((W,K,M))
+    for w in range(W):
+        for k in range(K):
+            for m in range(M):
+                z_value[w][k][m] = z[w][k][m].x
     
     obj = model.getAttr('ObjVal')
 
-    return obj, n_value, overflow_value, y_value, s_value, p_value
+    return obj, n_value, overflow_value, y_value, s_value, p_value, z_value
     
 
 def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
