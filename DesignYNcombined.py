@@ -668,17 +668,17 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 10 # number of time windows
+    W = 5 # number of time windows
     K = 10 # number of passenger types
-    R = 4 # number of resources
-    mR = 2 # max number of reosurces
+    R = 6 # number of resources
+    mR = 3 # max number of reosurces
     M = 2 # number of attack methods
-    P = 20 # number of staff
+    P = 30 # number of staff
     shift = 3 # d
-    Q = 3
-    nT = 20
+    Q = 4
+    nT = 25
     teams = util.generateAllTeams(R, mR)
-    maxT = 3
+    maxT = 5
     #teams = util.randomGenerateTeams(R, mR, nT)
 
 
