@@ -241,7 +241,7 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
-    model.params.MIPGap=0.01;
+    model.params.MIPGap=0.0001;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
@@ -427,9 +427,9 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
     #        for i in range(Q):
     #            model.addConstr(yi[i][w][r] + yb2[i][w][r]- yb[i][w][r]- minr[w][r] == 0, name="(11)_w{0}_r{1}_{2}".format(w, r,i))
     #            model.addConstr(yb2[i][w][r]+yb[i][w][r]<= 1, name="(11)_w{0}_r{1}_{2}".format(w, r,i))
-    #            
+                
     #for i in range(Q):         
-    #    model.addConstr(quicksum(yb2[i][w][r] for r in range(R) for w in range(W)) <= 2)
+    #    model.addConstr(quicksum(yb2[i][w][r] for r in range(R) for w in range(W)) <= 10)
               
     for w in range(W):
         for i in range(Q):
@@ -592,16 +592,11 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     Er = Er / 2
     print "Er"
     print Er
-    #Er = [[0.3, 0.5, 0.2], [0.6, 0.3, 0.4], [0.4, 0.6, 0.5]
-    #     ,[0.6, 0.3, 0.8], [0.7, 0.4, 0.7], [0.7, 0.6, 0.9]]
 
     Er, C = util.genResources(R, M, 600)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
-    # RatesEr = [0.357, 0.916, 0.511, 0.916, 1.204, 1.204,
-    #     0.693, 0.357, 0.916, 0.357, 0.511, 0.916,
-    #     0.223, 0.511, 0.693, 1.609, 1.204, 2.303]
 
     # suppose this is a zero-sum game
     U_plus = [] # covered (plus) utility of the defender
@@ -627,7 +622,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
         for w in range(startK-3,startK):
             large_or_small = random.random()
             if large_or_small > 0.5:
-                tmp_N = random.randint(100, 300)
+                tmp_N = random.randint(50, 200)
             else:
                 tmp_N = random.randint(10, 30)
             N_wk[w][k] = tmp_N
@@ -648,7 +643,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
  #   print "\nC"
   #  print C
     #C = [100,80,75,50,30,15]
-    mr = np.random.randint(5, 20, R)
+    mr = np.random.randint(5, 15, R)
  #   print "\nmr"
   #  print mr
     #mr = [5, 5, 5, 3, 2, 4] # maximum number of people to operate resource r
@@ -657,7 +652,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
   #  print ar
     #ar = [2, 1, 2, 1, 1, 2] # ar[r] number of people required to operate resource r
 
-    phi = np.random.rand(R)/10 # phi[r] overflow penalty
+    phi = np.random.rand(R) # phi[r] overflow penalty
    # print "\nphi"
     #print phi
     #phi = np.random.rand(W, R) # phi[w][r] overflow penalty
@@ -669,16 +664,16 @@ if __name__ == "__main__":
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 5 # number of time windows
-    K = 10 # number of passenger types
-    R = 6 # number of resources
+    K = 10# number of passenger types
+    R = 5 # number of resources
     mR = 3 # max number of reosurces
     M = 2 # number of attack methods
-    P = 30 # number of staff
-    shift = 3 # d
-    Q = 4
+    P = 20 # number of staff
+    shift = 2# d
+    Q = 1
     nT = 25
     teams = util.generateAllTeams(R, mR)
-    maxT = 5
+    maxT = 25
     #teams = util.randomGenerateTeams(R, mR, nT)
 
 
@@ -701,6 +696,7 @@ if __name__ == "__main__":
     minr = np.zeros((W,R))
     
     obj_relax, n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+    
     
     minr = np.zeros((W,R))
 
@@ -731,5 +727,5 @@ if __name__ == "__main__":
     obj1, rt, t3  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
-    
+
     

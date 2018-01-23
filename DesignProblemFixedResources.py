@@ -5,7 +5,8 @@ import numpy as np
 import random
 import math
 from relaxed_feed import LPsolver, LPsolverR
-from KStrategies import randomSetting as rs
+#from KStrategies import randomSetting as rs
+from DesignYNcombined import randomSetting as rs2
 from KStrategiesFixedYRoundN import Ksolver
 
 def KStrategiesYNB(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, y, yi, n, p, s, phi, integer=0, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
@@ -873,23 +874,23 @@ if __name__ == "__main__":
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 10 # number of time windows
-    K = 5 # number of passenger types
+    K = 10 # number of passenger types
     R = 5 # number of resources
-    mR = 10 # max number of reosurces
+    mR = 3 # max number of reosurces
     M = 2 # number of attack methods
-    P = 10 # number of staff
-    shift = 5 # d
-    Q = 5
+    P = 20 # number of staff
+    shift = 3 # d
+    Q = 3
     nT = 20
     teams = util.generateAllTeams(R, mR)
-    maxT = 3
+    maxT = 10
     #teams = util.randomGenerateTeams(R, mR, nT)
 
 
     # ================= random generate game setting ===========================
     seed = 2345
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
-    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = rs(seed, W, K ,R, mR, M, P, teams, shift)
+    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = rs2(seed, W, K ,R, mR, M, P, teams, shift)
 
     minr = np.zeros((W,R))
     start_time = time.time()
