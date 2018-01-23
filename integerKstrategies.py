@@ -106,6 +106,8 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
     XC = [[[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="XC_{0}_w{1}_t{2}_{3}_{4}".format(w,t,k,i,j)) for j in range(Nmax)] for i in range(Q)]  for k in range(K)] for t in range(T)] for w in range(W)]
     OC = [[[[model.addVar(vtype=GRB.CONTINUOUS, name="OC_{0}_w{1}_r{2}_{3}".format(w, r,i,j)) for j in range(Nmax)] for i in range(Q)] for r in range(R)] for w in range(W)]
     # ========================= Gurobi Objective ===============================
+    model.update()
+
     objective_variables = [theta] + [overflow[w][r] for w in range(W) for r in range(R)]
     objective_coefficients = [1] + [-phi[r] for r in range(R)]*W
     objective_value = LinExpr(objective_coefficients, objective_variables)
@@ -115,6 +117,7 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
     #    for r in range(R):
     #        objective_value += phi[r]*overflow[w][r]
     model.setObjective(objective_value, GRB.MAXIMIZE)
+    model.update()
 
     # ======================= Gurobi Constraints ===============================
     for w in range(W):
@@ -239,6 +242,7 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
         for r in range(R):
             model.addConstr(y[w][r] == 0, name="(11-2)_w{0}_r{1}".format(w, r))
     """
+    model.update()
 
     model.write("tsg.lp")
 
@@ -347,7 +351,16 @@ if __name__ == "__main__":
     
     minr = np.zeros((W,R))
     
-    obj, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
+    #obj, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
     #obj1, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
-
+    from DesignProblemFixedResources import solve
+    
     obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0,ni_value,oi_value,yi_value,q_value,z_value0 = integerSolution(Nmax,Q,W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+    util1, rt1, q1, teams1 = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, 5, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=False, YConstr=False)
+    
+    
+    print obj0, util1
+    
+    
+    
+    

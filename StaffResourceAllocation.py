@@ -73,6 +73,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
             tmp_resource_binary_r = model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w{0}_r{1}".format(w, r))
             yb[w].append(tmp_resource_binary_r)
 
+    model.update()
     # ========================= Gurobi Objective ===============================
     objective_variables = [theta] + [overflow[w][r] for w in range(W) for r in range(R)]
     objective_coefficients = [1] + [-phi[r] for r in range(R)]*W
@@ -83,6 +84,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
     #    for r in range(R):
     #        objective_value += phi[r]*overflow[w][r]
     model.setObjective(objective_value, GRB.MAXIMIZE)
+    model.update()
 
     # ======================= Gurobi Constraints ===============================
     for w in range(W):
@@ -173,6 +175,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
         for r in range(R):
             model.addConstr(y[w][r] == 0, name="(11-2)_w{0}_r{1}".format(w, r))
     """
+    model.update()
 
     model.write("tsg.lp")
 
