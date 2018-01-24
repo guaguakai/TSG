@@ -667,7 +667,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
-    # ========================= Game Setting ===================================
+    ## ========================= Game Setting ===================================
     W = 5 # number of time windows
     K = 10 # number of passenger types
     R = 6 # number of resources
@@ -679,6 +679,18 @@ if __name__ == "__main__":
     nT = 25
     teams = util.generateAllTeams(R, mR)
     maxT = 5
+    # ========================= Game Setting ===================================
+    #W = 5 # number of time windows
+    #K = 3 # number of passenger types
+    #R = 4 # number of resources
+    #mR = 2 # max number of reosurces
+    #M = 2 # number of attack methods
+    #P = 30 # number of staff
+    #shift = 2 # d
+    #Q = 4
+    #nT = 25
+    #teams = util.generateAllTeams(R, mR)
+    #maxT = 5
     #teams = util.randomGenerateTeams(R, mR, nT)
 
 
@@ -716,6 +728,7 @@ if __name__ == "__main__":
         q[i] = float(1)/Q
         
     
+    print "============================ K strategies Y, N combined =============================="
     objyn1, n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     minn = np.zeros((Q,W,T,K))
@@ -728,6 +741,7 @@ if __name__ == "__main__":
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
                     sum += math.floor(ns[i][w][t][k])
     
+    print "============================ K strategies Y, N, B new =============================="
     obj1, rt, t3  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1

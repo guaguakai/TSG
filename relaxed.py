@@ -207,13 +207,14 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     resource2team = util.resourceTeamDict(R, T, teams)
     print resource2team
 
-    Er = np.random.rand(R, M)/2 + 0.5 # Er[m][r]
-    Er = Er / 2
-    print "Er"
-    print Er
+    #Er = np.random.rand(R, M)/2 + 0.5 # Er[m][r]
+    #Er = Er / 2
+    #print "Er"
+    #print Er
     #Er = [[0.3, 0.5, 0.2], [0.6, 0.3, 0.4], [0.4, 0.6, 0.5]
     #     ,[0.6, 0.3, 0.8], [0.7, 0.4, 0.7], [0.7, 0.6, 0.9]]
 
+    Er, C = util.genResources(R, M, 600)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
@@ -235,35 +236,36 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     print "minus"
     print U_minus
 
-    N_wk = [] # N_wk[w][k] represents the number of people getting in time window w with type k
-    for w in range(W):
-        N_wk.append([])
-        for k in range(K):
+    N_wk = np.zeros((W,K))
+    for k in range(K):
+        startK = random.randint(3,W)
+        for w in range(startK-3,startK):
             large_or_small = random.random()
             if large_or_small > 0.5:
                 tmp_N = random.randint(100, 300)
             else:
                 tmp_N = random.randint(10, 30)
-            N_wk[w].append(tmp_N)
+            N_wk[w][k] = tmp_N
+
 
     print "number of passengers: {0}".format([sum(N_wk[w]) for w in range(W)])
 
-    C = np.random.randint(200, 500, R) # C[r] is the capacity of resource r
-    print "\nC"
-    print C
+    #C = np.random.randint(200, 500, R) # C[r] is the capacity of resource r
+    #print "\nC"
+    #print C
     #C = [100,80,75,50,30,15]
-    mr = np.random.randint(10, 30, R)
-    print "\nmr"
-    print mr
+    mr = np.random.randint(5, 20, R)
+    #print "\nmr"
+    #print mr
     #mr = [5, 5, 5, 3, 2, 4] # maximum number of people to operate resource r
     ar = np.random.randint(1, 5, R)
-    print "\nar"
-    print ar
+    #print "\nar"
+    #print ar
     #ar = [2, 1, 2, 1, 1, 2] # ar[r] number of people required to operate resource r
 
     phi = np.random.rand(R)/10 # phi[r] overflow penalty
-    print "\nphi"
-    print phi
+    #print "\nphi"
+    #print phi
     #phi = np.random.rand(W, R) # phi[w][r] overflow penalty
 
     return resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi
