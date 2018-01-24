@@ -735,12 +735,11 @@ if __name__ == "__main__":
     for i in range(Q):
         q[i] = float(1)/Q
         
-<<<<<<< HEAD
+
     #q = [0.25, 0.75]
-=======
+
     
     print "============================ K strategies Y, N combined =============================="
->>>>>>> 1fe88087513294985ccdfa61862be719d99ba6d3
     objyn1, n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     minn = np.zeros((Q,W,T,K))
@@ -753,17 +752,13 @@ if __name__ == "__main__":
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
                     sum += math.floor(ns[i][w][t][k])
     
-<<<<<<< HEAD
+
     obj1, rt, t3, ni  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
 
-    
-=======
     print "============================ K strategies Y, N, B new =============================="
     obj1, rt, t3  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
     
-    
->>>>>>> 1fe88087513294985ccdfa61862be719d99ba6d3
