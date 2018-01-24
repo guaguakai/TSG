@@ -49,7 +49,9 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
                 else:
                     tmp_pi_var = model.addVar(vtype=GRB.CONTINUOUS, name="n_w{0}_t{1}_k{2}".format(w, t, k))
                 n_wtk[w][t].append(tmp_pi_var)
-                
+    
+
+    ni = [[[[model.addVar(vtype=GRB.INTEGER, name="ni_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]           
     nb = [[[[model.addVar(vtype=GRB.BINARY, name="ni_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]
     X = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="X(s%d,w%d,k%d,t%d)" %(i, w,k,t))  for k in range(K)] for t in range(T)] for w in range(W)] for i in range(Q)]
 
@@ -125,6 +127,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
                 for t in range(T):
                     #tmp = LinExpr([1/(np.maximum(N_wk[w][k],1)) for w in range(W) for k in range(K)], [ni[i][w][t][k] for w in range(W) for k in range(K)])
                     model.addConstr( n[i][w][t][k]+nb[i][w][t][k] <= team[i][t]*N_wk[w][k], name="team{0}{1}{2}{3}".format(t,i,k,w))         
+                    model.addConstr( n[i][w][t][k]+nb[i][w][t][k]-ni[i][w][t][k]==0)
         model.addConstr(quicksum(team[i][t] for t in range(T)) <= maxT)
 
     
@@ -215,7 +218,12 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
 
     model.write("tsgkpMIPteam.sol")
 
-    
+    ni_value = np.zeros((Q,W,T,K))
+    for i in range(Q):
+        for w in range(W):
+            for t in range(T):
+                for k in range(K):
+                    ni_value[i][w][t][k] = ni[i][w][t][k].x
 
     n_value = np.zeros((W,T,K))
     for w in range(W):
@@ -234,7 +242,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
 
     model.terminate()
 
-    return obj, runtime, team_val
+    return obj, runtime, team_val, ni_value
 
 
 def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
@@ -664,13 +672,13 @@ if __name__ == "__main__":
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 5 # number of time windows
-    K = 10# number of passenger types
+    K = 5 # number of passenger types
     R = 5 # number of resources
     mR = 3 # max number of reosurces
     M = 2 # number of attack methods
     P = 20 # number of staff
-    shift = 2# d
-    Q = 1
+    shift = 3 # d
+    Q = 2
     nT = 25
     teams = util.generateAllTeams(R, mR)
     maxT = 25
@@ -711,7 +719,7 @@ if __name__ == "__main__":
     for i in range(Q):
         q[i] = float(1)/Q
         
-    
+    #q = [0.25, 0.75]
     objyn1, n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     minn = np.zeros((Q,W,T,K))
@@ -724,7 +732,7 @@ if __name__ == "__main__":
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
                     sum += math.floor(ns[i][w][t][k])
     
-    obj1, rt, t3  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
 
