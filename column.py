@@ -205,12 +205,12 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
                 #    print gamma_value[w][t][k]
 
     delta_value = c_q_sum.Pi
-    print "delta value: {0}".format(delta_value)
-    print "dual objective value: {0}".format(objective_value)
+    #print "delta value: {0}".format(delta_value)
+    #print "dual objective value: {0}".format(objective_value)
 
     q_value = np.zeros(len(Q))
     for i in range(len(Q)):
-        print q[i].varName, q[i].x
+        #print q[i].varName, q[i].x
         q_value[i] = q[i].x
 
     return model, gamma_value, delta_value, q_value
@@ -220,16 +220,17 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 15 # number of time windows
-    K = 20 # number of passenger types
-    R = 10 # number of resources
+    W = 5 # number of time windows
+    K = 10 # number of passenger types
+    R = 6 # number of resources
     mR = 3 # max number of reosurces
-    M = 10 # number of attack methods
-    P = 100 # number of staff
-    shift = 8 # d
-
-    nT = 20
+    M = 2 # number of attack methods
+    P = 30 # number of staff
+    shift = 3 # d
+    Q = 4 # here no use
+    nT = 25
     teams = util.generateAllTeams(R, mR)
+    maxT = 5 # here no use either
     #teams = util.randomGenerateTeams(R, mR, nT)
 
     print teams
@@ -247,7 +248,7 @@ if __name__ == "__main__":
     Q = []
     gamma = np.ones((W, T, K))
 
-    for j in range(100):
+    for j in range(1000):
         print "==================================== solving slave problem ===================================="
         slave_n_value, slave_overflow_value = slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma)
         tmpQ = {}
@@ -265,7 +266,7 @@ if __name__ == "__main__":
         #new_Q = [Q[i] for i in range(len(Q)) if q_value[i] > 0]
         #Q = new_Q
 
-        print "delta value: {0}".format(delta_value)
+        #print "delta value: {0}".format(delta_value)
 
 
     print "============================ LP relaxation =============================="

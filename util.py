@@ -24,10 +24,8 @@ def generateAllTeams(R, mR):
         for x in iterator:
             i+=1
             teams.append(x)
+    teams.append([])
     #teams.append([])
-    #teams.append([])
-    print teams
-    print len(teams)
     return teams
 
 def computeTeamsRate(R, M, T, teams, Er):

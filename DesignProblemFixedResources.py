@@ -641,7 +641,8 @@ def KStrategiesY(Q, W, K, R, mR, M, P, teams, resource2team, T, MaxT, E, C, U_pl
     tmp_sum = LinExpr([1]*W, [s[w] for w in range(W)])
     model.addConstr(tmp_sum - P <= 0, name="(9)")
     
-    
+    for i in range(Q-1):
+        model.addConstr(q[i] >= q[i+1], name="q_s{0}".format(i))
    
     model.update()
 

@@ -37,7 +37,7 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 5 # number of time windows
+    W = 10 # number of time windows
     K = 5 # number of passenger types
     R = 5 # number of resources
     mR = 10 # max number of resources
