@@ -681,24 +681,8 @@ if __name__ == "__main__":
     Q = 2
     nT = 25
     teams = util.generateAllTeams(R, mR)
-<<<<<<< HEAD
-    maxT = 25
-=======
+
     maxT = 5
-    # ========================= Game Setting ===================================
-    #W = 5 # number of time windows
-    #K = 3 # number of passenger types
-    #R = 4 # number of resources
-    #mR = 2 # max number of reosurces
-    #M = 2 # number of attack methods
-    #P = 30 # number of staff
-    #shift = 2 # d
-    #Q = 4
-    #nT = 25
-    #teams = util.generateAllTeams(R, mR)
-    #maxT = 5
->>>>>>> 1fe88087513294985ccdfa61862be719d99ba6d3
-    #teams = util.randomGenerateTeams(R, mR, nT)
 
 
     # ================= random generate game setting ===========================
