@@ -704,35 +704,7 @@ def fullYNcombined(seed, W, K ,R, mR, M, P, teams, shift):
     return ni_value
 
 if __name__ == "__main__":
-    # ============================= main =======================================
-    print "======================== main ======================================"
-    ## ========================= Game Setting ===================================
-<<<<<<< HEAD
-    W = 5 # number of time windows
-    K = 5 # number of passenger types
-    R = 5 # number of resources
-    mR = 3 # max number of reosurces
-    M = 2 # number of attack methods
-    P = 20 # number of staff
-    shift = 3 # d
-    Q = 2
-    nT = 25
-    teams = util.generateAllTeams(R, mR)
 
-    maxT = 5
-=======
-    #W = 5 # number of time windows
-    #K = 5 # number of passenger types
-    #R = 5 # number of resources
-    #mR = 3 # max number of reosurces
-    #M = 2 # number of attack methods
-    #P = 20 # number of staff
-    #shift = 3 # d
-    #Q = 5
-    #nT = 25
-    #teams = util.generateAllTeams(R, mR)
-    #maxT = 5
-    # ========================= Game Setting ===================================
     W = 5 # number of time windows
     K = 3 # number of passenger types
     R = 4 # number of resources
@@ -744,8 +716,6 @@ if __name__ == "__main__":
     nT = 25
     teams = util.generateAllTeams(R, mR)
     maxT = 5
-    #teams = util.randomGenerateTeams(R, mR, nT)
->>>>>>> d57b794e39fc652fde50e6bdf33c18b0ac3e1112
 
 
     # ================= random generate game setting ===========================
