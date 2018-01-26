@@ -4,6 +4,8 @@ import numpy as np
 import random
 import relaxed
 import DesignYNcombined
+import StaffResourceAllocation
+import time
 
 # =========================================== column generation =================================================
 
@@ -72,13 +74,13 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
             else:
                 model.addConstr(tmp_sum + overflow[w-1][r] - y[w][r] * C[r] - overflow[w][r] <= 0, name="(2)_w{0}_r{1}".format(w, r))
 
-    for w in range(W):
-        for r in range(R):
-            if w > 0:
-                model.addConstr(y[w][r] * C[r] - overflow[w-1][r] >= 0, name="(3)_w{0}_r{1}".format(w, r))
+    #for w in range(W): # DON'T NEED IT ANYMORE
+    #    for r in range(R):
+    #        if w > 0:
+    #            model.addConstr(y[w][r] * C[r] - overflow[w-1][r] >= 0, name="(3)_w{0}_r{1}".format(w, r))
 
-    for r in range(R): # OPTIONAL
-        model.addConstr(overflow[W-1][r] == 0, name="(4)_r{0}".format(r))
+    #for r in range(R): # OPTIONAL # DON'T NEED IT ANYMORE
+    #    model.addConstr(overflow[W-1][r] == 0, name="(4)_r{0}".format(r))
 
     for w in range(W):
         tmp_sum = LinExpr(ar, [y[w][r] for r in range(R)])
@@ -217,7 +219,7 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
         q_value[i] = q[i].x
 
     objective_value_gurobi = model.objVal
-    print "# of strategies: {0}, objective value (gurobi): {1}, objective value (computed): {2}".format(len(Q), objective_value_gurobi, objective_value)
+    print "# of strategies: {0}, objective value (gurobi): {1}, dual objective value (computed): {2}, delta value {3}".format(len(Q), objective_value_gurobi, objective_value, delta_value)
 
     return model, gamma_value, delta_value, q_value
 
@@ -226,23 +228,25 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 5 # number of time windows
-    K = 3 # number of passenger types
+    W = 10 # number of time windows
+    K = 20 # number of passenger types
     R = 6 # number of resources
-    mR = 2 # max number of reosurces
-    M = 2 # number of attack methods
-    P = 10 # number of staff
-    shift = 2 # d
-    Q = 4
+    mR = 3 # max number of reosurces
+    M = 5 # number of attack methods
+    P = 15 # number of staff
+    shift = 3 # d
+    Q = 5
     nT = 25
     teams = util.generateAllTeams(R, mR)
     maxT = 5
     #teams = util.randomGenerateTeams(R, mR, nT)
 
+    warm_start = True
+
     print teams
 
     # ================= random generate game setting ===========================
-    seed = 2345
+    seed = 3345
 
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = DesignYNcombined.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
@@ -253,16 +257,24 @@ if __name__ == "__main__":
             total_arrivals += N_wk[w][k]
     print "total arrivals: {0}".format(total_arrivals)
 
+    start_time = time.time()
     # ================= warm start by precomputing =============================
-    strategySet = DesignYNcombined.fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT)
+    if warm_start:
+        strategySet = DesignYNcombined.fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT)
+    else:
+        strategySet = [] # NO WARM START
+
+    gamma = np.ones((W, T, K))
 
     # ========================= column generation ==============================
 
     print "\n\n ======================== column generation ============================="
 
-    for j in range(100):
+    column_generation_iterations = 100
+    for j in range(column_generation_iterations):
         #print "================================== column generation testing =================================="
-        cg_model, gamma, delta_value, q_value = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, strategySet, iteration=10)
+        if len(strategySet) > 0:
+            cg_model, gamma, delta_value, q_value = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, strategySet, iteration=10)
         #new_Q = [Q[i] for i in range(len(Q)) if q_value[i] > 0]
         #Q = new_Q
 
@@ -280,8 +292,11 @@ if __name__ == "__main__":
         #    tmp_sum = sum([gamma[w][t][k] * Q[i]['n'][w][t][k] for w in range(W) for t in range(T) for k in range(K)]) - sum([phi[r] * Q[i]["overflow"][w][r] for w in range(W) for r in range(R)])
         #    print "{0} sanity check: {1}".format(i, tmp_sum)
 
+    elapsed_time = time.time() - start_time
+    print "elapsed time: {0}".format(elapsed_time)
 
-    print "============================ LP relaxation =============================="
-    model = relaxed.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0)
+    #print "============================ LP relaxation =============================="
+    #obj_relax, n_value0, overflow_value, y_value, s_value0, p, z_value = StaffResourceAllocation.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+
 
 
