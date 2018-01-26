@@ -55,7 +55,7 @@ if __name__ == "__main__":
     
     teams = util.generateAllTeams(R, mR)
     
-    Z = 10# number of runs
+    Z = 20# number of runs
     ZP = 5 # max number of P
     
     obj_relax = np.zeros((Z,ZP))
