@@ -104,24 +104,7 @@ if __name__ == "__main__":
         shift = 1 # d
         Q = 1 # number of strategies
         maxT = 10    
-    
-<<<<<<< HEAD
-=======
-    W = 10 # number of time windows
-    K = 20 # number of passenger types
-    R = 5 # number of resources
-    mR = 3 # max number of reosurces
-    M = 3 # number of attack methods
-    P = 15 # number of staff
-    shift = 3 # d
-    Q = 2
-    maxT = 25
-
-    seed = 8369
-    
-    
-    # Construct random instances
->>>>>>> 68d2e80652a7e42b96e0c3a196ed72105a44c0f8
+   
     teams = util.generateAllTeams(R, mR)
     
     Z = 20 # number of runs
