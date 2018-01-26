@@ -731,6 +731,8 @@ def fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_m
         tmp_strategy = {}
         tmp_strategy["n"] = ni_value[i]
         tmp_strategy["overflow"] = new_O_value[i]
+        tmp_strategy["y"] = ys[i]
+        tmp_strategy["s"] = s
         strategySet.append(tmp_strategy)
 
     return strategySet, obj_relax, objyn1, obj1, q_value

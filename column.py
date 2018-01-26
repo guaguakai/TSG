@@ -6,6 +6,7 @@ import relaxed
 import DesignYNcombined
 import StaffResourceAllocation
 import time
+import itertools
 
 # =========================================== column generation =================================================
 
@@ -118,6 +119,36 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
 
     return n_value, overflow_value
 
+def checkFeasibility(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, strategySet):
+    print " =========================== checking feasibility ================================ "
+    for i in range(Q):
+        n = strategySet[i]['n']
+        overflow = strategySet[i]['overflow']
+        y = strategySet[i]['y']
+        s = strategySet[i]['s'] # b
+
+        for (w,k) in itertools.product(range(W), range(K)):
+            n_wk_sum = np.sum([n[w][t][k] for t in range(T)])
+            if n_wk_sum != N_wk[w][k]:
+                print i, w, k, "passenger equation"
+        for (w,r) in itertools.product(range(W), range(R)):
+            if w == 0:
+                income = np.sum([n[w][t][k] for k in range(K) for t in resource2team[r] ])
+            else:
+                income = np.sum([n[w][t][k] for k in range(K) for t in resource2team[r] ]) + overflow[w-1][r]
+            outcome = y[w][r] * C[r] + overflow[w][r]
+            if outcome < income:
+                print i, w, r, "outcome"
+        p = np.zeros(W)
+        for w in range(W):
+           p[w] = np.sum([s[ww] for ww in range(max(w+1-shift, 0),w+1)])
+        if (P > np.sum(s) + 0.01) or (P < np.sum(s) - 0.01):
+            print "staff constraint P", P, np.sum(s)
+        for w in range(W):
+            if np.sum([y[w][r] * ar[r] for r in range(R)]) > p[w] + 0.01:
+                print i, w, r, "resource staff constraint", np.sum([y[w][r] * ar[r] for r in range(R)]), p[w]
+            if y[w][r] > mr[r]:
+                print i, w, r, "max resource constraint"
 
 def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, iteration=10): # integer indicates different relaxation method
     model = Model("LP")
@@ -284,9 +315,12 @@ if __name__ == "__main__":
                     utility_matrix[w][k][m] = U_plus[k] * mixed_z[w][k][m] + U_minus[k] * (1 - mixed_z[w][k][m])
         overflow_penalty = np.sum([mixed_overflow[w][r] * phi[r] for r in range(R) for w in range(W)])
         min_utility = np.min(utility_matrix) - overflow_penalty
+        print "our solution with usability constraints: {0}".format(min_utility)
 
     else:
         strategySet = [] # NO WARM START
+
+    checkFeasibility(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, strategySet)
 
     gamma = np.ones((W, T, K))
 
@@ -294,7 +328,7 @@ if __name__ == "__main__":
 
     print "\n\n ======================== column generation ============================="
 
-    column_generation_iterations = 0
+    column_generation_iterations = 500
     for j in range(column_generation_iterations):
         #print "================================== column generation testing =================================="
         if len(strategySet) > 0:
