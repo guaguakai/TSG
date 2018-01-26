@@ -329,10 +329,10 @@ if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 2 # number of time windows
-    K = 2 # number of passenger types
+    W = 1 # number of time windows
+    K = 3 # number of passenger types
     R = 2 # number of resources
-    mR = 2 # max number of reosurces
+    mR = 1 # max number of reosurces
     M = 1 # number of attack methods
     P = 10 # number of staff
     Q= 2
