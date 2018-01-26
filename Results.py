@@ -215,13 +215,7 @@ if __name__ == "__main__":
                     sum += math.floor(ns[i][w][t][k])
     
     objint, rt, t3,ni  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)   
-<<<<<<< HEAD
-    
+
     """
     print obj_relax, obj_yn, obj_final
     print time_relax, time_yn, time_final
-=======
-    """
-    print obj_relax, objyn, obj
-    #"""
->>>>>>> 68d2e80652a7e42b96e0c3a196ed72105a44c0f8

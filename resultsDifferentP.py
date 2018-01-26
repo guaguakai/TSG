@@ -5,6 +5,7 @@ import numpy as np
 import random
 import math
 from StaffResourceAllocation import LPsolver
+import pickle
 
 from DesignYNcombined import KStrategiesYNcomb
 from DesignYNcombined import KStrategiesYNBnew
@@ -54,8 +55,8 @@ if __name__ == "__main__":
     
     teams = util.generateAllTeams(R, mR)
     
-    Z = 10# number of runs
-    ZP = 5 # max number of P
+    Z = 1# number of runs
+    ZP = 1 # max number of P
     
     obj_relax = np.zeros((Z,ZP))
     obj_yn = np.zeros((Z,ZP))
@@ -117,3 +118,5 @@ if __name__ == "__main__":
        
     print obj_relax, obj_yn, obj_final
     print time_relax, time_yn, time_final
+    pickle.dump((obj_relax, obj_yn, obj_final, time_relax, time_yn, time_final), open("resultsDifferentP_0125.data", "wb"))
+    # obj_relax, obj_yn, obj_final, time_relax, time_yn, time_final = pickle.load(open("resultsDifferentP_0125.data", "rb"))

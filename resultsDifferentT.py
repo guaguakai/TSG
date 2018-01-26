@@ -13,6 +13,8 @@ from DesignYNcombinedInteger import KStrategiesYNcombInteger
 
 from Results import randomSetting
 
+import pickle
+
 if __name__ == "__main__":
     
     instance = 2
@@ -117,3 +119,6 @@ if __name__ == "__main__":
        
     print obj_relax, obj_yn, obj_final
     print time_relax, time_yn, time_final
+    
+    pickle.dump((obj_relax, obj_yn, obj_final, time_relax, time_yn, time_final), open("resultsDifferentT_0125.data", "wb"))
+    # obj_relax, obj_yn, obj_final, time_relax, time_yn, time_final = pickle.load(open("resultsDifferentT_0125.data", "rb"))
