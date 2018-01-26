@@ -52,7 +52,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
     
 
     ni = [[[[model.addVar(vtype=GRB.INTEGER, name="ni_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]           
-    nb = [[[[model.addVar(vtype=GRB.BINARY, name="ni_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]
+    nb = [[[[model.addVar(vtype=GRB.BINARY, name="nb_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]
     X = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="X(s%d,w%d,k%d,t%d)" %(i, w,k,t))  for k in range(K)] for t in range(T)] for w in range(W)] for i in range(Q)]
 
     # n_wtk[w][t][k] # integer value of N_wk[w][k] * pi[w][t][k]
@@ -166,7 +166,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
                 if w == 0:
                     model.addConstr(marginal_sum + tmp_sum + pre_overflow[r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
                 else:
-                    model.addConstr(marginal_sum + tmp_sum + overflow[w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
+                    model.addConstr(marginal_sum + tmp_sum + overflow[w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(11)_w{0}_r{1}_{2}".format(w, r, i))
     
                 model.addConstr( marginal_sum+ tmp_sum <= yi[i][w][r]*10000, name="(10.5)_w{0}_r{1}".format(w, r))
         
@@ -310,15 +310,15 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
             overflow[w].append(tmp_overflow_var)
     
     #O = [[[model.addVar(vtype=GRB.CONTINUOUS, name="O_{0}_w{1}_r{2}".format(i, w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
-    oi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="o_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    oi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="oi_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
     y = [[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="y_w{0}_r{1}".format(w, r)) for r in range(R)] for w in range(W)]
     
-    yi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="y_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    yi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="yi_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
     yb = [[[model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
-    yb2 = [[[model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    yb2 = [[[model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w2{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
      # y[i][w][r]: number of operating resources r at time w
     
 

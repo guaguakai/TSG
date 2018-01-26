@@ -9,8 +9,6 @@ from StaffResourceAllocation import LPsolver
 from DesignYNcombined import KStrategiesYNcomb
 from DesignYNcombined import KStrategiesYNBnew
 
-from DesignYNcombinedInteger import KStrategiesYNcombInteger
-
 from Results import randomSetting
 
 import pickle
@@ -56,8 +54,8 @@ if __name__ == "__main__":
     
     teams = util.generateAllTeams(R, mR)
     
-    Z = 20# number of runs
-    ZT = 10 # max number of maxT
+    Z = 1# number of runs
+    ZT = 2 # max number of maxT
     
     obj_relax = np.zeros((Z,ZT))
     obj_yn = np.zeros((Z,ZT))
@@ -113,7 +111,7 @@ if __name__ == "__main__":
             
             start_time_final = time.time()
             
-            obj_final[z][zt], rt, t3,ni,oi_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+            obj_final[z][zt], rt, t3,ni,oi_value,q_tem,o_temp  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
             
             time_final[z][zt] = time.time() - start_time_final
        

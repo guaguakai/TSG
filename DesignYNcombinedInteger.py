@@ -287,11 +287,11 @@ def KStrategiesYNcombInteger(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_p
             overflow[w].append(tmp_overflow_var)
     
     #O = [[[model.addVar(vtype=GRB.CONTINUOUS, name="O_{0}_w{1}_r{2}".format(i, w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
-    oi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="o_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    oi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="oi_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
     y = [[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="y_w{0}_r{1}".format(w, r)) for r in range(R)] for w in range(W)]
     
-    yi = [[[model.addVar(vtype=GRB.INTEGER, lb=0, name="y_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    yi = [[[model.addVar(vtype=GRB.INTEGER, lb=0, name="yi_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
     # y[i][w][r]: number of operating resources r at time w
     
