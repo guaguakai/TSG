@@ -56,7 +56,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 
     mr = np.random.randint(5, 15, R)
 
-    ar = np.random.randint(1, 5, R)
+    ar = np.random.randint(1, 3, R)
 
 
     phi = np.random.rand(R) # phi[r] overflow penalty
@@ -68,39 +68,64 @@ if __name__ == "__main__":
     
     print "======================== main ======================================"
     
-    W = 5 # number of time windows
-    K = 10 # number of passenger types
+    W = 10 # number of time windows
+    K = 20 # number of passenger types
     R = 5 # number of resources
     mR = 3 # max number of reosurces
-    M = 2 # number of attack methods
+    M = 3 # number of attack methods
     P = 15 # number of staff
     shift = 3 # d
     Q = 2
-    teams = util.generateAllTeams(R, mR)
     maxT = 25
 
-
-    # ================= random generate game setting ===========================
-    seed = 6385
+    seed = 8369
     
+    
+    # Construct random instances
+    teams = util.generateAllTeams(R, mR)
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-    minr = np.zeros((W,R))
-    start_time = time.time()
+    minr = np.zeros((W,R))   
     
-    print "============================ FULL LP relaxation =============================="
-    
-    
+    # Solve full LP relaxation
     obj_relax, n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
     
-
+       
     for w in range(W):
         for r in range(R):
             minr[w][r] = math.floor(y_value[w][r])
             #print y_value[w][r]
+            
     
-    QT = 5
-    q = [[0.1, 0.9],[0.2, 0.8],[0.25,0.75],[0.3333,0.6667],[0.5,0.5]]
+    q = np.zeros(Q)
+    for i in range(Q):
+        q[i] = float(1)/Q    
+    
+    # find Q strategies for y, using binaries and lower bound minr, n integer for each ys.    
+    objyn, n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)
+    
+    minn = np.zeros((Q,W,T,K))
+    
+    for i in range(Q):
+        for w in range(W):
+            for k in range(K):
+                sum = 0 
+                for t in range(T):
+                    minn[i][w][t][k] = math.floor(ns[i][w][t][k])
+                    sum += math.floor(ns[i][w][t][k])
+    
+    # Find integer solution (using binaries and rounde) for each ns, given ys, p and s
+    obj, rt, t3,ni,oi_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    
+            
+            
+    """
+    # Solve second step for different q-vectors (if Q=2 or Q=3)
+    q = [[0.1667,0.8333],[0.2, 0.8],[0.4,0.6],[0.25,0.75],[0.3333,0.6667],[0.5,0.5]] # if Q=2
+    q = [[0.1667,0.1667,0.6666],[0.1667,0.3333,0.5],[0.2,0.2,0.6],[0.2,0.4,0.4],[0.25,0.25,0.5],[0.3333,0.3333,0.3334]] # if Q=3
+    
+    QT = len(q)
+    
     
     objyn = np.zeros(QT)
     obj = np.zeros(QT)
@@ -117,11 +142,16 @@ if __name__ == "__main__":
                         minn[i][w][t][k] = math.floor(ns[i][w][t][k])
                         sum += math.floor(ns[i][w][t][k])
         
-        obj[j], rt, t3,ni  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+        obj[j], rt, t3,ni,oi_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
-    """
+    
+    # solve for MIP with ys integer (no rounding) and n marginal. q is given. 
     minr = np.zeros((W,R))
     
+    q = np.zeros(Q)
+    for i in range(Q):
+        q[i] = float(1)/Q 
+        
     objynint, n, ns,ys,z_value,p,s,y = KStrategiesYNcombInteger(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q[QT-1][:], ar, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     minn = np.zeros((Q,W,T,K))
@@ -135,5 +165,6 @@ if __name__ == "__main__":
                     sum += math.floor(ns[i][w][t][k])
     
     objint, rt, t3,ni  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)   
-    #print obj_relax, objyn1, obj1
     """
+    print obj_relax, objyn, obj
+    #"""

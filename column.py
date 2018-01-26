@@ -228,15 +228,15 @@ if __name__ == "__main__":
     # ========================= Game Setting ===================================
     W = 5 # number of time windows
     K = 3 # number of passenger types
-    R = 4 # number of resources
+    R = 6 # number of resources
     mR = 2 # max number of reosurces
     M = 2 # number of attack methods
     P = 10 # number of staff
     shift = 2 # d
-    Q = 4 # here no use
+    Q = 4
     nT = 25
     teams = util.generateAllTeams(R, mR)
-    maxT = 5 # here no use either
+    maxT = 5
     #teams = util.randomGenerateTeams(R, mR, nT)
 
     print teams
