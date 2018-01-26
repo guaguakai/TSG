@@ -166,7 +166,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
                 if w == 0:
                     model.addConstr(marginal_sum + tmp_sum + pre_overflow[r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
                 else:
-                    model.addConstr(marginal_sum + tmp_sum + O[i][w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
+                    model.addConstr(marginal_sum + tmp_sum + overflow[w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
     
                 model.addConstr( marginal_sum+ tmp_sum <= yi[i][w][r]*10000, name="(10.5)_w{0}_r{1}".format(w, r))
         
@@ -239,16 +239,25 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
             for r in range(R):
                 O_value[i][w][r] = O[i][w][r].x
 
+    q_value = np.zeros(Q)
+    for i in range(Q):
+        q_value[i] = q[i].x
+
     team_val = np.zeros((Q,T))
     for i in range(Q):
         for t in range(T):
             team_val[i][t] = team[i][t].x
+
+    overflow_value = np.zeros((W, R))
+    for w in range(W):
+        for r in range(R):
+            overflow_value[w][r] = overflow[w][r].x
     
     obj = model.getAttr('ObjVal')
 
     model.terminate()
 
-    return obj, runtime, team_val, ni_value, O_value
+    return obj, runtime, team_val, ni_value, O_value, q_value, overflow_value
 
 
 def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
@@ -692,23 +701,39 @@ def fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_m
     for i in range(Q):
         for w in range(W):
             for k in range(K):
-                sum = 0 
+                #sum = 0 
                 for t in range(T):
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
-                    sum += math.floor(ns[i][w][t][k])
+                    #sum += math.floor(ns[i][w][t][k])
     
     print "============================ K strategies Y, N, B new =============================="
-    obj1, rt, t3, ni_value, O_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni_value, O_value, q_value, overflow_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     print obj_relax, objyn1, obj1
 
-    Q = []
-    for i in range(len(ni_value)):
-        tmpQ = {}
-        tmpQ["n"] = ni_value[i]
-        tmpQ["overflow"] = O_value[i]
-        Q.append(tmpQ)
+    new_O_value = np.zeros((Q, W, R))
+    for i in range(Q):
+        for w in range(W):
+            for r in range(R):
+                if w > 0:
+                    new_O_value[i][w][r] = max(new_O_value[i][w-1][r] + np.sum([ni_value[i][w][t][k] for k in range(K) for t in resource2team[r]]) - ys[i][w][r] * C[r], 0)
+                else:
+                    new_O_value[i][w][r] = max(np.sum([ni_value[i][w][t][k] for k in range(K) for t in resource2team[r]]) - ys[i][w][r] * C[r], 0)
 
-    return Q
+    new_overflow = np.zeros((W, R))
+    for i in range(Q):
+        new_overflow += new_O_value[i] * q_value[i]
+    print "old overflow: {0}".format(overflow_value)
+    print "new overflow: {0}".format(new_overflow)
+                
+
+    strategySet = []
+    for i in range(Q):
+        tmp_strategy = {}
+        tmp_strategy["n"] = ni_value[i]
+        tmp_strategy["overflow"] = new_O_value[i]
+        strategySet.append(tmp_strategy)
+
+    return strategySet, obj_relax, objyn1, obj1, q_value
 
 if __name__ == "__main__":
 
@@ -717,7 +742,7 @@ if __name__ == "__main__":
     R = 6 # number of resources
     mR = 3 # max number of reosurces
     M = 2 # number of attack methods
-    P = 10 # number of staff
+    P = 15 # number of staff
     shift = 2 # d
     Q = 5
     nT = 25
@@ -755,13 +780,13 @@ if __name__ == "__main__":
     for i in range(Q):
         for w in range(W):
             for k in range(K):
-                sum = 0 
+                #sum = 0 
                 for t in range(T):
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
-                    sum += math.floor(ns[i][w][t][k])
+                    #sum += math.floor(ns[i][w][t][k])
     
     print "============================ K strategies Y, N, B new =============================="
-    obj1, rt, t3, ni_value, O_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni_value, O_value, q_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
     

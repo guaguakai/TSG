@@ -221,18 +221,18 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
     objective_value_gurobi = model.objVal
     print "# of strategies: {0}, objective value (gurobi): {1}, dual objective value (computed): {2}, delta value {3}".format(len(Q), objective_value_gurobi, objective_value, delta_value)
 
-    return model, gamma_value, delta_value, q_value
+    return model, gamma_value, delta_value, q_value, objective_value_gurobi
 
 
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
-    W = 10 # number of time windows
-    K = 20 # number of passenger types
-    R = 6 # number of resources
-    mR = 3 # max number of reosurces
-    M = 5 # number of attack methods
+    W = 5 # number of time windows
+    K = 10 # number of passenger types
+    R = 5 # number of resources
+    mR = 2 # max number of reosurces
+    M = 3 # number of attack methods
     P = 15 # number of staff
     shift = 3 # d
     Q = 5
@@ -246,7 +246,9 @@ if __name__ == "__main__":
     print teams
 
     # ================= random generate game setting ===========================
-    seed = 3345
+    seed = 2345
+    #seed = random.randint(1, 10000)
+    print "random seed: {0}".format(seed)
 
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = DesignYNcombined.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
@@ -260,7 +262,29 @@ if __name__ == "__main__":
     start_time = time.time()
     # ================= warm start by precomputing =============================
     if warm_start:
-        strategySet = DesignYNcombined.fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT)
+        strategySet, obj_relax, objyn, obj_our, q_value = DesignYNcombined.fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT)
+        mixed_n = np.zeros((W, T, K))
+        mixed_z = np.zeros((W, K, M))
+        mixed_overflow = np.zeros((W, R))
+        for i in range(Q):
+            mixed_n += strategySet[i]["n"] * q_value[i]
+            mixed_overflow += strategySet[i]["overflow"] * q_value[i]
+        for w in range(W):
+            for k in range(K):
+                for m in range(M):
+                    if N_wk[w][k] > 0:
+                        mixed_z[w][k][m] = np.sum([E[t][m] * mixed_n[w][t][k] / float(N_wk[w][k]) for t in range(T)])
+                    else:
+                        mixed_z[w][k][m] = 100 # a large cover
+
+        utility_matrix = np.zeros((W, K, M))
+        for w in range(W):
+            for k in range(K):
+                for m in range(M):
+                    utility_matrix[w][k][m] = U_plus[k] * mixed_z[w][k][m] + U_minus[k] * (1 - mixed_z[w][k][m])
+        overflow_penalty = np.sum([mixed_overflow[w][r] * phi[r] for r in range(R) for w in range(W)])
+        min_utility = np.min(utility_matrix) - overflow_penalty
+
     else:
         strategySet = [] # NO WARM START
 
@@ -270,11 +294,11 @@ if __name__ == "__main__":
 
     print "\n\n ======================== column generation ============================="
 
-    column_generation_iterations = 100
+    column_generation_iterations = 0
     for j in range(column_generation_iterations):
         #print "================================== column generation testing =================================="
         if len(strategySet) > 0:
-            cg_model, gamma, delta_value, q_value = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, strategySet, iteration=10)
+            cg_model, gamma, delta_value, q_value, obj_cg = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, strategySet, iteration=10)
         #new_Q = [Q[i] for i in range(len(Q)) if q_value[i] > 0]
         #Q = new_Q
 
@@ -294,6 +318,7 @@ if __name__ == "__main__":
 
     elapsed_time = time.time() - start_time
     print "elapsed time: {0}".format(elapsed_time)
+    print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
 
     #print "============================ LP relaxation =============================="
     #obj_relax, n_value0, overflow_value, y_value, s_value0, p, z_value = StaffResourceAllocation.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
