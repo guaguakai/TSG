@@ -3,12 +3,14 @@ from gurobipy import *
 import numpy as np
 import random
 import relaxed
+import DesignYNcombined
 
 # =========================================== column generation =================================================
 
 def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma): # slave problem solver
     model = Model("MIP")
     model.params.DualReductions = 0
+    model.params.OutputFlag = 0
 
     n_wtk = [] # n_wtk[w][t][k] # integer value of N_wk[w][k] * pi[w][t][k]
     for w in range(W):
@@ -42,10 +44,10 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
         s.append(tmp_working_staff)
 
     # ========================= Gurobi Objective ===============================
-    print "objective setting"
+    #print "objective setting"
     objective_variables = [n_wtk[w][t][k] for w in range(W) for t in range(T) for k in range(K)] + [overflow[w][r] for w in range(W) for r in range(R)]
     objective_coefficients = [gamma[w][t][k] for w in range(W) for t in range(T) for k in range(K)] + [-phi[r] for r in range(R)] * W
-    print len(objective_variables), len(objective_coefficients)
+    #print len(objective_variables), len(objective_coefficients)
     objective_value = LinExpr(objective_coefficients, objective_variables)
 
     #objective_value = theta
@@ -118,6 +120,7 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
 def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, iteration=10): # integer indicates different relaxation method
     model = Model("LP")
     model.params.DualReductions = 0
+    model.params.OutputFlag = 0
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, name="theta")
 
@@ -213,6 +216,9 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
         #print q[i].varName, q[i].x
         q_value[i] = q[i].x
 
+    objective_value_gurobi = model.objVal
+    print "# of strategies: {0}, objective value (gurobi): {1}, objective value (computed): {2}".format(len(Q), objective_value_gurobi, objective_value)
+
     return model, gamma_value, delta_value, q_value
 
 
@@ -221,12 +227,12 @@ if __name__ == "__main__":
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 5 # number of time windows
-    K = 10 # number of passenger types
-    R = 6 # number of resources
-    mR = 3 # max number of reosurces
+    K = 3 # number of passenger types
+    R = 4 # number of resources
+    mR = 2 # max number of reosurces
     M = 2 # number of attack methods
-    P = 30 # number of staff
-    shift = 3 # d
+    P = 10 # number of staff
+    shift = 2 # d
     Q = 4 # here no use
     nT = 25
     teams = util.generateAllTeams(R, mR)
@@ -238,35 +244,41 @@ if __name__ == "__main__":
     # ================= random generate game setting ===========================
     seed = 2345
 
-    resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = relaxed.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
+    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = DesignYNcombined.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
+
+
     total_arrivals = 0
     for w in range(W):
         for k in range(K):
             total_arrivals += N_wk[w][k]
     print "total arrivals: {0}".format(total_arrivals)
 
-    Q = []
-    gamma = np.ones((W, T, K))
+    # ================= warm start by precomputing =============================
+    strategySet = DesignYNcombined.fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT)
 
-    for j in range(1000):
-        print "==================================== solving slave problem ===================================="
+    # ========================= column generation ==============================
+
+    print "\n\n ======================== column generation ============================="
+
+    for j in range(100):
+        #print "================================== column generation testing =================================="
+        cg_model, gamma, delta_value, q_value = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, strategySet, iteration=10)
+        #new_Q = [Q[i] for i in range(len(Q)) if q_value[i] > 0]
+        #Q = new_Q
+
+        #print "delta value: {0}".format(delta_value)
+
+        #print "==================================== solving slave problem ===================================="
         slave_n_value, slave_overflow_value = slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma)
         tmpQ = {}
         tmpQ["n"] = slave_n_value
         tmpQ["overflow"] = slave_overflow_value
 
-        Q.append(tmpQ)
+        strategySet.append(tmpQ)
         #print "==================================== q sanity check ==========================================="
         #for i in range(len(Q)):
         #    tmp_sum = sum([gamma[w][t][k] * Q[i]['n'][w][t][k] for w in range(W) for t in range(T) for k in range(K)]) - sum([phi[r] * Q[i]["overflow"][w][r] for w in range(W) for r in range(R)])
         #    print "{0} sanity check: {1}".format(i, tmp_sum)
-
-        print "================================== column generation testing =================================="
-        cg_model, gamma, delta_value, q_value = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, iteration=10)
-        #new_Q = [Q[i] for i in range(len(Q)) if q_value[i] > 0]
-        #Q = new_Q
-
-        #print "delta value: {0}".format(delta_value)
 
 
     print "============================ LP relaxation =============================="

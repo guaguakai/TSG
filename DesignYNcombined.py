@@ -673,7 +673,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 
     return resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi
 
-def fullYNcombined(seed, W, K ,R, mR, M, P, teams, shift):
+def fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT):
     minr = np.zeros((W,R))
     obj_relax, n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
     for w in range(W):
@@ -698,28 +698,35 @@ def fullYNcombined(seed, W, K ,R, mR, M, P, teams, shift):
                     sum += math.floor(ns[i][w][t][k])
     
     print "============================ K strategies Y, N, B new =============================="
-    obj1, rt, t3, ni_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni_value, O_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     print obj_relax, objyn1, obj1
 
-    return ni_value
+    Q = []
+    for i in range(len(ni_value)):
+        tmpQ = {}
+        tmpQ["n"] = ni_value[i]
+        tmpQ["overflow"] = O_value[i]
+        Q.append(tmpQ)
+
+    return Q
 
 if __name__ == "__main__":
 
     W = 5 # number of time windows
     K = 3 # number of passenger types
-    R = 4 # number of resources
-    mR = 2 # max number of reosurces
+    R = 6 # number of resources
+    mR = 3 # max number of reosurces
     M = 2 # number of attack methods
     P = 10 # number of staff
     shift = 2 # d
-    Q = 4
+    Q = 5
     nT = 25
     teams = util.generateAllTeams(R, mR)
     maxT = 5
 
 
     # ================= random generate game setting ===========================
-    seed = 2345
+    seed = 3345
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
