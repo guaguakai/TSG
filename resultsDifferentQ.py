@@ -9,7 +9,6 @@ from StaffResourceAllocation import LPsolver
 from DesignYNcombined import KStrategiesYNcomb
 from DesignYNcombined import KStrategiesYNBnew
 
-
 from Results import randomSetting
 
 import pickle
