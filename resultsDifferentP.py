@@ -16,7 +16,7 @@ from Results import randomSetting
 
 if __name__ == "__main__":
     
-    instance = 3
+    instance = 2
     if (instance == 1):
         W = 10 # number of time windows
         AI = 3 # interval in which passengers are arriving
@@ -55,8 +55,8 @@ if __name__ == "__main__":
     
     teams = util.generateAllTeams(R, mR)
     
-    Z = 1# number of runs
-    ZP = 1 # max number of P
+    Z = 10# number of runs
+    ZP = 5 # max number of P
     
     obj_relax = np.zeros((Z,ZP))
     obj_yn = np.zeros((Z,ZP))
