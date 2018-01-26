@@ -75,7 +75,7 @@ if __name__ == "__main__":
     M = 3 # number of attack methods
     P = 15 # number of staff
     shift = 3 # d
-    Q = 3
+    Q = 1
     maxT = 25
 
     seed = 8369
