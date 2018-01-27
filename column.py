@@ -97,7 +97,7 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
         tmp_sum = LinExpr([1]*(w - start_index + 1), [s[i] for i in range(start_index, w+1)])
         model.addConstr(tmp_sum - p[w] == 0, name="(7)_w{0}".format(w))
 
-    if fix_s:
+    if fix_s != None:
         for w in range(W):
             model.addConstr(s[i] == fix_s[i], name="fixed_s_constraint_w{0}".format(w))
 
@@ -257,11 +257,11 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
         q_value[i] = q[i].x
 
     objective_value_gurobi = model.objVal
-    print "# of strategies: {0}, objective value (gurobi): {1}, dual objective value (computed): {2}, delta value {3}, slave optimal value {4}".format(len(Q), objective_value_gurobi, objective_value, delta_value, slave_optimal_value)
+    print "# of strategies: {0}, objective value (gurobi): {1}, dual objective value: {2}, delta value {3}, slave optimal value {4}".format(len(Q), objective_value_gurobi, objective_value, delta_value, slave_optimal_value)
 
     return model, gamma_value, delta_value, q_value, objective_value_gurobi
 
-def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=2000, warm_start=True):
+def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=True):
     # ========================= column generation ==============================
     start_time = time.time()
     # ================= warm start by precomputing =============================
@@ -335,7 +335,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
 
     elapsed_time = time.time() - start_time
     #print "elapsed time: {0}".format(elapsed_time)
-    #print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
+    print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
     num_iterations = j
 
     return obj_cg, elapsed_time, num_iterations
@@ -379,7 +379,7 @@ if __name__ == "__main__":
             total_arrivals += N_wk[w][k]
     print "total arrivals: {0}".format(total_arrivals)
 
-    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=2000, warm_start=True)
+    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=True)
 
 
     """
