@@ -335,7 +335,8 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
 
     elapsed_time = time.time() - start_time
     #print "elapsed time: {0}".format(elapsed_time)
-    print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
+    if warm_start:
+        print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
     num_iterations = j
 
     return obj_cg, elapsed_time, num_iterations
@@ -379,7 +380,7 @@ if __name__ == "__main__":
             total_arrivals += N_wk[w][k]
     print "total arrivals: {0}".format(total_arrivals)
 
-    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=True)
+    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=False)
 
 
     """
