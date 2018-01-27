@@ -12,7 +12,7 @@ from KStrategiesFixedYRoundN import Ksolver
 def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, n, p, s, phi, integer=0, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
@@ -263,7 +263,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
 def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
@@ -788,7 +788,7 @@ if __name__ == "__main__":
                     #sum += math.floor(ns[i][w][t][k])
     
     print "============================ K strategies Y, N, B new =============================="
-    obj1, rt, t3, ni_value, O_value, q_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni_value, O_value, q_value, overflow_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
     

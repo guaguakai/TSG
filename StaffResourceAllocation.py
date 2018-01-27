@@ -7,7 +7,7 @@ import math
 def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    #model.params.DualReductions = 0
     model.params.MIPGap=0.0001;
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
