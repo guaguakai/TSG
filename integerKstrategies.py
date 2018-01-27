@@ -325,6 +325,9 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
 
     return obj, n_value, overflow_value, y_value, s_value, p_value,ni_value,oi_value,yi_value,q_value,z_value
 
+
+    
+    
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
@@ -332,7 +335,7 @@ if __name__ == "__main__":
     W = 2 # number of time windows
     K = 2 # number of passenger types
     R = 2 # number of resources
-    mR = 2 # max number of reosurces
+    mR = 1 # max number of reosurces
     M = 1 # number of attack methods
     P = 10 # number of staff
     Q= 2
@@ -346,7 +349,7 @@ if __name__ == "__main__":
     #print teams
 
     # ================= random generate game setting ===========================
-    seed = 2345
+    seed = 2
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
     
     minr = np.zeros((W,R))

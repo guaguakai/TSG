@@ -52,7 +52,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
     
 
     ni = [[[[model.addVar(vtype=GRB.INTEGER, name="ni_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]           
-    nb = [[[[model.addVar(vtype=GRB.BINARY, name="ni_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]
+    nb = [[[[model.addVar(vtype=GRB.BINARY, name="nb_s{0}_w{1}_t{2}_k{3}".format(i, w, t, k)) for k in range(K)] for t in range(T)]for w in range(W)]for i in range(Q)]
     X = [[[[model.addVar(lb=0.0, ub = 1.0, vtype=GRB.CONTINUOUS, name="X(s%d,w%d,k%d,t%d)" %(i, w,k,t))  for k in range(K)] for t in range(T)] for w in range(W)] for i in range(Q)]
 
     # n_wtk[w][t][k] # integer value of N_wk[w][k] * pi[w][t][k]
@@ -166,7 +166,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
                 if w == 0:
                     model.addConstr(marginal_sum + tmp_sum + pre_overflow[r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
                 else:
-                    model.addConstr(marginal_sum + tmp_sum + O[i][w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(10)_w{0}_r{1}_{2}".format(w, r, i))
+                    model.addConstr(marginal_sum + tmp_sum + overflow[w-1][r] - yi[i][w][r] * C[r] - O[i][w][r] <= 0, name="(11)_w{0}_r{1}_{2}".format(w, r, i))
     
                 model.addConstr( marginal_sum+ tmp_sum <= yi[i][w][r]*10000, name="(10.5)_w{0}_r{1}".format(w, r))
         
@@ -239,23 +239,32 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
             for r in range(R):
                 O_value[i][w][r] = O[i][w][r].x
 
+    q_value = np.zeros(Q)
+    for i in range(Q):
+        q_value[i] = q[i].x
+
     team_val = np.zeros((Q,T))
     for i in range(Q):
         for t in range(T):
             team_val[i][t] = team[i][t].x
+
+    overflow_value = np.zeros((W, R))
+    for w in range(W):
+        for r in range(R):
+            overflow_value[w][r] = overflow[w][r].x
     
     obj = model.getAttr('ObjVal')
 
     model.terminate()
 
-    return obj, runtime, team_val, ni_value, O_value
+    return obj, runtime, team_val, ni_value, O_value, q_value, overflow_value
 
 
 def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
-    model.params.MIPGap=0.0001;
+    model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
@@ -301,15 +310,15 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
             overflow[w].append(tmp_overflow_var)
     
     #O = [[[model.addVar(vtype=GRB.CONTINUOUS, name="O_{0}_w{1}_r{2}".format(i, w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
-    oi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="o_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    oi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="oi_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
     y = [[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="y_w{0}_r{1}".format(w, r)) for r in range(R)] for w in range(W)]
     
-    yi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="y_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    yi = [[[model.addVar(vtype=GRB.CONTINUOUS, lb=0, name="yi_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
     yb = [[[model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
     
-    yb2 = [[[model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
+    yb2 = [[[model.addVar(vtype=GRB.BINARY, lb=0, name="yb_w2{0}_r{1}_s{2}".format(i,w, r)) for r in range(R)] for w in range(W)] for i in range(Q)]
      # y[i][w][r]: number of operating resources r at time w
     
 
@@ -673,7 +682,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 
     return resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi
 
-def fullYNcombined(seed, W, K ,R, mR, M, P, teams, shift):
+def fullYNcombined(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT):
     minr = np.zeros((W,R))
     obj_relax, n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
     for w in range(W):
@@ -692,34 +701,59 @@ def fullYNcombined(seed, W, K ,R, mR, M, P, teams, shift):
     for i in range(Q):
         for w in range(W):
             for k in range(K):
-                sum = 0 
+                #sum = 0 
                 for t in range(T):
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
-                    sum += math.floor(ns[i][w][t][k])
+                    #sum += math.floor(ns[i][w][t][k])
     
     print "============================ K strategies Y, N, B new =============================="
-    obj1, rt, t3, ni_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni_value, O_value, q_value, overflow_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     print obj_relax, objyn1, obj1
 
-    return ni_value
+    new_O_value = np.zeros((Q, W, R))
+    for i in range(Q):
+        for w in range(W):
+            for r in range(R):
+                if w > 0:
+                    new_O_value[i][w][r] = max(new_O_value[i][w-1][r] + np.sum([ni_value[i][w][t][k] for k in range(K) for t in resource2team[r]]) - ys[i][w][r] * C[r], 0)
+                else:
+                    new_O_value[i][w][r] = max(np.sum([ni_value[i][w][t][k] for k in range(K) for t in resource2team[r]]) - ys[i][w][r] * C[r], 0)
+
+    new_overflow = np.zeros((W, R))
+    for i in range(Q):
+        new_overflow += new_O_value[i] * q_value[i]
+    print "old overflow: {0}".format(overflow_value)
+    print "new overflow: {0}".format(new_overflow)
+                
+
+    strategySet = []
+    for i in range(Q):
+        tmp_strategy = {}
+        tmp_strategy["n"] = ni_value[i]
+        tmp_strategy["overflow"] = new_O_value[i]
+        tmp_strategy["y"] = ys[i]
+        tmp_strategy["s"] = s
+        strategySet.append(tmp_strategy)
+
+    return strategySet, obj_relax, objyn1, obj1, q_value
 
 if __name__ == "__main__":
 
     W = 5 # number of time windows
     K = 3 # number of passenger types
-    R = 4 # number of resources
-    mR = 2 # max number of reosurces
+    R = 6 # number of resources
+    mR = 3 # max number of reosurces
     M = 2 # number of attack methods
-    P = 10 # number of staff
+    P = 15 # number of staff
     shift = 2 # d
-    Q = 4
+    Q = 5
     nT = 25
     teams = util.generateAllTeams(R, mR)
     maxT = 5
 
 
     # ================= random generate game setting ===========================
-    seed = 2345
+    seed = 3345
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
@@ -748,13 +782,13 @@ if __name__ == "__main__":
     for i in range(Q):
         for w in range(W):
             for k in range(K):
-                sum = 0 
+                #sum = 0 
                 for t in range(T):
                     minn[i][w][t][k] = math.floor(ns[i][w][t][k])
-                    sum += math.floor(ns[i][w][t][k])
+                    #sum += math.floor(ns[i][w][t][k])
     
     print "============================ K strategies Y, N, B new =============================="
-    obj1, rt, t3, ni_value, O_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+    obj1, rt, t3, ni_value, O_value, q_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
     
     print obj_relax, objyn1, obj1
     
