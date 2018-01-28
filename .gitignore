@@ -1,2 +1,4 @@
 lp/*
 *.lp
+*.pyc
+gurobi*

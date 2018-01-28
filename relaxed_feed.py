@@ -4,10 +4,13 @@ import numpy as np
 import random
 
 
-def LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, y, s, p, mr, ar, phi, integer=0, OverConstr=False): # integer indicates different relaxation method
+def LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, y, s, p, mr, ar, phi, integer=0, OverConstr=False, verbose=True): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    if not verbose:
+        model.params.OutputFlag=0
+        model.params.TuneOutput=0
+    #model.params.DualReductions = 0
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
     z = [] # z[w][k][m]
@@ -175,10 +178,13 @@ def LPsolverR(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus,
     return obj, n_value, overflow_value, attack_set, fractional_vals
 
 
-def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, OverConstr=False, TeamConstr=False, MaxT=0, Q=0): # integer indicates different relaxation method
+def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, OverConstr=False, TeamConstr=False, MaxT=0, Q=0, verbose=True): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    if not verbose:
+        model.params.OutputFlag=0
+        model.params.TuneOutput=0
+    #model.params.DualReductions = 0
 
 
     if TeamConstr: team = [ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}".format(t)) for t in range(T)] 

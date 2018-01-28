@@ -52,7 +52,7 @@ def randomGenerateTeams(R, mR, nT):
     return teams
 
 def resourceTeamDict(R, T, teams):
-    print T
+    #print T
     resource2team = []
     for r in range(R):
         resource2team.append([])
