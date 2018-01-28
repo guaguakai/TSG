@@ -68,7 +68,7 @@ if __name__ == "__main__":
     
     print "======================== main ======================================"
      
-    instance = 1
+    instance = 2
     if (instance == 1):
         W = 10 # number of time windows
         AI = 3 # interval in which passengers are arriving
@@ -88,8 +88,8 @@ if __name__ == "__main__":
         R = 5 # number of resources
         mR = 3 # max number of reosurces
         M = 2 # number of attack methods
-        P = 10 # number of staff
-        shift = 1 # d
+        P = 5 # number of staff
+        shift = 2 # d
         Q = 1 # number of strategies
         maxT = 10
     
@@ -107,8 +107,8 @@ if __name__ == "__main__":
    
     teams = util.generateAllTeams(R, mR)
     
-    Z = 20 # number of runs
-    ZQ = 3 # max number of Q
+    Z = 10 # number of runs
+    ZQ = 2 # max number of Q
     
     obj_relax = np.zeros((Z,ZQ))
     obj_yn = np.zeros((Z,ZQ))
@@ -164,7 +164,7 @@ if __name__ == "__main__":
             
             start_time_final = time.time()
             
-            obj_final[z][zq], rt, t3,ni,oi_value  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+            obj_final[z][zq], rt, t3,ni,oi_value,q_temp,o_temp  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
             
             time_final[z][zq] = time.time() - start_time_final
             
