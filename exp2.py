@@ -20,11 +20,13 @@ if __name__ == "__main__":
     maxT = 5 # initial value, just use for column generation
 
     iterations = 1
-    maxT_start = 20
-    maxT_end = 20
+    maxT_start = 5
+    maxT_end = 5
 
     objective_values = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
     running_time = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
+    cg_objective = np.zeros(iterations)
+    cg_time = np.zeros(iterations)
 
     obj_method1 = obj_method2 = obj_relax = rt_method1 = rt_method2 = rt_relax = 0 # initialization
 
@@ -34,8 +36,10 @@ if __name__ == "__main__":
         #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
         resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-        obj_cg, time_cg, iterations_cg = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=True)
-        print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, obj_cg, time_cg)
+        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=True)
+        print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
+        cg_objective[i] = tmp_obj_cg
+        cg_time[i] = tmp_time_cg
 
         for maxT in range(maxT_start, maxT_end + 1):
             print " ============================================ maxT: {0}, i: {1} ==============================================".format(maxT, i)
@@ -57,4 +61,4 @@ if __name__ == "__main__":
     print objective_values
     print running_time
 
-    pickle.dump((objective_values, running_time), open("data/0128_kai_testing.pl", "wb"))
+    pickle.dump((objective_values, running_time, cg_objective, cg_time), open("data/0128_kai_testing.pl", "wb"))
