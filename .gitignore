@@ -2,3 +2,5 @@ lp/*
 *.lp
 *.pyc
 gurobi*
+*.log
+*.sol
