@@ -380,7 +380,7 @@ if __name__ == "__main__":
             total_arrivals += N_wk[w][k]
     print "total arrivals: {0}".format(total_arrivals)
 
-    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=False)
+    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=True)
 
 
     """

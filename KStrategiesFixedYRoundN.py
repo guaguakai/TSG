@@ -6,13 +6,16 @@ import time
 from relaxed_feed import LPsolver
 import pickle
 
-def Ksolver(W, K, R, mR, M, P, Q, QN, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, N_marginal, O_marginal, y_marginal, s_marginal, p_marginal, integer=0, OverConstr=False): # integer indicates different relaxation method
+def Ksolver(W, K, R, mR, M, P, Q, QN, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, N_marginal, O_marginal, y_marginal, s_marginal, p_marginal, integer=0, OverConstr=False, verbose=True): # integer indicates different relaxation method
     # ======================= Gurobi Variables =================================
     #
     #
     # ==========================================================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    if not verbose:
+        model.params.OutputFlag=0
+        model.params.TuneOutput=0
+    #model.params.DualReductions = 0
     model.params.MIPGap=0.0001
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")

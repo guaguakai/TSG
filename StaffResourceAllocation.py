@@ -4,9 +4,12 @@ import numpy as np
 import random
 import math
 
-def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr=False): # integer indicates different relaxation method
+def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr=False, verbose=True): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
+    if not verbose:
+        model.params.OutputFlag=0
+        model.params.TuneOutput=0
     #model.params.DualReductions = 0
     model.params.MIPGap=0.0001;
 

@@ -7,10 +7,13 @@ from relaxed_feed import LPsolver
 import math
 import time
 
-def FixedQ(Q, W, K, R, M, P, y_start, n_start,q, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, OverConstr=False, OverConstr2=False): # integer indicates different relaxation method
+def FixedQ(Q, W, K, R, M, P, y_start, n_start,q, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, OverConstr=False, OverConstr2=False, verbose=True): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
-    model.params.DualReductions = 0
+    if not verbose:
+        model.params.OutputFlag=0
+        model.params.TuneOutput=0
+    #model.params.DualReductions = 0
     #model.params.MIPGap=0.0005;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
@@ -233,13 +236,13 @@ def FixedQ(Q, W, K, R, M, P, y_start, n_start,q, resource2team, T, maxT, E, C, U
 
     return obj, n_value, ns_value, team_val
 
-def solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi):
+def solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, verbose=True):
    
     start_time = time.time()
     
     minr = np.zeros((W,R))
     
-    obj_relax, n_value0, overflow_value0, y_value0, s_value0, p, attset, f, tl = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1, OverConstr=False, TeamConstr=False, MaxT=maxT, Q=Q)
+    obj_relax, n_value0, overflow_value0, y_value0, s_value0, p, attset, f, tl = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=1, OverConstr=False, TeamConstr=False, MaxT=maxT, Q=Q, verbose=verbose)
     
     minr = np.zeros((W,R))
     minn = np.zeros((W,T,K))
@@ -253,7 +256,7 @@ def solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_m
     for i in range(Q):
         q_val[i] = float(1)/Q
         
-    obj, n_value, ns_value, team_val = FixedQ(Q, W, K, R, M, P, minr, minn, q_val, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, False, False)
+    obj, n_value, ns_value, team_val = FixedQ(Q, W, K, R, M, P, minr, minn, q_val, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, False, False, verbose=False)
     rt = time.time() - start_time
         
     return obj, rt
