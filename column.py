@@ -309,6 +309,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
     cumulative_obj = 0
     decay_factor = 0.6
     cutoff_value = 0.00000001
+    all_objectives = []
     for j in range(column_generation_iterations):
         #print "================================== column generation testing =================================="
         if len(strategySet) > 0:
@@ -317,6 +318,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
             if not pre_obj:
                 pre_obj = obj_cg # no previous objective value
             cumulative_obj = cumulative_obj * decay_factor + (obj_cg - pre_obj) # cumulative improvement
+            all_objectives.append(obj_cg)
             if (cumulative_obj < cutoff_value) and (j > 100):
                 break
             #print "cumulative objective value improvement: {0}".format(cumulative_obj)
@@ -339,7 +341,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
         print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
     num_iterations = j
 
-    return obj_cg, elapsed_time, num_iterations
+    return obj_cg, elapsed_time, num_iterations, all_objectives
 
     #print "============================ LP relaxation =============================="
     #obj_relax, n_value0, overflow_value, y_value, s_value0, p, z_value = StaffResourceAllocation.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
