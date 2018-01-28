@@ -443,7 +443,8 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
     for w in range(W):
         for r in range(R):
             for i in range(Q):
-                model.addConstr(yi[i][w][r] - mr[r] <= 0, name="(7)_w{0}_r{1}_{2}".format(w, r,i))
+                #model.addConstr(yi[i][w][r] - mr[r] <= 0, name="(7)_w{0}_r{1}_{2}".format(w, r,i))
+                model.addConstr(yi[i][w][r] - mr[r] - 1 <= 0, name="(7)_w{0}_r{1}_{2}".format(w, r,i)) # Kai modified TODO
             
             
     for w in range(W):

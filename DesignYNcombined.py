@@ -437,7 +437,7 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
     for w in range(W):
         for r in range(R):
             for i in range(Q):
-                model.addConstr(yi[i][w][r] - mr[r] <= 0, name="(7)_w{0}_r{1}_{2}".format(w, r,i))
+                model.addConstr(yi[i][w][r] - mr[r] - 1 <= 0, name="(7)_w{0}_r{1}_{2}".format(w, r,i))
             
             
     for w in range(W):
@@ -753,7 +753,8 @@ if __name__ == "__main__":
 
 
     # ================= random generate game setting ===========================
-    seed = 3345
+    #seed = 3345
+    seed = random.randint(1, 10000)
     #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
     resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 

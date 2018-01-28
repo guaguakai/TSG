@@ -18,9 +18,9 @@ if __name__ == "__main__":
     teams = util.generateAllTeams(R, mR)
     maxT = 5
 
-    iterations = 20
+    iterations = 5
     Q_start = 1
-    Q_end = 5
+    Q_end = 3
 
     objective_values = np.zeros((Q_end - Q_start + 1, 3, iterations))
     running_time = np.zeros((Q_end - Q_start + 1, 3, iterations))
