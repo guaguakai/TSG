@@ -8,15 +8,15 @@ import pickle
 
 if __name__ == "__main__":
     W = 5 # number of time windows
-    K = 3 # number of passenger types
+    K = 5 # number of passenger types
     R = 6 # number of resources
     mR = 3 # max number of reosurces
     M = 2 # number of attack methods
-    P = 15 # number of staff
+    P = 40 # number of staff
     shift = 2 # d
     nT = 25
     teams = util.generateAllTeams(R, mR)
-    Q = 3
+    Q = 2
     maxT = 5 # initial value, just use for column generation
 
     iterations = 1

@@ -14,6 +14,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
     model = Model("MIP")
     #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
+    model.params.TimeLimit=600 # at most 10 min
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
@@ -211,12 +212,12 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
    
     model.update()
 
-    model.write("tsgkpMIPteam.lp")
+    #model.write("tsgkpMIPteam.lp")
     start_time = time.time()
     model.optimize()
     runtime = time.time() - start_time
 
-    model.write("tsgkpMIPteam.sol")
+    #model.write("tsgkpMIPteam.sol")
 
     ni_value = np.zeros((Q,W,T,K))
     for i in range(Q):
@@ -265,6 +266,7 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
     model = Model("MIP")
     #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
+    model.params.TimeLimit=600 # at most 10 min
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
@@ -482,10 +484,10 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
    
     model.update()
 
-    model.write("tsgkynteam.lp")
+    #model.write("tsgkynteam.lp")
 
     model.optimize()
-    model.write("tsgkynteam.sol")
+    #model.write("tsgkynteam.sol")
 
     
 

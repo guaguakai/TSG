@@ -11,6 +11,7 @@ def LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, 
         model.params.OutputFlag=0
         model.params.TuneOutput=0
     #model.params.DualReductions = 0
+    model.params.TimeLimit=600 # at most 10 min
     model.params.MIPGap=0.0001;
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")

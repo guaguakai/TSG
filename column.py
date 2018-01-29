@@ -14,6 +14,7 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
     model = Model("MIP")
     model.params.OutputFlag = 0
     model.params.TuneOutput = 0
+    model.params.TimeLimit=60 # at most 10 min
 
     n_wtk = [] # n_wtk[w][t][k] # integer value of N_wk[w][k] * pi[w][t][k]
     for w in range(W):
@@ -161,6 +162,7 @@ def columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_p
     model = Model("LP")
     model.params.OutputFlag = 0
     model.params.TuneOutput = 0
+    model.params.TimeLimit=60 # at most 10 min
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-GRB.INFINITY, name="theta")
 
