@@ -20,8 +20,13 @@ if __name__ == "__main__":
     maxT = 5 # initial value, just use for column generation
 
     iterations = 1
-    maxT_start = 5
-    maxT_end = 5
+    maxT_start = 1
+    maxT_end = 20
+    maxT_list = [5, 10, 15, 20, 25, 30]
+
+    # ========================= file storage ==============================
+    f_q = open("exp/exp2/exp2_0129_1500.csv", "a")
+    f_cg = open("exp/exp2/exp2_cg_0129_1500.csv", "a")
 
     objective_values = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
     running_time = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
@@ -41,14 +46,21 @@ if __name__ == "__main__":
         cg_objective[i] = tmp_obj_cg
         cg_time[i] = tmp_time_cg
 
-        for maxT in range(maxT_start, maxT_end + 1):
+        f_cg.write("i, {0}, maxT, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, "NA", "cg", tmp_obj_cg, tmp_time_cg))
+        f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
+
+        for maxT in maxT_list:
             print " ============================================ maxT: {0}, i: {1} ==============================================".format(maxT, i)
 
             obj_method1, rt_method1 = Method1.solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, verbose=False)
             print "Method 1, maxT = {0}, i = {1}, obj = {2}, running time = {3}".format(maxT, i, obj_method1, rt_method1)
+            f_q.write("i, {0}, maxT, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, maxT, 1, obj_method1, rt_method1))
+
             obj_relax, objyn_method2, obj_method2, rt_method2, rt_relax = Method2.solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, TeamConstr=True, verbose=False)
             print "Method 2, maxT = {0}, i = {1}, obj = {2}, running time = {3}".format(maxT, i, obj_method2, rt_method2)
             print "Relaxed obj = {0}, YN combined obj = {1}, running time = {2}".format(obj_relax, objyn_method2, rt_relax)
+            f_q.write("i, {0}, maxT, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, maxT, 2, obj_method2, rt_method2))
+            f_q.write("i, {0}, maxT, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, maxT, "relaxed", obj_relax, rt_relax))
 
             objective_values[maxT-maxT_start][0][i] = obj_method1
             objective_values[maxT-maxT_start][1][i] = obj_method2
