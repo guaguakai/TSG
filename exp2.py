@@ -21,8 +21,8 @@ if __name__ == "__main__":
 
     iterations = 1
     maxT_start = 1
-    maxT_end = 20
     maxT_list = [5, 10, 15, 20, 25, 30]
+    maxT_end = max(maxT_list)
 
     # ========================= file storage ==============================
     f_q = open("exp/exp2/exp2_0129_1500.csv", "a")
@@ -41,7 +41,7 @@ if __name__ == "__main__":
         #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
         resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=True)
+        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=True)
         print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
         cg_objective[i] = tmp_obj_cg
         cg_time[i] = tmp_time_cg
