@@ -98,7 +98,7 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
         tmp_sum = LinExpr([1]*(w - start_index + 1), [s[i] for i in range(start_index, w+1)])
         model.addConstr(tmp_sum - p[w] == 0, name="(7)_w{0}".format(w))
 
-    if fix_s != None:
+    if not (fix_s is None):
         for w in range(W):
             model.addConstr(s[i] == fix_s[i], name="fixed_s_constraint_w{0}".format(w))
 
