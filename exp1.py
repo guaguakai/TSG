@@ -20,7 +20,7 @@ if __name__ == "__main__":
 
     teams = util.generateAllTeams(R, mR)
 
-    iterations = 5
+    iterations = 10
     Q_start = 1
     Q_end = 10
 
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     obj_method1 = obj_method2 = obj_relax = rt_method1 = rt_method2 = rt_relax = 0 # initialization
 
-    for i in range(iterations):
+    for i in range(5, iterations):
         # ================= random generate game setting ===========================
         seed = random.randint(1, 10000)
         #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
