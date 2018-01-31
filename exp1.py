@@ -21,8 +21,8 @@ if __name__ == "__main__":
     teams = util.generateAllTeams(R, mR)
 
     iterations = 10
-    Q_start = 1
-    Q_end = 10
+    Q_start = 5
+    Q_end = 5
 
     # ======================= file storage ==========================
     f_q = open("exp/exp1/exp1_0131_1200.csv", "a")
