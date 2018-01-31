@@ -24,7 +24,7 @@ def randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift):
     resource2team = util.resourceTeamDict(R, T, teams)
 
 
-    Er, C = util.genResources(R, M, 600)
+    Er, C = util.genResources(R, M, 200)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 

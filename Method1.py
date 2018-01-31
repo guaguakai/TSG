@@ -14,7 +14,7 @@ def FixedQ(Q, W, K, R, M, P, y_start, n_start,q, resource2team, T, maxT, E, C, U
         model.params.OutputFlag=0
         model.params.TuneOutput=0
     #model.params.DualReductions = 0
-    model.params.TimeLimit=600 # at most 10 min
+    #model.params.TimeLimit=600 # at most 10 min
     model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
@@ -257,7 +257,7 @@ def solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_m
     for i in range(Q):
         q_val[i] = float(1)/Q
         
-    obj, n_value, ns_value, team_val = FixedQ(Q, W, K, R, M, P, minr, minn, q_val, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, False, False, verbose=False)
+    obj, n_value, ns_value, team_val = FixedQ(Q, W, K, R, M, P, minr, minn, q_val, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, False, False, verbose=verbose)
     rt = time.time() - start_time
         
     return obj, rt

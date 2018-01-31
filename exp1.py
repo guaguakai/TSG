@@ -25,8 +25,8 @@ if __name__ == "__main__":
     Q_end = 10
 
     # ======================= file storage ==========================
-    f_q = open("exp/exp1/exp1_0129_1600.csv", "a")
-    f_cg = open("exp/exp3/exp3_cg_0129_1600.csv", "a")
+    f_q = open("exp/exp1/exp1_0131_1200.csv", "a")
+    f_cg = open("exp/exp3/exp3_cg_0131_1200.csv", "a")
 
     objective_values = np.zeros((Q_end - Q_start + 1, 3, iterations))
     running_time = np.zeros((Q_end - Q_start + 1, 3, iterations))
@@ -36,13 +36,13 @@ if __name__ == "__main__":
 
     obj_method1 = obj_method2 = obj_relax = rt_method1 = rt_method2 = rt_relax = 0 # initialization
 
-    for i in range(5, iterations):
+    for i in range(1,iterations):
         # ================= random generate game setting ===========================
         seed = random.randint(1, 10000)
         #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
         resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=False)
+        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_all_k_objectives = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=False)
         print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
         cg_objective[i] = tmp_obj_cg
         cg_time[i] = tmp_time_cg
@@ -50,6 +50,7 @@ if __name__ == "__main__":
 
         f_cg.write("i, {0}, Q, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, 1, "cg", tmp_obj_cg, tmp_time_cg))
         f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
+        f_cg.write(", ".join([str(j) for j in tmp_all_k_objectives]) + "\n")
 
         for Q in range(Q_start, Q_end + 1):
             print " ============================================ Q: {0}, i: {1} ==============================================".format(Q, i)
