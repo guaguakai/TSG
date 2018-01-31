@@ -313,6 +313,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
     cutoff_value = 0.00000001
     all_objectives = []
     all_k_objectives = []
+    Q = 5
     for j in range(column_generation_iterations):
         #print "================================== column generation testing =================================="
         if len(strategySet) > 0:
@@ -323,6 +324,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
             q_value = np.array(q_value)
             new_strategySet = np.array(strategySet)
             q_sort_index = q_value.argsort()[::-1][:Q]
+            print q_sort_index, q_value[q_sort_index]
             k_strategySet = new_strategySet[q_sort_index]
             k_cg_model, k_gamma, k_delta_value, k_q_value, k_obj_cg = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, k_strategySet, slave_optimal_value)
             print "column generation objective value with {0} strategies: {1}".format(Q, k_obj_cg)
