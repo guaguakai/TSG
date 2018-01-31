@@ -25,8 +25,8 @@ if __name__ == "__main__":
     Q_end = 10
 
     # ======================= file storage ==========================
-    f_q = open("exp/exp1/exp1_0129_1600.csv", "a")
-    f_cg = open("exp/exp3/exp3_cg_0129_1600.csv", "a")
+    f_q = open("exp/exp1/exp1_0130_1200.csv", "a")
+    f_cg = open("exp/exp3/exp3_cg_0130_1200.csv", "a")
 
     objective_values = np.zeros((Q_end - Q_start + 1, 3, iterations))
     running_time = np.zeros((Q_end - Q_start + 1, 3, iterations))
