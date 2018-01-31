@@ -3,14 +3,19 @@ from gurobipy import *
 import numpy as np
 import random
 import math
-from KStrategies import randomSetting
+import time
 from StaffResourceAllocation import LPsolver
+
+
+from DesignYNcombined import KStrategiesYNcomb
+from DesignYNcombined import KStrategiesYNBnew
 
 def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, binary_y=0, OverConstr=False): # integer indicates different relaxation method
     # ======================= Gurobi Setting ===================================
     model = Model("MIP")
     model.params.DualReductions = 0
-    model.params.MIPGap=0.0001;
+    model.params.MIPGap=0.01
+    model.params.TimeLimit = 3600
 
     theta = model.addVar(vtype=GRB.CONTINUOUS, lb=-10000, name="theta")
     z = [] # z[w][k][m]
@@ -85,7 +90,7 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
             for k in range(K):
                 ni_wtk[w][t].append([])
                 for i in range(Q):
-                    tmp_pi_var = model.addVar(vtype=GRB.INTEGER, name="n_w{0}_t{1}_k{2}_s{3}".format(w, t, k, i))
+                    tmp_pi_var = model.addVar(vtype=GRB.CONTINUOUS, name="n_w{0}_t{1}_k{2}_s{3}".format(w, t, k, i))
                     ni_wtk[w][t][k].append(tmp_pi_var)
                     
     oi = [] # overflow[w][r]
@@ -293,6 +298,8 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
     
     obj = model.getAttr('ObjVal')
     
+    gap = model.MIPGap
+    
     oi_value = np.zeros((W,R,Q))
     for w in range(W):
         for r in range(R):
@@ -323,43 +330,159 @@ def integerSolution(Nmax, Q, W, K, R, mR, M, P, teams, resource2team, T, E, C, U
                 z_value[w][k][m] = z[w][k][m].x
     
 
-    return obj, n_value, overflow_value, y_value, s_value, p_value,ni_value,oi_value,yi_value,q_value,z_value
+    return obj,gap, n_value, overflow_value, y_value, s_value, p_value,ni_value,oi_value,yi_value,q_value,z_value
+
+def randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift):
+    # ========================== Random Seed ===================================
+    #seed = 3234
+    #seed = random.randint(1,10000)
+    np.random.seed(seed)
+    random.seed(seed)
+
+    T = len(teams)
+
+    resource2team = util.resourceTeamDict(R, T, teams)
+
+
+    Er, C = util.genResources(R, M, 30)
+    Er = [[0.5,0.7],[0.7,0.2],[0.3,0.5]]
+    C = [10,7,15]
+    E = util.computeTeamsRate(R, M, T, teams, Er)
+    print E     
+
+
+    # suppose this is a zero-sum game
+    U_plus = [] # covered (plus) utility of the defender
+    U_minus = [] # uncovered (minus) utility of the defender
+    for i in range(K):
+        tmp_plus_utility = 0 #random.randint(100,500)
+        U_plus.append(tmp_plus_utility)
+        tmp_minus_utility = -random.randint(50,200)
+        U_minus.append(tmp_minus_utility)
+
+
+    N_wk = [[ 0 for k in range(K)] for w in range(W)] # N_wk[w][k] represents the number of people getting in time window w with type k
+    
+
+    N_wk = np.zeros((W,K))        
+    for k in range(K):
+        startK = random.randint(AI,W)
+        for w in range(startK-AI,startK):
+            large_or_small = random.random()
+            if large_or_small > 0.5:
+                tmp_N = random.randint(30, 40)
+            else:
+                tmp_N = random.randint(10, 20)
+            N_wk[w][k] = tmp_N
+
+
+    mr = np.random.randint(2, 3, R)
+
+    ar = np.random.randint(1, 2, R)
+
+
+    phi = np.random.rand(R) # phi[r] overflow penalty
+
+
+    return resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi
 
 if __name__ == "__main__":
     # ============================= main =======================================
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 1 # number of time windows
-    K = 3 # number of passenger types
-    R = 2 # number of resources
-    mR = 1 # max number of reosurces
-    M = 1 # number of attack methods
-    P = 10 # number of staff
-    Q= 2
+    AI = 1
+    K = 5 # number of passenger types
+    R = 3 # number of resources
+    mR = 2 # max number of reosurces
+    M = 2 # number of attack methods
+    P = 3 # number of staff
+    Q= 4
     shift = 1 # d
 
     nT = 22
+    maxT = 10
     teams = util.generateAllTeams(R, mR)
     #teams = util.randomGenerateTeams(R, mR, nT)
-    Nmax = 150
+    Nmax = 100
 
-    #print teams
-
-    # ================= random generate game setting ===========================
-    seed = 2345
-    resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
-    
-    minr = np.zeros((W,R))
-    
-    #obj, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
-    #obj1, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
-    from DesignProblemFixedResources import solve
-    
-    obj0, n_value0, overflow_value0, y_value0, s_value0, p_value0,ni_value,oi_value,yi_value,q_value,z_value0 = integerSolution(Nmax,Q,W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
-    util1, rt1, q1, teams1 = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, 5, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=False, YConstr=False)
+    Z = 6
+    ZQ = 3
+    obj_relax = np.zeros((Z))
+    obj_int = np.zeros((Z,ZQ))
+    time_int = np.zeros((Z,ZQ))
     
     
-    print obj0, util1
+    obj_yn = np.zeros((Z,ZQ))
+    obj_final = np.zeros((Z,ZQ))
+    time_yn = np.zeros((Z,ZQ))
+    time_final = np.zeros((Z,ZQ))
+    
+    gap = np.zeros((Z,ZQ))
+    SEEDS = [254,834,105,309,305,105]
+    #SEEDS = np.zeros(Z)
+    for z in range(Z):
+        seed = random.randint(1,1000)
+        seed = SEEDS[z]
+        for zq in range(ZQ):
+            Q = zq+1
+            resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift)
+    
+            minr = np.zeros((W,R))
+            
+            #obj, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
+            #obj1, n_value, overflow_value, y_value, s_value, p_value,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=3, binary_y=0, OverConstr = 0)
+            #from DesignProblemFixedResources import solve
+            
+            obj_relax[z], n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+            
+            start_time = time.time()
+            obj_int[z][zq], gap[z][zq], n_value0, overflow_value0, y_value0, s_value0, p_value0,ni_value,oi_value,yi_value,q_value,z_value0 = integerSolution(Nmax,Q,W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+            #util1, rt1, q1, teams1 = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, 5, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi,  TeamConstr=False, YConstr=False)
+            time_int[z][zq] = time.time() - start_time
+            
+            
+            q = np.zeros(Q)
+            for i in range(Q):
+                q[i] = float(1)/Q 
+                
+            
+            start_time_yn = time.time()
+            
+            for w in range(W):
+                for r in range(R):
+                    minr[w][r] = math.floor(y_value[w][r])
+                
+            obj_yn[z][zq], n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)    
+            
+            #time_yn[z][zq] = time.time() - start_time_yn
+            minn = np.zeros((Q,W,T,K))
+            
+            for i in range(Q):
+                for w in range(W):
+                    for k in range(K):
+                        sum = 0 
+                        for t in range(T):
+                            minn[i][w][t][k] = math.floor(ns[i][w][t][k])
+                            sum += math.floor(ns[i][w][t][k])
+            
+            # Find integer solution (using binaries and rounde) for each ns, given ys, p and s
+            
+            #start_time_final = time.time()
+            
+            obj_final[z][zq], rt, t3,ni,oi_value,q_tem,o_temp  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+            
+            time_final[z][zq] = time.time() - start_time_yn
+            
+        
+            file = open('resultsInteger_0129.txt','w')
+            file.write('run%s\n' %str(z+1))
+            file.write("obj:\n"+ str(obj_relax)+'\n\n' + str(obj_int)+'\n\n' + str(obj_final))
+            file.write("\n\ngap:\n"+ str(gap))
+            file.write("\n\ntime:\n" + str(time_int)+'\n\n' + str(time_final))
+            file.close()
+            
+    print obj_int, time
     
     
     
