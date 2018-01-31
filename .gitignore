@@ -2,5 +2,6 @@ lp/*
 *.lp
 *.pyc
 gurobi*
-*.log
-*.sol
+gurobi.log
+tsgkynteam.sol
+tsg_relax.sol

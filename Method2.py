@@ -16,6 +16,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
         model.params.OutputFlag=0
         model.params.TuneOutput=0
     #model.params.DualReductions = 0
+    model.params.TimeLimit=600 # at most 10 min
     model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
@@ -214,12 +215,12 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
    
     model.update()
 
-    model.write("tsgkpMIPteam.lp")
+    #model.write("tsgkpMIPteam.lp")
     start_time = time.time()
     model.optimize()
     runtime = time.time() - start_time
 
-    model.write("tsgkpMIPteam.sol")
+    #model.write("tsgkpMIPteam.sol")
 
     ni_value = np.zeros((Q,W,T,K))
     for i in range(Q):
@@ -270,6 +271,7 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
         model.params.OutputFlag=0
         model.params.TuneOutput=0
     #model.params.DualReductions = 0
+    model.params.TimeLimit=600 # at most 10 min
     model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
@@ -488,10 +490,10 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
    
     model.update()
 
-    model.write("tsgkynteam.lp")
+    #model.write("tsgkynteam.lp")
 
     model.optimize()
-    model.write("tsgkynteam.sol")
+    #model.write("tsgkynteam.sol")
 
     
 
@@ -612,7 +614,8 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     #print "Er"
     #print Er
 
-    Er, C = util.genResources(R, M, 600)
+    #Er, C = util.genResources(R, M, 600)
+    Er, C = util.genResources(R, M, 200)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     #print E     
 
