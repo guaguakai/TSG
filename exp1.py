@@ -28,7 +28,7 @@ if __name__ == "__main__":
     P = 10 # number of staff
     shift = 2 # d
     Q = 1 # number of strategies
-    maxT = 1
+    maxT = 2
 
     teams = util.generateAllTeams(R, mR)
 

@@ -353,7 +353,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
             cumulative_obj = cumulative_obj * decay_factor + (obj_cg - pre_obj) # cumulative improvement
             all_objectives.append(obj_cg)
             #if (cumulative_obj < cutoff_value) and (j > 500):
-            if (cumulative_obj < cutoff_value) and (j > 300):
+            if (cumulative_obj < cutoff_value) and (j > 50):
                 break
             #print "cumulative objective value improvement: {0}".format(cumulative_obj)
 
