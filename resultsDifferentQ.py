@@ -1,4 +1,4 @@
-het import util
+import util
 from gurobipy import *
 import time
 import numpy as np
@@ -10,6 +10,8 @@ from DesignYNcombined import KStrategiesYNcomb
 from DesignYNcombined import KStrategiesYNBnew
 
 from Results import randomSetting
+
+from Method1 import solve
 
 import pickle
 
@@ -44,18 +46,18 @@ if __name__ == "__main__":
         W = 3 # number of time windows
         AI = 1 # interval in which passengers are arriving
         K = 10 # number of passenger types
-        R = 3 # number of resources
-        mR = 2 # max number of reosurces
+        R = 6 # number of resources
+        mR = 3 # max number of reosurces
         M = 3 # number of attack methods
-        P = 10 # number of staff
-        shift = 1 # d
+        P = 3 # number of staff
+        shift = 2 # d
         Q = 2 # number of strategies
-        maxT = 10    
+        maxT = 2    
         
     teams = util.generateAllTeams(R, mR)
     
-    Z = 20 # number of runs
-    ZQ = 10 # max number of Q
+    Z = 10 # number of runs
+    ZQ = 4 # max number of Q
     
     obj_relax = np.zeros((Z,ZQ))
     obj_yn = np.zeros((Z,ZQ))
@@ -63,9 +65,14 @@ if __name__ == "__main__":
     time_relax = np.zeros((Z,ZQ))
     time_yn = np.zeros((Z,ZQ))
     time_final = np.zeros((Z,ZQ))
+    obj_uniform = np.zeros((Z,ZQ))
     
+    
+    time_uniform = np.zeros((Z,ZQ))
+    
+    SEEDS = [132,735,7253,251,253,8153,9142,731,936,946]
     for z in range(Z):
-        seed = random.randint(1,1000)
+        seed = SEEDS[z] #random.randint(1,1000)
         for zq in range(ZQ):
             Q = zq+1;  
             
@@ -114,6 +121,13 @@ if __name__ == "__main__":
             obj_final[z][zq], rt, t3,ni,oi_value,q_tem,o_temp  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
             
             time_final[z][zq] = time.time() - start_time_final
+            
+            
+            start_time_uniform = time.time()
+            
+            obj_uniform[z][zq], rt = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi)
+        
+            time_uniform[z][zq] = time.time() - start_time_uniform
             
        
     print obj_relax, obj_yn, obj_final

@@ -14,12 +14,7 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
     model = Model("MIP")
     #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
-<<<<<<< HEAD
-    
-    model.params.TimeLimit = 300
-=======
-    model.params.TimeLimit=600 # at most 10 min
->>>>>>> 6ab8500be07e219d7fa976eb722e4aff4beed974
+    model.params.TimeLimit = 600
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
@@ -271,11 +266,7 @@ def KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_
     model = Model("MIP")
     #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
-<<<<<<< HEAD
-    model.params.TimeLimit = 300
-=======
     model.params.TimeLimit=600 # at most 10 min
->>>>>>> 6ab8500be07e219d7fa976eb722e4aff4beed974
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 
