@@ -14,7 +14,7 @@ def FixedQ(Q, W, K, R, M, P, y_start, n_start,q, resource2team, T, maxT, E, C, U
         model.params.OutputFlag=0
         model.params.TuneOutput=0
     #model.params.DualReductions = 0
-    #model.params.TimeLimit=600 # at most 10 min
+    model.params.TimeLimit=600 # at most 10 min
     model.params.MIPGap=0.01;
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
