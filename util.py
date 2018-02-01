@@ -10,6 +10,10 @@ def genResources(R, M, NP):
     capacity = []
     for r in range(R):
         E = np.random.rand(M)
+        #if r == 0:
+        #    E = [1,0]
+        #else:
+        #    E = [0,1]
         cap = math.floor((1-np.max(E))*NP)
         
         ER.append(E)
