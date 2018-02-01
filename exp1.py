@@ -21,12 +21,12 @@ if __name__ == "__main__":
 
     W = 5 # number of time windows
     AI = 1 # interval in which passengers are arriving
-    K = 4 # number of passenger types
+    K = 5 # number of passenger types
     R = 10 # number of resources
     mR = 1 # max number of reosurces
     M = 5 # number of attack methods
-    P = 10 # number of staff
-    shift = 2 # d
+    P = 20 # number of staff
+    shift = 1 # d
     Q = 1 # number of strategies
     maxT = 2
 

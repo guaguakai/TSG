@@ -666,13 +666,13 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
  #   print "\nC"
   #  print C
     #C = [100,80,75,50,30,15]
-    mr = np.random.randint(5, 10, R)
+    mr = np.random.randint(5, 15, R)
  #   print "\nmr"
   #  print mr
     #mr = [5, 5, 5, 3, 2, 4] # maximum number of people to operate resource r
 
     #ar = np.random.randint(1, 5, R)
-    ar = np.random.randint(1, 3, R)
+    ar = np.random.randint(1, 2, R)
 
  #   print "\nar"
   #  print ar
