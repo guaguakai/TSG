@@ -609,8 +609,8 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     resource2team = util.resourceTeamDict(R, T, teams)
     #print resource2team
 
-    Er = np.random.rand(R, M)/4 + 0.75 # Er[m][r]
-    Er = Er / 2
+    #Er = np.random.rand(R, M)/4 + 0.75 # Er[m][r]
+    #Er = Er / 2
     #print "Er"
     #print Er
 
@@ -640,8 +640,9 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
 
     N_wk = np.zeros((W,K))        
     for k in range(K):
-        startK = random.randint(3,W)
-        for w in range(startK-3,startK):
+        #startK = random.randint(3,W)
+        startK = random.randint(1,W)
+        for w in range(max(startK-3, 0),startK):
             large_or_small = random.random()
             if large_or_small > 0.5:
                 tmp_N = random.randint(50, 200)
@@ -669,7 +670,10 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
  #   print "\nmr"
   #  print mr
     #mr = [5, 5, 5, 3, 2, 4] # maximum number of people to operate resource r
-    ar = np.random.randint(1, 5, R)
+
+    #ar = np.random.randint(1, 5, R)
+    ar = np.random.randint(1, 2, R)
+
  #   print "\nar"
   #  print ar
     #ar = [2, 1, 2, 1, 1, 2] # ar[r] number of people required to operate resource r

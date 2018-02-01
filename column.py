@@ -326,7 +326,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
     cutoff_value = 0.00000001
     all_objectives = []
     all_k_objectives = []
-    Q = 5
+    Q = 3
     all_times = []
 
     cg_start_time = time.time()
