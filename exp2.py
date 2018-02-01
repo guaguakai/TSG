@@ -19,14 +19,14 @@ if __name__ == "__main__":
     Q = 2
     maxT = 5 # initial value, just use for column generation
 
-    iterations = 10
+    iterations = 1
     maxT_start = 1
     maxT_list = range(1, 11)
     maxT_end = max(maxT_list)
 
     # ========================= file storage ==============================
-    f_q = open("exp/exp2/exp2_0130_0200.csv", "a")
-    f_cg = open("exp/exp2/exp2_cg_0130_0200.csv", "a")
+    f_q = open("exp/exp2/exp2_0131_2000.csv", "a")
+    f_cg = open("exp/exp2/exp2_cg_0131_2000.csv", "a")
 
     objective_values = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
     running_time = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
@@ -41,13 +41,15 @@ if __name__ == "__main__":
         #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
         resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=True)
+        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_k_objectives, tmp_all_times = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=1000, warm_start=True)
         print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
         cg_objective[i] = tmp_obj_cg
         cg_time[i] = tmp_time_cg
 
         f_cg.write("i, {0}, maxT, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, "NA", "cg", tmp_obj_cg, tmp_time_cg))
         f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
+        f_cg.write(", ".join([str(j) for j in tmp_k_objectives]) + "\n")
+        f_cg.write(", ".join([str(j) for j in tmp_all_times]) + "\n")
 
         for maxT in maxT_list:
             print " ============================================ maxT: {0}, i: {1} ==============================================".format(maxT, i)
