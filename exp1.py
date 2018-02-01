@@ -5,28 +5,40 @@ import random
 import util
 import numpy as np
 import pickle
+import Results
 
 if __name__ == "__main__":
     W = 5 # number of time windows
-    AI = 3 # interval in which passengers are arriving
+    AI = 1 # interval in which passengers are arriving
     K = 5 # number of passenger types
     R = 6 # number of resources
-    mR = 3 # max number of reosurces
-    M = 2 # number of attack methods
-    P = 40 # number of staff
+    mR = 2 # max number of reosurces
+    M = 3 # number of attack methods
+    P = 7 # number of staff
     shift = 2 # d
     Q = 2 # number of strategies
-    maxT = 10
+    maxT = 2
+
+    #W = 5 # number of time windows
+    #AI = 3 # interval in which passengers are arriving
+    #K = 5 # number of passenger types
+    #R = 6 # number of resources
+    #mR = 3 # max number of reosurces
+    #M = 2 # number of attack methods
+    #P = 30 # number of staff
+    #shift = 2 # d
+    #Q = 2 # number of strategies
+    #maxT = 10
 
     teams = util.generateAllTeams(R, mR)
 
     iterations = 10
-    Q_start = 5
-    Q_end = 5
+    Q_start = 1
+    Q_end = 10
 
     # ======================= file storage ==========================
-    f_q = open("exp/exp1/exp1_0131_2100.csv", "a")
-    f_cg = open("exp/exp3/exp3_cg_0131_2100.csv", "a")
+    f_q = open("exp/exp1/exp1_0131_2210.csv", "a")
+    f_cg = open("exp/exp3/exp3_cg_0131_2210.csv", "a")
 
     objective_values = np.zeros((Q_end - Q_start + 1, 3, iterations))
     running_time = np.zeros((Q_end - Q_start + 1, 3, iterations))
@@ -39,8 +51,9 @@ if __name__ == "__main__":
     for i in range(iterations):
         # ================= random generate game setting ===========================
         seed = random.randint(1, 10000)
+        print "seed: ", seed
         #resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
-        resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
+        resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Results.randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift)
 
         tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_all_k_objectives, tmp_all_times = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=500, warm_start=False)
         print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)

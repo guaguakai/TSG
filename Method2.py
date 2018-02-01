@@ -609,7 +609,7 @@ def randomSetting(seed, W, K ,R, mR, M, P, teams, shift):
     resource2team = util.resourceTeamDict(R, T, teams)
     #print resource2team
 
-    Er = np.random.rand(R, M)/2 + 0.5 # Er[m][r]
+    Er = np.random.rand(R, M)/4 + 0.75 # Er[m][r]
     Er = Er / 2
     #print "Er"
     #print Er
