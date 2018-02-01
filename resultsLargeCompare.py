@@ -9,7 +9,7 @@ from StaffResourceAllocation import LPsolver
 from DesignYNcombined import KStrategiesYNcomb
 from DesignYNcombined import KStrategiesYNBnew
 
-from Results import randomSetting
+from Method2 import randomSetting
 
 from Method1 import solve
 
@@ -17,18 +17,18 @@ import pickle
 
 if __name__ == "__main__":
     
-    instance = 3
+    instance = 1
     if (instance == 1):
         W = 10 # number of time windows
         AI = 3 # interval in which passengers are arriving
-        K = 20 # number of passenger types
+        K = 50 # number of passenger types
         R = 5 # number of resources
         mR = 3 # max number of reosurces
         M = 3 # number of attack methods
-        P = 15 # number of staff
+        P = 75 # number of staff
         shift = 3 # d
         Q = 2 # number of strategies
-        maxT = 10
+        maxT = 5
 
     if (instance == 2):
         W = 5 # number of time windows
@@ -40,7 +40,7 @@ if __name__ == "__main__":
         P = 10 # number of staff
         shift = 1 # d
         Q = 2 # number of strategies
-        maxT = 10
+        maxT = 100
     
     if (instance == 3):
         W = 3 # number of time windows
@@ -51,86 +51,88 @@ if __name__ == "__main__":
         M = 3 # number of attack methods
         P = 10 # number of staff
         shift = 1 # d
-        Q = 2 # number of strategies
+        Q = 4 # number of strategies
         maxT = 10    
         
     teams = util.generateAllTeams(R, mR)
     
     Z = 10 # number of runs
     ZQ = 1 # max number of Q
-    
+    ZC = 10
     maxQT = 6
     
-    obj_relax = np.zeros((Z))
-    obj_uniform = np.zeros((Z))
-    obj_yn = np.zeros((Z))
-    obj_final = np.zeros((Z))
-    time_uniform = np.zeros((Z))
-    time_final = np.zeros((Z))
+    obj_relax = np.zeros((Z,ZC))
+    obj_uniform = np.zeros((Z,ZC))
+    obj_yn = np.zeros((Z,ZC))
+    obj_final = np.zeros((Z,ZC))
+    time_uniform = np.zeros((Z,ZC))
+    time_final = np.zeros((Z,ZC))
     
     for z in range(Z):
         seed = random.randint(1,1000)
+        for zc in range(ZC):
+            K = (zc+1)*5
+            P = K
+            # Construct random instances
+            resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
+        
+            minr = np.zeros((W,R))   
             
-        # Construct random instances
-        resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift)
-    
-        minr = np.zeros((W,R))   
-        
-        
-        start_time_relax = time.time()
-        # Solve full LP relaxation
-        obj_relax[z], n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
-        
-        #time_relax[z][zq] = time.time() - start_time_relax
-           
-        for w in range(W):
-            for r in range(R):
-                minr[w][r] = math.floor(y_value[w][r])
-                #print y_value[w][r]
-        
-        
-        # find Q strategies for y, using binaries and lower bound minr, n integer for each ys.    
-        start_time_yn = time.time()
-        
-        
-        
-        q = np.zeros(Q)
-        for i in range(Q):
-            q[i] = float(1)/Q 
-                
-        obj_yn[z], n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)
-             
+            
+            start_time_relax = time.time()
+            # Solve full LP relaxation
+            obj_relax[z][zc], n_value0, overflow_value, y_value, s_value0, p,z_value = LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
+            
+            #time_relax[z][zq] = time.time() - start_time_relax
                
-        
-        #time_yn[z][zq][j] = time.time() - start_time_yn
-        minn = np.zeros((Q,W,T,K))
-        
-        for i in range(Q):
             for w in range(W):
-                for k in range(K):
-                    sum = 0 
-                    for t in range(T):
-                        minn[i][w][t][k] = math.floor(ns[i][w][t][k])
-                        sum += math.floor(ns[i][w][t][k])
-        
-        # Find integer solution (using binaries and rounde) for each ns, given ys, p and s
-        
-        #start_time_final = time.time()
-        
-        obj_final[z], rt, t3,ni,oi_value,q_tem,o_temp  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
-        
-        time_final[z] = time.time() - start_time_yn
-        
-        start_time_uniform = time.time()
-        
-        obj_uniform[z], rt = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi)
-                
-        time_uniform[z] = time.time() - start_time_uniform
-        file = open('Largeresults_0130.txt','w')
-        file.write('run%s\n' %str(z+1))
-        file.write("obj:\n" + str(obj_relax)+'\n\n'+str(obj_final)+'\n\n'+str(obj_uniform))
-        file.write("\n\ntime:\n" +str(time_final) +'\n\n'+str(time_uniform))
-        file.close()
+                for r in range(R):
+                    minr[w][r] = math.floor(y_value[w][r])
+                    #print y_value[w][r]
+            
+            
+            # find Q strategies for y, using binaries and lower bound minr, n integer for each ys.    
+            start_time_yn = time.time()
+            
+            
+            
+            q = np.zeros(Q)
+            for i in range(Q):
+                q[i] = float(1)/Q 
+                    
+            obj_yn[z][zc], n, ns,ys,z_value,p,s,y = KStrategiesYNcomb(Q, W, K, R, M, P, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, minr, q, ar, phi, integer=0, OverConstr=False, OverConstr2=False)
+                 
+                   
+            
+            #time_yn[z][zq][j] = time.time() - start_time_yn
+            minn = np.zeros((Q,W,T,K))
+            
+            for i in range(Q):
+                for w in range(W):
+                    for k in range(K):
+                        sum = 0 
+                        for t in range(T):
+                            minn[i][w][t][k] = math.floor(ns[i][w][t][k])
+                            sum += math.floor(ns[i][w][t][k])
+            
+            # Find integer solution (using binaries and rounde) for each ns, given ys, p and s
+            
+            #start_time_final = time.time()
+            
+            obj_final[z][zc], rt, t3,ni,oi_value,q_tem,o_temp  = KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, ys, minn, p, s, phi, integer=0, OverConstr=False, OverConstr2=False)
+            
+            time_final[z][zc] = time.time() - start_time_yn
+            
+            start_time_uniform = time.time()
+            
+            obj_uniform[z][zc], rt = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi)
+                    
+            time_uniform[z][zc] = time.time() - start_time_uniform
+            file = open('Largeresults_0130.txt','w')
+            file.write('run%s\n' %str(z+1))
+            file.write("obj:\n" + str(obj_relax)+'\n\n'+str(obj_final)+'\n\n'+str(obj_uniform))
+            file.write("\n\ntime:\n" +str(time_final) +'\n\n'+str(time_uniform))
+            file.close()
     
     
     #print obj_relax, obj_yn, obj_final

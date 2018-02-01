@@ -6,6 +6,7 @@ import math
 import time
 from StaffResourceAllocation import LPsolver
 
+from Method1 import solve
 
 from DesignYNcombined import KStrategiesYNcomb
 from DesignYNcombined import KStrategiesYNBnew
@@ -344,9 +345,7 @@ def randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift):
     resource2team = util.resourceTeamDict(R, T, teams)
 
 
-    Er, C = util.genResources(R, M, 30)
-    Er = [[0.5,0.7],[0.7,0.2],[0.3,0.5]]
-    C = [10,7,15]
+    Er, C = util.genResources(R, M, 20)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
@@ -370,9 +369,9 @@ def randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift):
         for w in range(startK-AI,startK):
             large_or_small = random.random()
             if large_or_small > 0.5:
-                tmp_N = random.randint(30, 40)
+                tmp_N = random.randint(5, 10)
             else:
-                tmp_N = random.randint(10, 20)
+                tmp_N = random.randint(5, 10)
             N_wk[w][k] = tmp_N
 
 
@@ -392,12 +391,12 @@ if __name__ == "__main__":
     # ========================= Game Setting ===================================
     W = 1 # number of time windows
     AI = 1
-    K = 5 # number of passenger types
-    R = 3 # number of resources
+    K = 2 # number of passenger types
+    R = 2 # number of resources
     mR = 2 # max number of reosurces
     M = 2 # number of attack methods
-    P = 3 # number of staff
-    Q= 4
+    P = 1 # number of staff
+    Q= 2
     shift = 1 # d
 
     nT = 22
@@ -406,7 +405,7 @@ if __name__ == "__main__":
     #teams = util.randomGenerateTeams(R, mR, nT)
     Nmax = 100
 
-    Z = 6
+    Z = 10
     ZQ = 3
     obj_relax = np.zeros((Z))
     obj_int = np.zeros((Z,ZQ))
@@ -415,14 +414,17 @@ if __name__ == "__main__":
     
     obj_yn = np.zeros((Z,ZQ))
     obj_final = np.zeros((Z,ZQ))
+    obj_uniform = np.zeros((Z,ZQ))
     time_yn = np.zeros((Z,ZQ))
     time_final = np.zeros((Z,ZQ))
+    time_uniform = np.zeros((Z,ZQ))
     
     gap = np.zeros((Z,ZQ))
-    SEEDS = [254,834,105,309,305,105]
+    SEEDS = [8096,364,2402,8332,714,3824,798,243,8030,2637]
     #SEEDS = np.zeros(Z)
     for z in range(Z):
-        seed = random.randint(1,1000)
+        seed = random.randint(1,10000)
+        #SEEDS[z] = seed
         seed = SEEDS[z]
         for zq in range(ZQ):
             Q = zq+1
@@ -474,6 +476,12 @@ if __name__ == "__main__":
             
             time_final[z][zq] = time.time() - start_time_yn
             
+            start_time_uniform = time.time()
+        
+            obj_uniform[z][zq], rt = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi)
+                    
+            time_uniform[z][zq] = time.time() - start_time_uniform
+            
         
             file = open('resultsInteger_0129.txt','w')
             file.write('run%s\n' %str(z+1))
@@ -482,7 +490,7 @@ if __name__ == "__main__":
             file.write("\n\ntime:\n" + str(time_int)+'\n\n' + str(time_final))
             file.close()
             
-    print obj_int, time
+    
     
     
     

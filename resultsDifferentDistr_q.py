@@ -1,4 +1,4 @@
-import util
+jaimport util
 from gurobipy import *
 import time
 import numpy as np
