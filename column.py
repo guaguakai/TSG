@@ -10,7 +10,7 @@ import itertools
 
 # =========================================== column generation =================================================
 
-def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma, fix_s=None): # slave problem solver
+def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma, maxT, fix_s=None): # slave problem solver
     model = Model("MIP")
     model.params.OutputFlag = 0
     model.params.TuneOutput = 0
@@ -46,6 +46,11 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
         tmp_working_staff = model.addVar(vtype=GRB.INTEGER, name="s_w{0}".format(w))
         p.append(tmp_staff)
         s.append(tmp_working_staff)
+
+    teams = []
+    for t in range(T):
+        tmp_team = model.addVar(vtype=GRB.BINARY, name="team_t{0}".format(t))
+        teams.append(tmp_team)
 
     # ========================= Gurobi Objective ===============================
     #print "objective setting"
@@ -97,6 +102,14 @@ def slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_min
         start_index = max(0, w - shift + 1)
         tmp_sum = LinExpr([1]*(w - start_index + 1), [s[i] for i in range(start_index, w+1)])
         model.addConstr(tmp_sum - p[w] == 0, name="(7)_w{0}".format(w))
+
+    # ====================== teams constraints ========================
+    for w in range(W):
+        for k in range(K):
+            for t in range(T):
+                model.addConstr( n_wtk[w][t][k] <= N_wk[w][k] * teams[t])
+
+    model.addConstr(quicksum(teams) <= maxT)
 
     if not (fix_s is None):
         for w in range(W):
@@ -312,21 +325,40 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
     decay_factor = 0.6
     cutoff_value = 0.00000001
     all_objectives = []
+    all_k_objectives = []
+    Q = 5
+    all_times = []
+
+    cg_start_time = time.time()
     for j in range(column_generation_iterations):
         #print "================================== column generation testing =================================="
         if len(strategySet) > 0:
             pre_obj = obj_cg
             cg_model, gamma, delta_value, q_value, obj_cg = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, strategySet, slave_optimal_value)
+
+            # ========================== for column generation k ==============================================
+            q_value = np.array(q_value)
+            new_strategySet = np.array(strategySet)
+            q_sort_index = q_value.argsort()[::-1][:Q]
+            print q_sort_index, q_value[q_sort_index]
+            k_strategySet = new_strategySet[q_sort_index]
+            k_cg_model, k_gamma, k_delta_value, k_q_value, k_obj_cg = columnGenerationSolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, k_strategySet, slave_optimal_value)
+            print "column generation objective value with {0} strategies: {1}".format(Q, k_obj_cg)
+            all_k_objectives.append(k_obj_cg)
+            all_times.append(time.time() - cg_start_time)
+
+            # =================================================================================================
             if not pre_obj:
                 pre_obj = obj_cg # no previous objective value
             cumulative_obj = cumulative_obj * decay_factor + (obj_cg - pre_obj) # cumulative improvement
             all_objectives.append(obj_cg)
-            if (cumulative_obj < cutoff_value) and (j > 100):
+            #if (cumulative_obj < cutoff_value) and (j > 500):
+            if (cumulative_obj < cutoff_value) and (j > 50):
                 break
             #print "cumulative objective value improvement: {0}".format(cumulative_obj)
 
         #print "==================================== solving slave problem ===================================="
-        slave_n_value, slave_overflow_value, slave_optimal_value = slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma, fix_s)
+        slave_n_value, slave_overflow_value, slave_optimal_value = slaveProblem(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, gamma, maxT, fix_s)
         tmpQ = {}
         tmpQ["n"] = slave_n_value
         tmpQ["overflow"] = slave_overflow_value
@@ -343,7 +375,7 @@ def columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U
         print "true optimal: {0}, our method: {1}, relaxed solution: {2}".format(obj_cg, obj_our, obj_relax)
     num_iterations = j
 
-    return obj_cg, elapsed_time, num_iterations, all_objectives
+    return obj_cg, elapsed_time, num_iterations, all_objectives, all_k_objectives, all_times
 
     #print "============================ LP relaxation =============================="
     #obj_relax, n_value0, overflow_value, y_value, s_value0, p, z_value = StaffResourceAllocation.LPsolver(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, minr, ar, phi, integer=0, binary_y=0, OverConstr = 0)
@@ -356,16 +388,16 @@ if __name__ == "__main__":
     print "======================== main ======================================"
     # ========================= Game Setting ===================================
     W = 5 # number of time windows
-    K = 10 # number of passenger types
+    K = 7 # number of passenger types
     R = 5 # number of resources
     mR = 2 # max number of reosurces
     M = 3 # number of attack methods
-    P = 15 # number of staff
+    P = 20 # number of staff
     shift = 3 # d
-    Q = 5
+    Q = 2
     nT = 25
     teams = util.generateAllTeams(R, mR)
-    maxT = 5
+    maxT = 10
     #teams = util.randomGenerateTeams(R, mR, nT)
 
     print teams
@@ -384,7 +416,7 @@ if __name__ == "__main__":
             total_arrivals += N_wk[w][k]
     print "total arrivals: {0}".format(total_arrivals)
 
-    obj_cg, time_cg, iterations_cg = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=True)
+    obj_cg, time_cg, iterations_cg, all_objectives, cg_all_times = columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, Q, maxT, column_generation_iterations=1000, warm_start=True)
 
 
     """

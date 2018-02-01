@@ -14,7 +14,11 @@ def KStrategiesYNBnew(Q, W, K, R, M, resource2team, T, maxT, E, C, U_plus, U_min
     model = Model("MIP")
     #model.params.DualReductions = 0
     model.params.MIPGap=0.01;
+<<<<<<< HEAD
     model.params.TimeLimit = 600
+=======
+    model.params.TimeLimit=600 # at most 10 min
+>>>>>>> 52087b2272f27b324ddb3fc884e046ed07432da9
 
     team = [[ model.addVar(lb=0.0, ub = 1.0, vtype=GRB.BINARY, name="team_t{0}_s{1}".format(t,i)) for t in range(T)] for i in range(Q)]
 

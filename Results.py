@@ -24,7 +24,7 @@ def randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift):
     resource2team = util.resourceTeamDict(R, T, teams)
 
 
-    Er, C = util.genResources(R, M, 600)
+    Er, C = util.genResources(R, M, 200)
     E = util.computeTeamsRate(R, M, T, teams, Er)
     print E     
 
@@ -48,7 +48,7 @@ def randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift):
         for w in range(startK-AI,startK):
             large_or_small = random.random()
             if large_or_small > 0.5:
-                tmp_N = random.randint(50, 200)
+                tmp_N = random.randint(150, 200)
             else:
                 tmp_N = random.randint(10, 30)
             N_wk[w][k] = tmp_N

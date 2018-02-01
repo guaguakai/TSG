@@ -257,7 +257,7 @@ def solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_m
     for i in range(Q):
         q_val[i] = float(1)/Q
         
-    obj, n_value, ns_value, team_val = FixedQ(Q, W, K, R, M, P, minr, minn, q_val, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, False, False, verbose=False)
+    obj, n_value, ns_value, team_val = FixedQ(Q, W, K, R, M, P, minr, minn, q_val, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, False, False, verbose=verbose)
     rt = time.time() - start_time
         
     return obj, rt
