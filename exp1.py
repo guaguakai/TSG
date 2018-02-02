@@ -32,13 +32,13 @@ if __name__ == "__main__":
 
     teams = util.generateAllTeams(R, mR)
 
-    iterations = 5
+    iterations = 10
     Q_start = 1
     Q_end = 10
 
     # ======================= file storage ==========================
-    f_q = open("exp/exp1/exp1_0201_0130.csv", "w")
-    f_cg = open("exp/exp3/exp3_cg_0201_0130.csv", "w")
+    f_q = open("exp/exp1/exp1_0202.csv", "w")
+    f_cg = open("exp/exp3/exp3_cg_0202.csv", "w")
 
     objective_values = np.zeros((Q_end - Q_start + 1, 3, iterations))
     running_time = np.zeros((Q_end - Q_start + 1, 3, iterations))
