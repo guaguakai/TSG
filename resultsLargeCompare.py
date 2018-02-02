@@ -19,13 +19,13 @@ if __name__ == "__main__":
     
     instance = 1
     if (instance == 1):
-        W = 10 # number of time windows
+        W = 20 # number of time windows
         AI = 3 # interval in which passengers are arriving
-        K = 50 # number of passenger types
+        K = 20 # number of passenger types
         R = 5 # number of resources
         mR = 3 # max number of reosurces
         M = 3 # number of attack methods
-        P = 75 # number of staff
+        P = 20 # number of staff
         shift = 3 # d
         Q = 2 # number of strategies
         maxT = 5
@@ -56,9 +56,9 @@ if __name__ == "__main__":
         
     teams = util.generateAllTeams(R, mR)
     
-    Z = 10 # number of runs
+    Z = 1 # number of runs
     ZQ = 1 # max number of Q
-    ZC = 10
+    ZC = 1
     maxQT = 6
     
     obj_relax = np.zeros((Z,ZC))
@@ -69,10 +69,8 @@ if __name__ == "__main__":
     time_final = np.zeros((Z,ZC))
     
     for z in range(Z):
-        seed = random.randint(1,1000)
+        seed = random.randint(1,1000)+11
         for zc in range(ZC):
-            K = (zc+1)*5
-            P = K
             # Construct random instances
             resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
         
@@ -128,11 +126,15 @@ if __name__ == "__main__":
             obj_uniform[z][zc], rt = solve(Q, W, K, R, mR, M, P, teams, resource2team, T, maxT, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi)
                     
             time_uniform[z][zc] = time.time() - start_time_uniform
-            file = open('Largeresults_0130.txt','w')
+            file = open('DifferentK_5.txt','w')
             file.write('run%s\n' %str(z+1))
             file.write("obj:\n" + str(obj_relax)+'\n\n'+str(obj_final)+'\n\n'+str(obj_uniform))
             file.write("\n\ntime:\n" +str(time_final) +'\n\n'+str(time_uniform))
             file.close()
+            
+            
+            
+    
     
     
     #print obj_relax, obj_yn, obj_final
