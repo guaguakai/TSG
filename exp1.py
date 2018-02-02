@@ -19,22 +19,22 @@ if __name__ == "__main__":
     #Q = 2 # number of strategies
     #maxT = 2
 
-    W = 5 # number of time windows
-    AI = 1 # interval in which passengers are arriving
-    K = 5 # number of passenger types
-    R = 10 # number of resources
-    mR = 1 # max number of reosurces
+    W = 7 # number of time windows
+    AI = 3 # interval in which passengers are arriving
+    K = 7 # number of passenger types
+    R = 6 # number of resources
+    mR = 2 # max number of reosurces
     M = 5 # number of attack methods
-    P = 20 # number of staff
-    shift = 1 # d
+    P = 30 # number of staff
+    shift = 2 # d
     Q = 1 # number of strategies
     maxT = 2
 
     teams = util.generateAllTeams(R, mR)
 
-    iterations = 10
-    Q_start = 1
-    Q_end = 10
+    iterations = 20
+    Q_start = 5
+    Q_end = 5
 
     # ======================= file storage ==========================
     f_q = open("exp/exp1/exp1_0202.csv", "w")
@@ -56,16 +56,16 @@ if __name__ == "__main__":
         #resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Results.randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift)
         resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_all_k_objectives, tmp_all_times = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=500, warm_start=False)
-        print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
-        cg_objective[i] = tmp_obj_cg
-        cg_time[i] = tmp_time_cg
-        cg_all_objectives.append(tmp_all_objectives)
+        #tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_all_k_objectives, tmp_all_times = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=500, warm_start=False)
+        #print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
+        #cg_objective[i] = tmp_obj_cg
+        #cg_time[i] = tmp_time_cg
+        #cg_all_objectives.append(tmp_all_objectives)
 
-        f_cg.write("i, {0}, Q, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, 1, "cg", tmp_obj_cg, tmp_time_cg))
-        f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
-        f_cg.write(", ".join([str(j) for j in tmp_all_k_objectives]) + "\n")
-        f_cg.write(", ".join([str(j) for j in tmp_all_times]) + "\n")
+        #f_cg.write("i, {0}, Q, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, 1, "cg", tmp_obj_cg, tmp_time_cg))
+        #f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
+        #f_cg.write(", ".join([str(j) for j in tmp_all_k_objectives]) + "\n")
+        #f_cg.write(", ".join([str(j) for j in tmp_all_times]) + "\n")
 
         for Q in range(Q_start, Q_end + 1):
             print " ============================================ Q: {0}, i: {1} ==============================================".format(Q, i)
