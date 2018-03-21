@@ -10,7 +10,7 @@ import Results
 if __name__ == "__main__":
     W = 5 # number of time windows
     AI = 1
-    K = 5 # number of passenger types
+    K = 10 # number of passenger types
     R = 6 # number of resources
     mR = 2 # max number of reosurces
     M = 3 # number of attack methods
