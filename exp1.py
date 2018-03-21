@@ -8,37 +8,37 @@ import pickle
 import Results
 
 if __name__ == "__main__":
-    #W = 5 # number of time windows
-    #AI = 1 # interval in which passengers are arriving
-    #K = 5 # number of passenger types
+    W = 5 # number of time windows
+    AI = 3 # interval in which passengers are arriving
+    K = 10 # number of passenger types
+    R = 5 # number of resources
+    mR = 2 # max number of reosurces
+    M = 3 # number of attack methods
+    P = 7 # number of staff
+    shift = 2 # d
+    Q = 2 # number of strategies
+    maxT = 10
+
+    #W = 7 # number of time windows
+    #AI = 3 # interval in which passengers are arriving
+    #K = 7 # number of passenger types
     #R = 6 # number of resources
     #mR = 2 # max number of reosurces
-    #M = 3 # number of attack methods
-    #P = 7 # number of staff
+    #M = 5 # number of attack methods
+    #P = 30 # number of staff
     #shift = 2 # d
-    #Q = 2 # number of strategies
-    #maxT = 2
-
-    W = 7 # number of time windows
-    AI = 3 # interval in which passengers are arriving
-    K = 7 # number of passenger types
-    R = 6 # number of resources
-    mR = 2 # max number of reosurces
-    M = 5 # number of attack methods
-    P = 30 # number of staff
-    shift = 2 # d
-    Q = 1 # number of strategies
-    maxT = 2
+    #Q = 1 # number of strategies
+    #maxT = 10
 
     teams = util.generateAllTeams(R, mR)
 
-    iterations = 20
-    Q_start = 5
-    Q_end = 5
+    iterations = 50
+    Q_start = 1
+    Q_end = 10
 
     # ======================= file storage ==========================
-    f_q = open("exp/exp1/exp1_0202.csv", "w")
-    f_cg = open("exp/exp3/exp3_cg_0202.csv", "w")
+    f_q = open("exp/exp1/exp1_0320.csv", "w")
+    f_cg = open("exp/exp3/exp3_cg_0320.csv", "w")
 
     objective_values = np.zeros((Q_end - Q_start + 1, 3, iterations))
     running_time = np.zeros((Q_end - Q_start + 1, 3, iterations))
@@ -56,16 +56,16 @@ if __name__ == "__main__":
         #resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Results.randomSetting(seed, W, AI, K ,R, mR, M, P, teams, shift)
         resource2team, T, Er, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi = Method2.randomSetting(seed, W, K ,R, mR, M, P, teams, shift)
 
-        #tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_all_k_objectives, tmp_all_times = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 1, maxT, column_generation_iterations=500, warm_start=False)
-        #print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
-        #cg_objective[i] = tmp_obj_cg
-        #cg_time[i] = tmp_time_cg
-        #cg_all_objectives.append(tmp_all_objectives)
+        tmp_obj_cg, tmp_time_cg, tmp_iterations_cg, tmp_all_objectives, tmp_all_k_objectives, tmp_all_times = column.columnGeneration(W, K, R, mR, M, P, teams, resource2team, T, E, C, U_plus, U_minus, N_wk, shift, mr, ar, phi, 5, maxT, column_generation_iterations=500, warm_start=False) # TODO set Q manually
+        print "Column Generation, i = {0}, obj = {1}, running time = {2}".format(i, tmp_obj_cg, tmp_time_cg)
+        cg_objective[i] = tmp_obj_cg
+        cg_time[i] = tmp_time_cg
+        cg_all_objectives.append(tmp_all_objectives)
 
-        #f_cg.write("i, {0}, Q, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, 1, "cg", tmp_obj_cg, tmp_time_cg))
-        #f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
-        #f_cg.write(", ".join([str(j) for j in tmp_all_k_objectives]) + "\n")
-        #f_cg.write(", ".join([str(j) for j in tmp_all_times]) + "\n")
+        f_cg.write("i, {0}, Q, {1}, method, {2}, obj, {3}, running time, {4}, \n".format(i, 1, "cg", tmp_obj_cg, tmp_time_cg))
+        f_cg.write(", ".join([str(j) for j in tmp_all_objectives]) + "\n")
+        f_cg.write(", ".join([str(j) for j in tmp_all_k_objectives]) + "\n")
+        f_cg.write(", ".join([str(j) for j in tmp_all_times]) + "\n")
 
         for Q in range(Q_start, Q_end + 1):
             print " ============================================ Q: {0}, i: {1} ==============================================".format(Q, i)

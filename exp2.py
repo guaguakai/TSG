@@ -21,14 +21,14 @@ if __name__ == "__main__":
     Q = 2
     maxT = 2 # initial value, just use for column generation
 
-    iterations = 10
+    iterations = 50
     maxT_start = 1
     maxT_list = range(1, 11)
     maxT_end = max(maxT_list)
 
     # ========================= file storage ==============================
-    f_q = open("exp/exp2/exp2_0131_2230.csv", "a")
-    f_cg = open("exp/exp2/exp2_cg_0131_2230.csv", "a")
+    f_q = open("exp/exp2/exp2_0320.csv", "w")
+    f_cg = open("exp/exp2/exp2_cg_0320.csv", "w")
 
     objective_values = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
     running_time = np.zeros((maxT_end - maxT_start + 1, 3, iterations))
